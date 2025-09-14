@@ -1,16 +1,15 @@
 # Követelményspecifikáció
 
 ## 1. Jelenlegi helyzet
-- Tervezési fázis, az ötlet megfogalmazása és leírása
-- Ötlet szétbontása részekre
-- Platform kiválasztása
-- Frontend-backend kiválasztása
-- Feladatok kiosztása a collaboratorok között
-
+- Tervezési fázis, az ötlet megfogalmazása és leírása.
+- Ötlet szétbontása részekre.
+- Platform kiválasztása.
+- Frontend-backend kiválasztása.
+- Feladatok kiosztása a collaboratorok között.
 
 ## 2. Vágyálomrendszer
-- Egy végtelenségig tartó Simon says
-- Adaptálódó nehézség[^2] ami a sikeresen teljesített körök múlásával nő
+- Egy végtelenségig[^4] tartó Simon says.
+- Adaptálódó nehézség[^2] ami a sikeresen teljesített körök múlásával nő.
 - Reszponzív felület, amely mobilon és asztali környezetben egyaránt élvezhető.
 
 ## 3. Jelenlegi üzleti folyamatok
@@ -26,6 +25,7 @@ A rendszer minden körben egy színmintát generál, amit a játékosnak helyese
 A sorozat hossza minden sikeres körrel nő, a hibás bevitel a játék végét jelenti.
 Az adaptálódó nehézség: gyorsuló ritmus vagy új gombok vagy akár alternatív input formák.
 A játék végén opcionálisan pontszám rögzíthető, amely később összehasonlítható más játékosok eredményeivel.
+Az elkülönűlő játékmenetek randomizálása[^5] az újrajátszhatóság növeléséért.
 
 ## 5. Követelménylista
 | Modul | ID  | Név | V. | Kifejtés |
@@ -44,3 +44,5 @@ A játék végén opcionálisan pontszám rögzíthető, amely később összeha
 [^1]: **Simon says**: Egy memóriára és figyelemre épülő játék, ahol a játékosnak egyre hosszabb és bonyolultabb utasítás-sorozatot kell követnie.
 [^2]: **Adaptálódó nehézség**: A játék közbeni dinamikus változtatás, amely a teljesítményhez igazodik.
 [^3]: **Input-típus**: A játékos által használt bevitel (pl. kattintás, szöveg írása)
+[^4]: **Végtelen**: A limitáltságokon belül akkora hossz elérése mely végtelennek tűnik a játékosok képességei miatt.
+[^5]: **Randomizálás**: Az a folyamat mely (pseudo) véletlenen alapulóan nem ismétlődővé teszi a játék menetét.
