@@ -10,7 +10,7 @@
 
 ## 2. Vágyálomrendszer
 -Egy végtelenségig tartó Simon says
--Adaptálódó nehézség ami a sikeresen teljesített körök múlásával nő
+-Adaptálódó nehézség[^2] ami a sikeresen teljesített körök múlásával nő
 -Reszponzív felület, amely mobilon és asztali környezetben egyaránt élvezhető.
 
 ## 3. Jelenlegi üzleti folyamatok
@@ -19,7 +19,7 @@ Az eredeti Simon says[^1] játék jól ismert, és az interneten számos változ
 Ezek a változatok jellemzően:
 + Korlátozott számú körrel rendelkeznek.
 + Nem vagy csak egyszerűen növekvő nehézséget kínálnak.
-+ Csak gombnyomásos inputot támogatnak, más input-típus nincs.
++ Csak gombnyomásos inputot támogatnak, más input-típus[^3] nincs.
 
 ## 4. Igényelt üzleti folyamatok
 A rendszer minden körben egy színmintát generál, amit a játékosnak helyesen kell visszajátszania.
@@ -40,3 +40,5 @@ A játék végén opcionálisan pontszám rögzíthető, amely később összeha
 
 ## 6. Fogalomszótár
 [^1]: **Simon says**: Egy memóriára és figyelemre épülő játék, ahol a játékosnak egyre hosszabb és bonyolultabb utasítás-sorozatot kell követnie.
+[^2]: **Adaptálódó nehézség**: A játék közbeni dinamikus változtatás, amely a teljesítményhez igazodik.
+[^3]: **Input-típus**: A játékos által használt bevitel (pl. kattintás, szöveg írása)
