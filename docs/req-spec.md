@@ -30,6 +30,8 @@ Ezek a változatok jellemzően:
 | JátékLogika | K3 | Adaptív nehézség | 0.2 | Amennyiben a játékos hosszabb ideig, sikeres sorozatokat ér el, a játék nehézsége nő. Gyorsul a gombok felvillanásának sebessége, vagy új input-típusok jelnenek meg. |
 | UI | K4 | Felhasználóbarát felület | 0.9 | A játék felülete legyen intuitív és könnyen kezelhető, hogy a játékosok gyorsan megértsék a játékmenetet. |
 | Platform | K5 | Web alapú platform | 1.0 | A játék webes környezetben fusson, hogy könnyen elérhető legyen különböző eszközökről. |
+| Audio | K6 | Hangjelzések | 1.1 | Az egyes színekhez hang effektek lejátszása gomblenyomáskor. |
+| Extra | K7 | Pontozás és ranglista | 1.2 | Név és pontszám tárolása, ami motiválja a játékosokat a versenyzésre. |
 
 ## 6. Fogalomszótár
 [^1]: **Simon says**: Egy memóriára és figyelemre épülő játék, ahol a játékosnak egyre hosszabb és bonyolultabb utasítás-sorozatot kell követnie.
