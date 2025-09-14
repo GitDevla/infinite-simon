@@ -11,6 +11,7 @@
 ## 2. Vágyálomrendszer
 -Egy végtelenségig tartó Simon says
 -Adaptálódó nehézség ami a sikeresen teljesített körök múlásával nő
+-Reszponzív felület, amely mobilon és asztali környezetben egyaránt élvezhető.
 
 ## 3. Jelenlegi üzleti folyamatok
 Az eredeti Simon says[^1] játék jól ismert, és az interneten számos változata elérhető.
