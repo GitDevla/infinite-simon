@@ -21,6 +21,10 @@ Ezek a változatok jellemzően:
 + Csak gombnyomásos inputot támogatnak, más input-típus nincs.
 
 ## 4. Igényelt üzleti folyamatok
+A rendszer minden körben egy színmintát generál, amit a játékosnak helyesen kell visszajátszania.
+A sorozat hossza minden sikeres körrel nő, a hibás bevitel a játék végét jelenti.
+Az adaptálódó nehézség: gyorsuló ritmus vagy új gombok vagy akár alternatív input formák.
+A játék végén opcionálisan pontszám rögzíthető, amely később összehasonlítható más játékosok eredményeivel.
 
 ## 5. Követelménylista
 | Modul | ID  | Név | V. | Kifejtés |
