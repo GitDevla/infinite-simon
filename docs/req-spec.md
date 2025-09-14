@@ -32,11 +32,13 @@ A játék végén opcionálisan pontszám rögzíthető, amely később összeha
 |-------|-----|-----|----|----------|
 | JátékLogika | K1 | Alap Simon says | 0.1 | A klasszikus 4 gombos Simon says játék megvalósítása. |
 | JátékLogika | K2 | Végtelen játékmenet | 0.2 | A játék folyamatosan köröket generál, amíg a játékos el nem hibázza a sorozatot. Nem lesz előre definiált maximális körszám. |
-| JátékLogika | K3 | Adaptív nehézség | 0.2 | Amennyiben a játékos hosszabb ideig, sikeres sorozatokat ér el, a játék nehézsége nő. Gyorsul a gombok felvillanásának sebessége, vagy új input-típusok jelnenek meg. |
-| UI | K4 | Felhasználóbarát felület | 0.9 | A játék felülete legyen intuitív és könnyen kezelhető, hogy a játékosok gyorsan megértsék a játékmenetet. |
-| Platform | K5 | Web alapú platform | 1.0 | A játék webes környezetben fusson, hogy könnyen elérhető legyen különböző eszközökről. |
-| Audio | K6 | Hangjelzések | 1.1 | Az egyes színekhez hang effektek lejátszása gomblenyomáskor. |
-| Extra | K7 | Pontozás és ranglista | 1.2 | Név és pontszám tárolása, ami motiválja a játékosokat a versenyzésre. |
+| JátékLogika | K3 | Adaptív nehézség | 0.2 | Amennyiben a játékos hosszabb ideig, sikeres sorozatokat ér el, a játék nehézsége nő. Gyorsul a gombok felvillanásának sebessége, vagy új input-típusok[^3] jelnenek meg. |
+| UI | K4 | JátékLogika és UI integráció | 0.3 | A játék logikája és a felhasználói felület közötti kommunikáció megvalósítása. |
+| UI | K5 | Reszponzív dizájn | 0.4 | A felület alkalmazkodik különböző képernyőméretekhez és eszközökhöz (mobil, tablet, desktop). |
+| UI | K6 | Felhasználóbarát felület | 0.4 | A játék felülete legyen intuitív és könnyen kezelhető, hogy a játékosok gyorsan megértsék a játékmenetet. |
+| JátékLogika | K7 | Pontozás és ranglista | 0.5 | Név és pontszám tárolása, ami motiválja a játékosokat a versenyzésre. |
+| Platform | K8 | Web alapú platform | 1.0 | A játék webes környezetben fusson, hogy könnyen elérhető legyen különböző eszközökről. |
+| Audio | K9 | Hangjelzések | 1.1 | Az egyes színekhez hang effektek lejátszása gomblenyomáskor. |
 
 ## 6. Fogalomszótár
 [^1]: **Simon says**: Egy memóriára és figyelemre épülő játék, ahol a játékosnak egyre hosszabb és bonyolultabb utasítás-sorozatot kell követnie.
