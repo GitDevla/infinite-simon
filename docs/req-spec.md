@@ -37,7 +37,7 @@ Ezek a változatok jellemzően:
 | UI | K5 | Reszponzív dizájn | 0.4 | A felület alkalmazkodik különböző képernyőméretekhez és eszközökhöz (mobil, tablet, desktop). |
 | UI | K6 | Felhasználóbarát felület | 0.4 | A játék felülete legyen intuitív és könnyen kezelhető, hogy a játékosok gyorsan megértsék a játékmenetet. |
 | JátékLogika | K7 | Pontozás és ranglista | 0.5 | Név és pontszám tárolása, ami motiválja a játékosokat a versenyzésre. |
-| Platform | K8 | Web alapú platform | 1.0 | A játék webes környezetben fusson, hogy könnyen elérhető legyen különböző eszközökről. |
+| Telepítés | K8 | Web alapú platform | 1.0 | A játék webes környezetben fusson, hogy könnyen elérhető legyen különböző eszközökről. |
 | Audio | K9 | Hangjelzések | 1.1 | Az egyes színekhez hang effektek lejátszása gomblenyomáskor. |
 
 ## 6. Fogalomszótár
