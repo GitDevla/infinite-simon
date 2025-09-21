@@ -89,7 +89,14 @@ graph LR
 ```
 
 ### Képernyő tervek
-#TODO
+
+> **Figyelem:** A képernyőtervek előzetes vázlatok, amelyek a fejlesztés során változhatnak. A végleges felhasználói felület eltérhet az itt bemutatott vázlatoktól.
+
+![](assets/Wireframe%20-%201.png)
+![](assets/Wireframe%20-%202.png)
+![](assets/Wireframe%20-%203.png)
+![](assets/Wireframe%20-%204.png)
+![](assets/Wireframe%20-%205.png)
 
 ## Fizikai környezet
 
