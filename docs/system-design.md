@@ -100,6 +100,102 @@ graph LR
 ## Adatbázis terv
 
 ## Implementációs terv
+### Perszistencia réteg
+- A játékos pontszámait a böngésző `localStorage`-jában tároljuk.
+- Az adatok JSON formátumban kerülnek mentésre.
+- Az adatok betöltése a játék indításakor történik, és a pontszám mentése a játék végén.
+```mermaid
+classDiagram
+    class ScoreRepository {
+        +saveScore(playerName: String, score: Int, timestamp: DateTime): void
+        +getTopScores(limit: Int): List~Score~
+        +clearScores(): void
+    }
+```
+- A `ScoreRepository` egy wrapper osztály, amely a `localStorage`-t kezeli, mentést és betöltést végez.
+
+### Üzleti logika réteg
+- A játék logikáját a `Game` osztály kezeli.
+- A `Game` osztály felelős a játék állapotának kezeléséért, a bemenet ellenőrzéséért és a pontszám számításáért.
+```mermaid
+classDiagram
+    class SequencePart {
+        <<abstract>>
+        +type: String
+        +expectedValue: any
+        +isCorrect(input: any): Boolean
+    }
+
+    class ButtonPart {
+        +isCorrect(input: String): Boolean
+    }
+
+    class SliderPart {
+        +isCorrect(input: Number): Boolean
+    }
+
+    class KnobPart {
+        +isCorrect(input: Number): Boolean
+    }
+
+    class Sequence {
+        -currentPosition: Int
+        -parts: List~SequencePart~
+        +addPart(part: SequencePart): void
+        +getCurrentPart(): SequencePart
+    }
+  
+    class Game {
+        -sequence: Sequence
+        -currentRound: Int
+        -isGameOver: Boolean
+        +startNewGame(): void
+        -generateNextSequence(): void
+        +checkPlayerInput(input: SequencePart): Boolean
+        +getCurrentRound(): Int
+        +isGameOver(): Boolean
+    }
+
+    Sequence "1" -- "many" SequencePart : contains
+    Game "1" -- "1" Sequence : has
+    SequencePart <|-- ButtonPart
+    SequencePart <|-- SliderPart
+    SequencePart <|-- KnobPart
+```
+- A `Game` osztály kezeli a játék állapotát, generálja a bemeneti sorozatot, ellenőrzi a játékos bemenetét, és nyomon követi a körök számát.
+- A `SequencePart` osztály reprezentálja a bemeneti elemeket, amelyek lehetnek gombok, csúszkák, tekerők vagy egyéb interaktív elemek.
+
+### Prezentációs réteg
+- A felhasználói felület React komponensekből áll.
+- Minden képernyő egy külön komponens, amely a megfelelő üzleti logikát és perszisztencia réteget használja.
+```mermaid
+classDiagram
+    class WelcomeScreen {
+        +render(): JSX.Element
+        +handleStartGame(): void
+        +handleViewScores(): void
+    }
+
+    class GameScreen {
+        +render(): JSX.Element
+        +handlePlayerInput(input: SequencePart): void
+    }
+
+    class GameOverModal {
+        +render(): JSX.Element
+        +handleSaveScore(playerName: String): void
+        +handleRestartGame(): void
+    }
+
+    class ScoreboardScreen {
+        +render(): JSX.Element
+        +handleClearScores(): void
+    }
+    WelcomeScreen --> GameScreen : starts
+    GameScreen --> GameOverModal : ends
+    GameOverModal --> ScoreboardScreen : views
+    WelcomeScreen --> ScoreboardScreen : views
+``` 
 
 ## Tesztterv
 
