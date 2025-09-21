@@ -6,6 +6,7 @@
 ## Projekt terv
 - Rendszer terv megírása 09.21.
 - További követelmények megismerése 09.22.
+- Újonnan felmerült követelmények kivitelezésének megvitatása 09.22
 - Újonnan felmerült követelmények teljesítése 09.22-29
 - Webfelület létrehozása 09.27-ig
 - Webfelület interaktívvá tétele 09.28-ig
@@ -31,7 +32,7 @@
 
 ### Folyamatok
 - **Játék indítása**: A látogató elindítja a játékot, ekkor a rendszer generál egy input-kombinációt, amit a játékosnak meg kell jegyeznie.
-- **Játék menete**: A játékos megpróbálja megismételni az input-kombinációt. Ha sikerül, a rendszer újabb inputot ad a kombinációhoz, és a játék folytatódik. Ha nem sikerül, a játék véget ér, és a játékos pontszáma rögzítésre kerül.
+- **Játék menete**: A játékos megpróbálja megismételni az input-kombinációt. Ha sikerül, a rendszer újabb inputot ad a kombinációhoz, növeli a pontszámot, és a játék folytatódik. Ha nem sikerül, a játék véget ér, és a játékos pontszáma rögzítésre kerülhet.
 - **Eredménytábla megtekintése**: A látogatók és játékosok megtekinthetik az eredménytáblát, ahol a legjobb pontszámokat látják az adott számitógépen.
 
 ### Entitások
@@ -46,8 +47,9 @@
 - A látogató képes legyen elindítani a játékot a kezdőképernyőről.
 - A látogató képes legyen megtekinteni az eredménytáblát.
 - A rendszer jelenítse meg a sorozatot a játékos számára minden körben.
+- A rendszer véletlenszerűen generálja a sorozatot külön játék menetek között.
 - A rendszer ellenőrizze a játékos bemenetét és adjon visszajelzést.
-- A rendszer folytassa a játékot helyes bemenet után, növelve a sorozat hosszát és nezéségét.
+- A rendszer folytassa a játékot helyes bemenet után, növelve a sorozat hosszát és nehézségét.
 - A rendszer végezze el a játék lezárását, ha a játékos hibázik.
 - A rendszer mentse a játékos pontszámát.
 - Az eredménytábla mindig a legjobb pontszámokat mutassa, rendezve.
@@ -57,6 +59,8 @@
 - A rendszer ne igényeljen regisztrációt a játékhoz.
 - A felhasználói pontszámok csak a böngészőben tárolódjanak.
 - A rendszer böngészőfüggetlenül működjön.
+- A rendszer adjon lehetőséget a pontszám mentés kihagyására amennyiben a felhasználó nem igényli.
+- A pontszámokat ne lehessen véglegesen módosítani a játékmenet szakszerű használata nélkül.
 
 ## Funkcionális terv
 ### Rendszer szereplők
@@ -260,11 +264,13 @@ classDiagram
 - Játékos bemenet ellenőrzése, helyes és helytelen válasz esetén visszajelzés.
 - Eredménytábla megjelenítése és pontszámok helyes rendezése.
 - Pontszám mentése és böngésző újratöltés után történő betöltése.
+- Játék kései állapotának tesztelése
 
 ### 3. Nem funkcionális tesztek
 - Reszponzív design ellenőrzése mobil és desktop eszközökön.
 - Böngészőfüggetlenség tesztelése Chrome, Firefox, Edge böngészőkben.
 - Teljesítményteszt: rövid késleltetés a sorozat megjelenítésekor.
+- Játékos sebesség teszt: a bemenet sorrendjének pontossága még akkor is ha a felhasználó gyorsan üti be őket.
 
 ## Telepítési terv
 
