@@ -59,6 +59,37 @@
 - A rendszer böngészőfüggetlenül működjön.
 
 ## Funkcionális terv
+### Rendszer szereplők
+[Több információ](#szereplők)
+
+### Használati esetek
+[Több információ](#folyamatok)
+
+[User Story](user-story1.md)
+
+### Határ osztályok
+| Határ osztály | Leírás |
+|---------------|--------|
+| App | A fő alkalmazás osztály, amely kezeli a képernyők közötti navigációt. |
+| WelcomeScreen | A játék indítására és az eredménytábla megtekintésére szolgál. |
+| GameScreen | A játékos interakcióját kezeli, bemenetet fogad és visszajelzést ad. |
+| GameOverModal | A játék végét jelző ablak, amely megjeleníti a pontszámot és lehetőséget ad a pontszám mentésére. |
+| ScoreboardScreen | A legjobb pontszámokat jeleníti meg. |
+
+### Menü hierarchia
+```mermaid
+graph LR
+    A[Kezdőképernyő]
+    A --> B[Játék indítása]
+    B --> C[Játék képernyő]
+    C --> D[Játék vége]
+    D --> E[Game Over ablak]
+    E --> F[Eredménytábla]
+    A --> F
+```
+
+### Képernyő tervek
+#TODO
 
 ## Fizikai környezet
 
