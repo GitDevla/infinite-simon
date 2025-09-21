@@ -3,6 +3,13 @@
 - Memória fejlődést elősegítő játékos felület weboldalon való megvalósítása
 - Rekord értékek segítségével a gyakorlottság és emlékezőképesség fejlődésének követése
 - Versenyszerű kézségösszemérés egyéb játékosokkal
+
+**A rendszernek nem célja**:
+- Regisztráció vagy felhasználói fiók létrehozása
+- Pontszámok felhőben való tárolása
+- Többjátékos mód
+- Közösségi funkciók (pl. barátok hozzáadása, üzenetküldés)
+
 ## Projekt terv
 - Rendszer terv megírása 09.21.
 - További követelmények megismerése 09.22.
