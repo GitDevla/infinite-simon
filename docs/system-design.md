@@ -94,7 +94,31 @@ graph LR
 ## Fizikai környezet
 
 ## Absztrakt domain modell
+```mermaid
+classDiagram
+    class Játékos {
+        +felhasználónév: String
+    }
 
+    class Pontszám {
+        +érték: Int
+        +dátum: Date
+    }
+
+    class Játék {
+        +sorozat: List~Input~
+        +állapot: String
+        +körökSzáma: Int
+    }
+
+    class Eredménytábla {
+        +pontszámok: List~Pontszám~
+    }
+
+    Játékos "1" --> "0..*" Pontszám
+    Eredménytábla "1" --> "0..*" Pontszám
+    Játék "1" --> "1" Játékos
+```
 ## Architektúra terv
 
 ## Adatbázis terv
