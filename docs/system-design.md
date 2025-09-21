@@ -42,6 +42,22 @@
 
 ## Követelmények
 
+### Funkcionális követelmények
+- A látogató képes legyen elindítani a játékot a kezdőképernyőről.
+- A látogató képes legyen megtekinteni az eredménytáblát.
+- A rendszer jelenítse meg a sorozatot a játékos számára minden körben.
+- A rendszer ellenőrizze a játékos bemenetét és adjon visszajelzést.
+- A rendszer folytassa a játékot helyes bemenet után, növelve a sorozat hosszát és nezéségét.
+- A rendszer végezze el a játék lezárását, ha a játékos hibázik.
+- A rendszer mentse a játékos pontszámát.
+- Az eredménytábla mindig a legjobb pontszámokat mutassa, rendezve.
+
+### Nem funkcionális követelmények
+- A felület legyen mobilon és desktopon is jól használható.
+- A rendszer ne igényeljen regisztrációt a játékhoz.
+- A felhasználói pontszámok csak a böngészőben tárolódjanak.
+- A rendszer böngészőfüggetlenül működjön.
+
 ## Funkcionális terv
 
 ## Fizikai környezet
