@@ -122,7 +122,23 @@ classDiagram
 ## Architektúra terv
 
 ## Adatbázis terv
-
+Az adatok JSON formátumban kerülnek mentésre egy fix kulcs alatt `scores`. A tárolt adatok struktúrája a következő:
+```json
+{
+  "scores": [
+    {
+      "player": "Anna",
+      "score": 12,
+      "date": "2025-09-21T14:32:00Z"
+    },
+    {
+      "player": "Béla",
+      "score": 9,
+      "date": "2025-09-21T14:40:00Z"
+    }
+  ]
+}
+```
 ## Implementációs terv
 ### Perszistencia réteg
 - A játékos pontszámait a böngésző `localStorage`-jában tároljuk.
