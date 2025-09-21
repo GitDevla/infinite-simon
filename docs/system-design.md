@@ -194,6 +194,9 @@ classDiagram
         -parts: List~SequencePart~
         +addPart(part: SequencePart): void
         +getCurrentPart(): SequencePart
+        +moveToNextPart(): void
+        +reset(): void
+        +isComplete(): Boolean
     }
   
     class Game {
