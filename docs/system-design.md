@@ -238,6 +238,26 @@ classDiagram
 ``` 
 
 ## Tesztterv
+### 1. Egységtesztek
+- **Game osztály**:  
+  - `checkPlayerInput()` helyes és helytelen bemenetekre.
+  - `generateNextSequence()` sorozatnövelés ellenőrzése.
+  - Játék állapotának (`isGameOver`) helyes kezelése.
+- **ScoreRepository**:
+  - Pontszám mentése és betöltése `localStorage`-ból.
+  - Legjobb pontszámok lekérése (`getTopScores(limit)`).
+  - Pontszámok törlése (`clearScores()`).
+
+### 2. Felhasználói tesztek
+- Játék indítása és sorozatok megjelenítése.
+- Játékos bemenet ellenőrzése, helyes és helytelen válasz esetén visszajelzés.
+- Eredménytábla megjelenítése és pontszámok helyes rendezése.
+- Pontszám mentése és böngésző újratöltés után történő betöltése.
+
+### 3. Nem funkcionális tesztek
+- Reszponzív design ellenőrzése mobil és desktop eszközökön.
+- Böngészőfüggetlenség tesztelése Chrome, Firefox, Edge böngészőkben.
+- Teljesítményteszt: rövid késleltetés a sorozat megjelenítésekor.
 
 ## Telepítési terv
 
