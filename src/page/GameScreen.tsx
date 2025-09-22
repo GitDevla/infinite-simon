@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Button from "../component/Button";
+import GameEndModal from "../component/GameEndModal";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 
 export default function GameScreen() {
 	const [actions, setActions] = useState<any[]>([]);
-
+	const [gameOngoing, setGameOngoing] = useState(true);
+	const score = actions.length;
 	const addAction = (action: string) => {
 		setActions((prev) => [...prev, action]);
 	};
@@ -14,9 +16,8 @@ export default function GameScreen() {
 		<div>
 			<div>
 				<h1>Game Screen</h1>
-				<span>Score: 0</span>
+				<span>Score: {score}</span>
 			</div>
-
 			<div>
 				<div>
 					<Button color="green" onPress={() => addAction("simon:green")} />
@@ -37,10 +38,14 @@ export default function GameScreen() {
 					<Slider max={8} onChange={(value) => addAction(`knob-2:${value}`)} />
 				</div>
 			</div>
+			<button type="button" onClick={() => setGameOngoing(false)}>
+				End Game
+			</button>
 			<div>
 				{/* Testing, remove in prod */}
 				{JSON.stringify(actions)}
 			</div>
+			{!gameOngoing && <GameEndModal score={score} />}
 		</div>
 	);
 }
