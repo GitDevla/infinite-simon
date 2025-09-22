@@ -4,9 +4,40 @@ import GameEndModal from "../component/GameEndModal";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 
+export type GameInput = {
+	type: "button" | "slider" | "switch" | "knob";
+	id: string;
+	enabled: boolean;
+};
+
 export default function GameScreen() {
 	const [actions, setActions] = useState<any[]>([]);
 	const [gameOngoing, setGameOngoing] = useState(true);
+	const [inputs, setInputs] = useState<GameInput[]>([
+		{ type: "button", id: "simon-red", enabled: true },
+		{ type: "button", id: "simon-green", enabled: true },
+		{ type: "button", id: "simon-blue", enabled: true },
+		{ type: "button", id: "simon-yellow", enabled: true },
+		{ type: "slider", id: "slider-1", enabled: true },
+		{ type: "switch", id: "switch-1", enabled: true },
+		{ type: "switch", id: "switch-2", enabled: true },
+		{ type: "knob", id: "knob-1", enabled: true },
+		{ type: "knob", id: "knob-2", enabled: true },
+	]);
+
+	const enabledButtons = inputs.filter(
+		(input) => input.type === "button" && input.enabled,
+	);
+	const enabledSliders = inputs.filter(
+		(input) => input.type === "slider" && input.enabled,
+	);
+	const enabledSwitches = inputs.filter(
+		(input) => input.type === "switch" && input.enabled,
+	);
+	const enabledKnobs = inputs.filter(
+		(input) => input.type === "knob" && input.enabled,
+	);
+
 	const score = actions.length;
 	const addAction = (action: string) => {
 		setActions((prev) => [...prev, action]);
@@ -20,22 +51,39 @@ export default function GameScreen() {
 			</div>
 			<div>
 				<div>
-					<Button color="green" onPress={() => addAction("simon:green")} />
-					<Button color="red" onPress={() => addAction("simon:red")} />
-					<Button color="blue" onPress={() => addAction("simon:blue")} />
-					<Button color="yellow" onPress={() => addAction("simon:yellow")} />
+					{enabledButtons.map((input) => (
+						<Button
+							color={input.id.split("-")[1]}
+							key={input.id}
+							onPress={() => addAction(`${input.id}:pressed`)}
+						/>
+					))}
 				</div>
 				<div>
-					<Slider onChange={(value) => addAction(`slider-1:${value}`)} />
+					{enabledSliders.map((input) => (
+						<Slider
+							key={input.id}
+							max={5}
+							onChange={(value) => addAction(`${input.id}:${value}`)}
+						/>
+					))}
 				</div>
 				<div>
-					<Switch onToggle={(isOn) => addAction(`switch-1:${isOn}`)} />
-					<Switch onToggle={(isOn) => addAction(`switch-2:${isOn}`)} />
+					{enabledSwitches.map((input) => (
+						<Switch
+							key={input.id}
+							onToggle={(state) => addAction(`${input.id}:${state}`)}
+						/>
+					))}
 				</div>
 				<div>
-					{/* Placeholder for knobs */}
-					<Slider max={8} onChange={(value) => addAction(`knob-1:${value}`)} />
-					<Slider max={8} onChange={(value) => addAction(`knob-2:${value}`)} />
+					{enabledKnobs.map((input) => (
+						<Slider
+							key={input.id}
+							max={8}
+							onChange={(value) => addAction(`${input.id}:${value}`)}
+						/>
+					))}
 				</div>
 			</div>
 			<button type="button" onClick={() => setGameOngoing(false)}>
