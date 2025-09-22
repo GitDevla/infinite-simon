@@ -30,6 +30,17 @@
 - Tesztelés során felmerült problémák jegyzetelése 10.04.
 - Tesztelés folytatása és hibák javítása 10.05-ig
 - Értékelésre alkalmas állapotról való meggyőződés 10.05.
+
+### Csapatbeosztás
+- Frontend
+    - Landing Page: Csendes Dávid
+    - GameScreen: Pataki Dávid
+    - Leaderboard: Csendes Dávid
+- Backend
+    - GameLogic: Bence
+    - ScoreRepositroy: Csendes Dávid
+- Tesztelés: Mindenki a sajátját
+
 ## Üzleti folyamatok modellje
 [![](https://img.plantuml.biz/plantuml/dsvg/TLBDIiD04BxlKmovrmUG4WeYWYWAXTwdoJHTijajkzD08Zv4xbvwpC6Ju0iiVIytcneZw6LWvflPxuTTEKRBnqe9HJi6Dc1biMV8fQMCfT42CpOMaWT_ObCW-uy4qC56EXdct-XzG7rV6XV1Ewp82d70hCI28F5lUUq_MtNkeFJzWQnkpbq2BmBWw2X3HzCB87NktzcV7CQdreEy-TwjfRpolMx2pbOXL5GmbLA7OqVZIMOiRGtQNBpEH5m8_g7T6TLWXJooFYjivbjhOotf74WfqkVEjXFPpPwoShww8TSEMgOWdkgGnLy6u97cgh6cg7mGVKaN5elqai2loO_12CRXc7ciiOyMXXAxKMQiS9LEkk0QbiizgOOf64jJ8IOa4asQLi7zy4c-0000)](https://editor.plantuml.com/uml/TLBDIiD04BxlKmovrmUG4WeYWYWAXTwdoJHTijajkzD08Zv4xbvwpC6Ju0iiVIytcneZw6LWvflPxuTTEKRBnqe9HJi6Dc1biMV8fQMCfT42CpOMaWT_ObCW-uy4qC56EXdct-XzG7rV6XV1Ewp82d70hCI28F5lUUq_MtNkeFJzWQnkpbq2BmBWw2X3HzCB87NktzcV7CQdreEy-TwjfRpolMx2pbOXL5GmbLA7OqVZIMOiRGtQNBpEH5m8_g7T6TLWXJooFYjivbjhOotf74WfqkVEjXFPpPwoShww8TSEMgOWdkgGnLy6u97cgh6cg7mGVKaN5elqai2loO_12CRXc7ciiOyMXXAxKMQiS9LEkk0QbiizgOOf64jJ8IOa4asQLi7zy4c-0000)
 
