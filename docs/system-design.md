@@ -180,6 +180,16 @@ classDiagram
         +getTopScores(limit: Int): List~Score~
         +clearScores(): void
     }
+
+    class Score{
+        -name: String
+        -score: Number
+        -timestamp: DateTime
+        +getName(): String
+        +getScore(): Number
+        +getTimestamp(): DateTime
+    }
+    ScoreRepository "1" -- "many" Score : manages
 ```
 - A `ScoreRepository` egy wrapper osztály, amely a `localStorage`-t kezeli, mentést és betöltést végez.
 
@@ -226,6 +236,7 @@ classDiagram
         +checkPlayerInput(input: SequencePart): Boolean
         +getCurrentRound(): Int
         +isGameOver(): Boolean
+        +getSequence(): Sequence
     }
 
     Sequence "1" -- "many" SequencePart : contains
