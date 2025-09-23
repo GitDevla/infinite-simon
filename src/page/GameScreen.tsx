@@ -45,54 +45,67 @@ export default function GameScreen() {
 	};
 
 	return (
-		<div>
-			<div>
+		<div
+			style={{
+				display: "grid",
+				gridTemplateRows: "auto 1fr auto",
+				gridTemplateColumns: "1fr 5fr 1fr",
+				gap: "20px",
+				padding: "20px",
+				height: "100vh",
+				boxSizing: "border-box",
+			}}
+		>
+			<div style={{ gridColumn: "1 / -1", marginBottom: "20px" }}>
 				<h1>Game Screen</h1>
 				<span>Score: {score}</span>
 			</div>
 			<div>
-				<div>
-					{enabledButtons.map((input) => (
-						<Button
-							color={input.id.split("-")[1]}
-							key={input.id}
-							onPress={() => addAction(`${input.id}:pressed`)}
-						/>
-					))}
-				</div>
-				<div>
-					{enabledSliders.map((input) => (
-						<Slider
-							key={input.id}
-							max={5}
-							onChange={(value) => addAction(`${input.id}:${value}`)}
-						/>
-					))}
-				</div>
-				<div>
-					{enabledSwitches.map((input) => (
-						<Switch
-							key={input.id}
-							onToggle={(state) => addAction(`${input.id}:${state}`)}
-						/>
-					))}
-				</div>
-				<div>
-					{enabledKnobs.map((input) => (
-						<Knob
-							key={input.id}
-							max={8}
-							onChange={(value) => addAction(`${input.id}:${value}`)}
-						/>
-					))}
-				</div>
+				{enabledSliders.map((input) => (
+					<Slider
+						key={input.id}
+						max={5}
+						onChange={(value) => addAction(`${input.id}:${value}`)}
+					/>
+				))}
+			</div>
+			<div
+				style={{
+					display: "grid",
+					gridTemplateColumns: "repeat(2, 1fr)",
+					gap: "10px",
+					marginBottom: "20px",
+				}}
+			>
+				{enabledButtons.map((input) => (
+					<Button
+						color={input.id.split("-")[1]}
+						key={input.id}
+						onPress={() => addAction(`${input.id}:pressed`)}
+					/>
+				))}
+			</div>
+			<div></div>
+
+			<div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+				{enabledSwitches.map((input) => (
+					<Switch
+						key={input.id}
+						onToggle={(state) => addAction(`${input.id}:${state}`)}
+					/>
+				))}
 			</div>
 			<button type="button" onClick={() => setGameOngoing(false)}>
 				End Game
 			</button>
-			<div>
-				{/* Testing, remove in prod */}
-				{JSON.stringify(actions)}
+			<div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+				{enabledKnobs.map((input) => (
+					<Knob
+						key={input.id}
+						max={8}
+						onChange={(value) => addAction(`${input.id}:${value}`)}
+					/>
+				))}
 			</div>
 			{!gameOngoing && <GameEndModal score={score} />}
 		</div>
