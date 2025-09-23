@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../component/Button";
 import GameEndModal from "../component/GameEndModal";
+import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 
@@ -78,7 +79,7 @@ export default function GameScreen() {
 				</div>
 				<div>
 					{enabledKnobs.map((input) => (
-						<Slider
+						<Knob
 							key={input.id}
 							max={8}
 							onChange={(value) => addAction(`${input.id}:${value}`)}
