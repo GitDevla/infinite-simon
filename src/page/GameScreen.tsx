@@ -45,6 +45,7 @@ export default function GameScreen() {
 	};
 
 	const reenactSequence = async () => {
+		document.body.style.pointerEvents = "none";
 		for (let i = 0; i < sequence.length; i++) {
 			const { id, value } = sequence[i];
 			highlightInput(id, value);
@@ -60,6 +61,7 @@ export default function GameScreen() {
 				return input;
 			}),
 		);
+		document.body.style.pointerEvents = "auto";
 	};
 
 	useEffect(() => {
