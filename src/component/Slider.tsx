@@ -43,15 +43,20 @@ export default function Slider({
 	return (
 		<div
 			style={{
-				width: "75px",
-				height: "300px",
-				backgroundColor: "lightgray",
+				width: "100%",
+				height: "100%",
+				backgroundColor: "darkgrey",
+				padding: "10px",
+				display: "flex",
+				flexDirection: "column",
+				gap: "7%",
+				justifyContent: "space-between",
 			}}
 		>
 			<div
 				style={{
 					position: "relative",
-					height: "80%",
+					height: "100%",
 				}}
 			>
 				<div>
@@ -84,10 +89,11 @@ export default function Slider({
 									style={{
 										position: "relative",
 										display: "block",
-										left: "-20%",
+										left: "-30%",
+										top: "-300%",
 									}}
 								>
-									{max - i - 1}
+									{max - i}
 								</span>
 							</div>
 						))}
@@ -110,8 +116,14 @@ export default function Slider({
 					onMouseDown={handleMouseDown}
 				></div>
 			</div>
-			<div style={{ textAlign: "center", marginTop: "10px" }}>
-				<span>{value}</span>
+			<div
+				style={{
+					textAlign: "center",
+					backgroundColor: "white",
+					fontSize: "1.5rem",
+				}}
+			>
+				<span>{value + 1}</span>
 			</div>
 		</div>
 	);

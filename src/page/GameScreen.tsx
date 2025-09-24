@@ -51,16 +51,30 @@ export default function GameScreen() {
 				gridTemplateRows: "auto 1fr auto",
 				gridTemplateColumns: "1fr 5fr 1fr",
 				gap: "20px",
-				padding: "20px",
 				height: "100vh",
-				boxSizing: "border-box",
 			}}
 		>
-			<div style={{ gridColumn: "1 / -1", marginBottom: "20px" }}>
-				<h1>Game Screen</h1>
-				<span>Score: {score}</span>
+			<div
+				style={{
+					gridColumn: "1 / -1",
+					marginBottom: "20px",
+					textAlign: "center",
+				}}
+			>
+				<span style={{ fontSize: "3rem" }}>Score: {score}</span>
 			</div>
-			<div>
+			<div
+				style={{
+					display: "flex",
+					gap: "10px",
+					backgroundColor: "lightgrey",
+					padding: "20%",
+					borderRadius: "0 40px 40px 0",
+					height: "70%",
+					width: "100%",
+					margin: "auto",
+				}}
+			>
 				{enabledSliders.map((input) => (
 					<Slider
 						key={input.id}
@@ -102,7 +116,17 @@ export default function GameScreen() {
 			</div>
 			<div></div>
 
-			<div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+			<div
+				style={{
+					display: "flex",
+					gap: "10px",
+					alignItems: "center",
+					justifyContent: "center",
+					backgroundColor: "lightgrey",
+					padding: "10px",
+					borderRadius: "0 40px 0 0",
+				}}
+			>
 				{enabledSwitches.map((input) => (
 					<Switch
 						key={input.id}
@@ -110,10 +134,39 @@ export default function GameScreen() {
 					/>
 				))}
 			</div>
-			<button type="button" onClick={() => setGameOngoing(false)}>
-				End Game
-			</button>
-			<div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<button
+					type="button"
+					onClick={() => setGameOngoing(false)}
+					style={{
+						width: "25%",
+						padding: "10px",
+						fontSize: "1.5rem",
+						border: "none",
+						borderRadius: "4000px",
+						cursor: "pointer",
+					}}
+				>
+					GIVE UP
+				</button>
+			</div>
+			<div
+				style={{
+					display: "flex",
+					gap: "10px",
+					justifyContent: "center",
+					alignItems: "center",
+					backgroundColor: "lightgrey",
+					padding: "10px",
+					borderRadius: "40px 0 0 0",
+				}}
+			>
 				{enabledKnobs.map((input) => (
 					<Knob
 						key={input.id}
