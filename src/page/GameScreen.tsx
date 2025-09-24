@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../component/Button";
+import ButtonQuarterRing from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
 import Slider from "../component/Slider";
@@ -69,21 +69,36 @@ export default function GameScreen() {
 					/>
 				))}
 			</div>
-			<div
-				style={{
-					display: "grid",
-					gridTemplateColumns: "repeat(2, 1fr)",
-					gap: "10px",
-					marginBottom: "20px",
-				}}
-			>
-				{enabledButtons.map((input) => (
-					<Button
-						color={input.id.split("-")[1]}
-						key={input.id}
-						onPress={() => addAction(`${input.id}:pressed`)}
+			<div style={{ display: "flex", justifyContent: "center" }}>
+				<div
+					style={{
+						display: "grid",
+						gridTemplateColumns: "1fr 1fr",
+						gap: "40px",
+						aspectRatio: "1/1",
+					}}
+				>
+					<ButtonQuarterRing
+						color="red"
+						onPress={() => addAction(`simon-red:pressed`)}
+						additionalStyles={{ transform: "rotate(270deg)" }}
 					/>
-				))}
+					<ButtonQuarterRing
+						color="green"
+						onPress={() => addAction(`simon-red:pressed`)}
+						additionalStyles={{ transform: "rotate(0deg)" }}
+					/>
+					<ButtonQuarterRing
+						color="blue"
+						onPress={() => addAction(`simon-red:pressed`)}
+						additionalStyles={{ transform: "rotate(180deg)" }}
+					/>
+					<ButtonQuarterRing
+						color="yellow"
+						onPress={() => addAction(`simon-red:pressed`)}
+						additionalStyles={{ transform: "rotate(90deg)" }}
+					/>
+				</div>
 			</div>
 			<div></div>
 
