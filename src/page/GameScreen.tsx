@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonQuarterRing from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
+import { MockGame } from "../service/MockGame";
 
 export type GameInput = {
 	type: "button" | "slider" | "switch" | "knob";
 	id: string;
 	enabled: boolean;
+	value?: number | boolean;
 };
 
 export default function GameScreen() {
@@ -19,12 +21,50 @@ export default function GameScreen() {
 		{ type: "button", id: "simon-green", enabled: true },
 		{ type: "button", id: "simon-blue", enabled: true },
 		{ type: "button", id: "simon-yellow", enabled: true },
-		{ type: "slider", id: "slider-1", enabled: true },
-		{ type: "switch", id: "switch-1", enabled: true },
-		{ type: "switch", id: "switch-2", enabled: true },
-		{ type: "knob", id: "knob-1", enabled: true },
-		{ type: "knob", id: "knob-2", enabled: true },
+		{ type: "slider", id: "slider-1", enabled: true, value: 0 },
+		{ type: "switch", id: "switch-1", enabled: true, value: false },
+		{ type: "switch", id: "switch-2", enabled: true, value: false },
+		{ type: "knob", id: "knob-1", enabled: true, value: 0 },
+		{ type: "knob", id: "knob-2", enabled: true, value: 0 },
 	]);
+
+	const game = MockGame.getInstance();
+	const [sequence, setSequence] = useState<any[]>(game.getSequence());
+	const [currentHighlight, setCurrentHighlight] = useState<string>("");
+
+	const highlightInput = (id: string, value: any) => {
+		if (value !== undefined) {
+			setInputs((prev) =>
+				prev.map((input) =>
+					input.id === id ? { ...input, value: value } : input,
+				),
+			);
+		} else {
+			setCurrentHighlight(id);
+		}
+	};
+
+	const reenactSequence = async () => {
+		for (let i = 0; i < sequence.length; i++) {
+			const { id, value } = sequence[i];
+			highlightInput(id, value);
+			await new Promise((res) => setTimeout(res, 1000));
+		}
+		// reset to default state
+		setCurrentHighlight("");
+		setInputs((prev) =>
+			prev.map((input) => {
+				if (input.type === "switch") return { ...input, value: false };
+				if (input.type === "knob") return { ...input, value: 0 };
+				if (input.type === "slider") return { ...input, value: 0 };
+				return input;
+			}),
+		);
+	};
+
+	useEffect(() => {
+		reenactSequence();
+	}, []);
 
 	const enabledButtons = inputs.filter(
 		(input) => input.type === "button" && input.enabled,
@@ -79,6 +119,7 @@ export default function GameScreen() {
 					<Slider
 						key={input.id}
 						max={5}
+						value={typeof input.value === "number" ? input.value : 0}
 						onChange={(value) => addAction(`${input.id}:${value}`)}
 					/>
 				))}
@@ -96,21 +137,25 @@ export default function GameScreen() {
 						color="red"
 						onPress={() => addAction(`simon-red:pressed`)}
 						additionalStyles={{ transform: "rotate(270deg)" }}
+						triggerAnimation={currentHighlight === "simon-red"}
 					/>
 					<ButtonQuarterRing
 						color="green"
-						onPress={() => addAction(`simon-red:pressed`)}
+						onPress={() => addAction(`simon-green:pressed`)}
 						additionalStyles={{ transform: "rotate(0deg)" }}
+						triggerAnimation={currentHighlight === "simon-green"}
 					/>
 					<ButtonQuarterRing
 						color="blue"
-						onPress={() => addAction(`simon-red:pressed`)}
+						onPress={() => addAction(`simon-blue:pressed`)}
 						additionalStyles={{ transform: "rotate(180deg)" }}
+						triggerAnimation={currentHighlight === "simon-blue"}
 					/>
 					<ButtonQuarterRing
 						color="yellow"
-						onPress={() => addAction(`simon-red:pressed`)}
+						onPress={() => addAction(`simon-yellow:pressed`)}
 						additionalStyles={{ transform: "rotate(90deg)" }}
+						triggerAnimation={currentHighlight === "simon-yellow"}
 					/>
 				</div>
 			</div>
@@ -131,6 +176,7 @@ export default function GameScreen() {
 					<Switch
 						key={input.id}
 						onToggle={(state) => addAction(`${input.id}:${state}`)}
+						value={typeof input.value === "boolean" ? input.value : false}
 					/>
 				))}
 			</div>
@@ -172,6 +218,7 @@ export default function GameScreen() {
 						key={input.id}
 						max={8}
 						onChange={(value) => addAction(`${input.id}:${value}`)}
+						value={typeof input.value === "number" ? input.value : 0}
 					/>
 				))}
 			</div>
