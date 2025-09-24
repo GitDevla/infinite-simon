@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 export default function Switch({
 	onToggle,
 	value,
+	id
 }: {
 	onToggle?: (isOn: boolean) => void;
 	value?: boolean;
+	id?: string;
 }) {
 	const [isOn, setIsOn] = useState(false);
 
@@ -21,7 +23,7 @@ export default function Switch({
 	}
 
 	return (
-		<div>
+		<div id={id}>
 			<input
 				type="checkbox"
 				checked={isOn}

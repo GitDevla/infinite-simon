@@ -5,11 +5,13 @@ export default function ButtonQuarterRing({
 	onPress,
 	additionalStyles,
 	triggerAnimation,
+	id
 }: {
 	color?: string;
 	onPress?: () => void;
 	additionalStyles?: React.CSSProperties;
 	triggerAnimation?: boolean;
+	id?: string;
 }) {
 	const ref = useRef<SVGSVGElement>(null);
 
@@ -36,6 +38,7 @@ export default function ButtonQuarterRing({
 				...additionalStyles,
 			}}
 			onClick={onPress}
+			id={id}
 		>
 			<svg
 				ref={ref}

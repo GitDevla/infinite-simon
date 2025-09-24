@@ -5,11 +5,13 @@ export default function Slider({
 	max = 5,
 	value: externalValue,
 	onChange,
+	id,
 }: {
 	min?: number;
 	max?: number;
 	value?: number;
 	onChange?: (value: number) => void;
+	id?: string;
 }) {
 	const [internalValue, setInternalValue] = useState(min);
 	const currentValue = internalValue;
@@ -62,6 +64,7 @@ export default function Slider({
 				gap: "7%",
 				justifyContent: "space-between",
 			}}
+			id={id}
 		>
 			<div
 				style={{

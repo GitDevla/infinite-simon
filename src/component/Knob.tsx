@@ -6,11 +6,13 @@ export default function Knob({
 	max = 5,
 	value: externalValue,
 	onChange,
+	id
 }: {
 	min?: number;
 	max?: number;
 	onChange?: (value: number) => void;
 	value?: number;
+	id?: string;
 }) {
 	const [innerValue, setInnerValue] = useState(min);
 
@@ -48,7 +50,7 @@ export default function Knob({
 	};
 
 	return (
-		<div style={{ position: "relative", width: "100px", height: "100px" }}>
+		<div style={{ position: "relative", width: "100px", height: "100px" }} id={id}>
 			<div
 				style={{
 					position: "absolute",

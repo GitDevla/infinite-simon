@@ -15,6 +15,10 @@ export type GameInput = {
 
 export default function GameScreen() {
 	const [actions, setActions] = useState<any[]>([]);
+	const [pointerPosition, setPointerPosition] = useState<{
+		x: number;
+		y: number;
+	} | null>(null);
 	const [gameOngoing, setGameOngoing] = useState(true);
 	const [inputs, setInputs] = useState<GameInput[]>([
 		{ type: "button", id: "simon-red", enabled: true },
@@ -32,7 +36,16 @@ export default function GameScreen() {
 	const [sequence, setSequence] = useState<any[]>(game.getSequence());
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 
-	const highlightInput = (id: string, value: any) => {
+	const highlightInput = async (id: string, value: any) => {
+		const element = document.getElementById(id);
+		if (element) {
+			const rect = element.getBoundingClientRect();
+			setPointerPosition({
+				x: rect.left + rect.width / 2,
+				y: rect.top + rect.height / 2,
+			});
+		}
+		await new Promise((res) => setTimeout(res, 500));
 		if (value !== undefined) {
 			setInputs((prev) =>
 				prev.map((input) =>
@@ -61,6 +74,7 @@ export default function GameScreen() {
 				return input;
 			}),
 		);
+		setPointerPosition(null);
 		document.body.style.pointerEvents = "auto";
 	};
 
@@ -123,6 +137,7 @@ export default function GameScreen() {
 						max={5}
 						value={typeof input.value === "number" ? input.value : 0}
 						onChange={(value) => addAction(`${input.id}:${value}`)}
+						id={input.id}
 					/>
 				))}
 			</div>
@@ -140,24 +155,28 @@ export default function GameScreen() {
 						onPress={() => addAction(`simon-red:pressed`)}
 						additionalStyles={{ transform: "rotate(270deg)" }}
 						triggerAnimation={currentHighlight === "simon-red"}
+						id="simon-red"
 					/>
 					<ButtonQuarterRing
 						color="green"
 						onPress={() => addAction(`simon-green:pressed`)}
 						additionalStyles={{ transform: "rotate(0deg)" }}
 						triggerAnimation={currentHighlight === "simon-green"}
+						id="simon-green"
 					/>
 					<ButtonQuarterRing
 						color="blue"
 						onPress={() => addAction(`simon-blue:pressed`)}
 						additionalStyles={{ transform: "rotate(180deg)" }}
 						triggerAnimation={currentHighlight === "simon-blue"}
+						id="simon-blue"
 					/>
 					<ButtonQuarterRing
 						color="yellow"
 						onPress={() => addAction(`simon-yellow:pressed`)}
 						additionalStyles={{ transform: "rotate(90deg)" }}
 						triggerAnimation={currentHighlight === "simon-yellow"}
+						id="simon-yellow"
 					/>
 				</div>
 			</div>
@@ -179,6 +198,7 @@ export default function GameScreen() {
 						key={input.id}
 						onToggle={(state) => addAction(`${input.id}:${state}`)}
 						value={typeof input.value === "boolean" ? input.value : false}
+						id={input.id}
 					/>
 				))}
 			</div>
@@ -221,10 +241,26 @@ export default function GameScreen() {
 						max={8}
 						onChange={(value) => addAction(`${input.id}:${value}`)}
 						value={typeof input.value === "number" ? input.value : 0}
+						id={input.id}
 					/>
 				))}
 			</div>
 			{!gameOngoing && <GameEndModal score={score} />}
+			{pointerPosition && (
+				<div
+					style={{
+						position: "fixed",
+						left: pointerPosition.x,
+						top: pointerPosition.y,
+						fontSize: "2rem",
+						pointerEvents: "none",
+						zIndex: 1000,
+						transition: "left 300ms ease, top 300ms ease",
+					}}
+				>
+					👆
+				</div>
+			)}
 		</div>
 	);
 }
