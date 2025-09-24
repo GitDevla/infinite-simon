@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mod } from "../util/mod";
 
 export default function Knob({
 	min = 0,
 	max = 5,
+	value: externalValue,
 	onChange,
 }: {
 	min?: number;
 	max?: number;
 	onChange?: (value: number) => void;
+	value?: number;
 }) {
 	const [innerValue, setInnerValue] = useState(min);
+
+	useEffect(() => {
+		if (externalValue !== undefined) {
+			setInnerValue(externalValue);
+		}
+	}, [externalValue]);
 
 	const clamp = (v: number) => mod(Math.round(v), max);
 

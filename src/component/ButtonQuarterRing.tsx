@@ -1,12 +1,35 @@
+import { useEffect, useRef } from "react";
+
 export default function ButtonQuarterRing({
 	color,
 	onPress,
 	additionalStyles,
+	triggerAnimation,
 }: {
 	color?: string;
 	onPress?: () => void;
 	additionalStyles?: React.CSSProperties;
+	triggerAnimation?: boolean;
 }) {
+	const ref = useRef<SVGSVGElement>(null);
+
+	function onClickAnimation() {
+		if (!ref.current) return;
+		ref.current.style.setProperty(
+			"filter",
+			`drop-shadow(0 0 10px ${color}) drop-shadow(0 0 20px ${color})`,
+		);
+		setTimeout(() => {
+			ref.current?.style.setProperty("filter", "none");
+		}, 200);
+	}
+
+	useEffect(() => {
+		if (triggerAnimation) {
+			onClickAnimation();
+		}
+	}, [triggerAnimation]);
+
 	return (
 		<div
 			style={{
@@ -15,18 +38,23 @@ export default function ButtonQuarterRing({
 			onClick={onPress}
 		>
 			<svg
+				ref={ref}
 				viewBox="-40 -65 95 95"
 				xmlns="http://www.w3.org/2000/svg"
 				style={{
 					cursor: "pointer",
-					transition: "filter 0.3s ease",
+					transition: "filter 0.5s ease",
 				}}
 				onMouseEnter={(e) => {
-					e.currentTarget.style.filter = `drop-shadow(0 0 3px ${color}) drop-shadow(0 0 16px ${color})`;
+					ref.current?.style.setProperty(
+						"filter",
+						`drop-shadow(0 0 3px ${color}) drop-shadow(0 0 16px ${color})`,
+					);
 				}}
 				onMouseLeave={(e) => {
-					e.currentTarget.style.filter = "none";
+					ref.current?.style.setProperty("filter", "none");
 				}}
+				onClick={onClickAnimation}
 			>
 				<path
 					d="

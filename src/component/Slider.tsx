@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Slider({
 	min = 0,
 	max = 5,
+	value: externalValue,
 	onChange,
 }: {
 	min?: number;
 	max?: number;
+	value?: number;
 	onChange?: (value: number) => void;
 }) {
-	const [value, setValue] = useState(min);
+	const [internalValue, setInternalValue] = useState(min);
+	const currentValue = internalValue;
+
+	useEffect(() => {
+		if (externalValue !== undefined) {
+			setInternalValue(externalValue);
+		}
+	}, [externalValue]);
 
 	const handleMouseDown = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -25,14 +34,11 @@ export default function Slider({
 			const newValue = Math.round(
 				(1 - clampedY / parentRect.height) * (max - 1),
 			);
-			setValue(newValue);
+
+			setInternalValue(newValue);
 		};
 		const onMouseUp = () => {
-			setValue((v) => {
-				onChange?.(v);
-				return v;
-			});
-
+			onChange?.(currentValue);
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("mouseup", onMouseUp);
 		};
@@ -108,7 +114,7 @@ export default function Slider({
 						position: "absolute",
 						left: "50%",
 						transform: "translate(-50%,-50%)",
-						top: `${100 - (value / (max - 1)) * 100}%`,
+						top: `${100 - (currentValue / (max - 1)) * 100}%`,
 						cursor: "pointer",
 						touchAction: "none",
 						transition: "top 0.2s ease-out",
@@ -123,7 +129,7 @@ export default function Slider({
 					fontSize: "1.5rem",
 				}}
 			>
-				<span>{value + 1}</span>
+				<span>{currentValue + 1}</span>
 			</div>
 		</div>
 	);
