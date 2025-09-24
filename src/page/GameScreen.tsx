@@ -16,11 +16,11 @@ export type GameInput = {
 };
 
 export default function GameScreen() {
-	const [actions, setActions] = useState<any[]>([]);
 	const [pointerPosition, setPointerPosition] = useState<{
 		x: number;
 		y: number;
 	} | null>(null);
+	const [score, setScore] = useState(0);
 	const [gameOngoing, setGameOngoing] = useState(true);
 	const [inputs, setInputs] = useState<GameInput[]>([
 		{ type: "button", id: "simon-red", enabled: true },
@@ -38,6 +38,16 @@ export default function GameScreen() {
 	const [sequence, setSequence] = useState<any[]>(game.getSequence());
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 	const moveSpeedInMs = 700;
+
+	const handleUserInput = (id: string, value: any) => {
+		const actionString = value !== undefined ? `${id}:${value}` : id;
+		if (!game.validateUserAction(actionString)) setGameOngoing(false);
+
+		if (game.isEndOfSequence()) {
+			setScore((s) => s + 1);
+			setSequence(game.getSequence());
+		}
+	};
 
 	const moveCursorToComponent = async (id: string) => {
 		const element = document.getElementById(id);
@@ -95,7 +105,7 @@ export default function GameScreen() {
 
 	useEffect(() => {
 		reenactSequence();
-	}, []);
+	}, [sequence]);
 
 	const enabledButtons = inputs.filter(
 		(input) => input.type === "button" && input.enabled,
@@ -109,11 +119,6 @@ export default function GameScreen() {
 	const enabledKnobs = inputs.filter(
 		(input) => input.type === "knob" && input.enabled,
 	);
-
-	const score = actions.length;
-	const addAction = (action: string) => {
-		setActions((prev) => [...prev, action]);
-	};
 
 	const rotations = [270, 0, 180, 90];
 
@@ -153,7 +158,7 @@ export default function GameScreen() {
 						key={input.id}
 						max={5}
 						value={typeof input.value === "number" ? input.value : 0}
-						onChange={(value) => addAction(`${input.id}:${value}`)}
+						onChange={(value) => handleUserInput(input.id, value)}
 						id={input.id}
 					/>
 				))}
@@ -171,7 +176,7 @@ export default function GameScreen() {
 						<ButtonQuarterRing
 							key={input.id}
 							color={input.id.split("-")[1]}
-							onPress={() => addAction(`${input.id}:pressed`)}
+							onPress={() => handleUserInput(input.id, true)}
 							additionalStyles={{ transform: `rotate(${rotations[index]}deg)` }}
 							triggerAnimation={currentHighlight === input.id}
 							id={input.id}
@@ -195,7 +200,7 @@ export default function GameScreen() {
 				{enabledSwitches.map((input) => (
 					<Switch
 						key={input.id}
-						onToggle={(state) => addAction(`${input.id}:${state}`)}
+						onToggle={(state) => handleUserInput(input.id, state)}
 						value={typeof input.value === "boolean" ? input.value : false}
 						id={input.id}
 					/>
@@ -238,7 +243,7 @@ export default function GameScreen() {
 					<Knob
 						key={input.id}
 						max={8}
-						onChange={(value) => addAction(`${input.id}:${value}`)}
+						onChange={(value) => handleUserInput(input.id, value)}
 						value={typeof input.value === "number" ? input.value : 0}
 						id={input.id}
 					/>

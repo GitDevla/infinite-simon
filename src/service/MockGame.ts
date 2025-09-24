@@ -19,4 +19,12 @@ export class MockGame {
 			{ type: "knob", id: "knob-2", value: 4 },
 		];
 	}
+
+	public validateUserAction(action: string): boolean {
+		return true;
+	}
+
+	public isEndOfSequence(): boolean {
+		return false;
+	}
 }
