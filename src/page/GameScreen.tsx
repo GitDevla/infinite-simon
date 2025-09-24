@@ -39,7 +39,7 @@ export default function GameScreen() {
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 	const moveSpeedInMs = 700;
 
-	const moveCursorToComponent = (id: string) => {
+	const moveCursorToComponent = async (id: string) => {
 		const element = document.getElementById(id);
 		if (element) {
 			const rect = element.getBoundingClientRect();
@@ -48,11 +48,10 @@ export default function GameScreen() {
 				y: rect.top + rect.height / 2,
 			});
 		}
+		await sleep(moveSpeedInMs);
 	};
 
 	const highlightInput = async (id: string, value: any) => {
-		moveCursorToComponent(id);
-		await sleep(moveSpeedInMs);
 		if (value !== undefined) {
 			setInputs((prev) =>
 				prev.map((input) =>
@@ -64,14 +63,7 @@ export default function GameScreen() {
 		}
 	};
 
-	const reenactSequence = async () => {
-		document.body.style.pointerEvents = "none";
-		for (let i = 0; i < sequence.length; i++) {
-			const { id, value } = sequence[i];
-			await highlightInput(id, value);
-			await sleep(moveSpeedInMs);
-		}
-		// reset to default state
+	const resetScene = async () => {
 		setCurrentHighlight("");
 		setInputs((prev) =>
 			prev.map((input) => {
@@ -82,7 +74,23 @@ export default function GameScreen() {
 			}),
 		);
 		setPointerPosition(null);
-		document.body.style.pointerEvents = "auto";
+	};
+
+	const enableUserInteraction = (value: boolean) => {
+		document.body.style.pointerEvents = value ? "auto" : "none";
+	};
+
+	const reenactSequence = async () => {
+		enableUserInteraction(false);
+		for (let i = 0; i < sequence.length; i++) {
+			const { id, value } = sequence[i];
+			await moveCursorToComponent(id);
+			await highlightInput(id, value);
+			await sleep(moveSpeedInMs);
+		}
+		resetScene();
+		setPointerPosition(null);
+		enableUserInteraction(true);
 	};
 
 	useEffect(() => {
