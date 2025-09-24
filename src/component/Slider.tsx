@@ -38,7 +38,11 @@ export default function Slider({
 			setInternalValue(newValue);
 		};
 		const onMouseUp = () => {
-			onChange?.(currentValue);
+			setInternalValue((v) => {
+				v = Math.round(v);
+				onChange?.(v);
+				return v;
+			});
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("mouseup", onMouseUp);
 		};
