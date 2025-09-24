@@ -6,6 +6,7 @@ import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 import { MockGame } from "../service/MockGame";
+import sleep from "../util/sleep";
 
 export type GameInput = {
 	type: "button" | "slider" | "switch" | "knob";
@@ -36,8 +37,9 @@ export default function GameScreen() {
 	const game = MockGame.getInstance();
 	const [sequence, setSequence] = useState<any[]>(game.getSequence());
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
+	const moveSpeedInMs = 700;
 
-	const highlightInput = async (id: string, value: any) => {
+	const moveCursorToComponent = (id: string) => {
 		const element = document.getElementById(id);
 		if (element) {
 			const rect = element.getBoundingClientRect();
@@ -46,7 +48,11 @@ export default function GameScreen() {
 				y: rect.top + rect.height / 2,
 			});
 		}
-		await new Promise((res) => setTimeout(res, 500));
+	};
+
+	const highlightInput = async (id: string, value: any) => {
+		moveCursorToComponent(id);
+		await sleep(moveSpeedInMs);
 		if (value !== undefined) {
 			setInputs((prev) =>
 				prev.map((input) =>
@@ -62,8 +68,8 @@ export default function GameScreen() {
 		document.body.style.pointerEvents = "none";
 		for (let i = 0; i < sequence.length; i++) {
 			const { id, value } = sequence[i];
-			highlightInput(id, value);
-			await new Promise((res) => setTimeout(res, 1000));
+			await highlightInput(id, value);
+			await sleep(moveSpeedInMs);
 		}
 		// reset to default state
 		setCurrentHighlight("");
@@ -247,7 +253,7 @@ export default function GameScreen() {
 				))}
 			</div>
 			{!gameOngoing && <GameEndModal score={score} />}
-			<AnimatedCursor pos={pointerPosition} />
+			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />
 		</div>
 	);
 }

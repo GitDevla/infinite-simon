@@ -1,7 +1,9 @@
 export default function AnimatedCursor({
 	pos,
+	speed = 300,
 }: {
 	pos: { x: number; y: number } | null;
+	speed?: number;
 }) {
 	return pos ? (
 		<div
@@ -12,7 +14,7 @@ export default function AnimatedCursor({
 				fontSize: "2rem",
 				pointerEvents: "none",
 				zIndex: 1000,
-				transition: "left 300ms ease, top 300ms ease",
+				transition: `left ${speed}ms ease, top ${speed}ms ease`,
 			}}
 		>
 			👆
