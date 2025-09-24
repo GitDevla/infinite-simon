@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AnimatedCursor from "../component/AnimatedCursor";
 import ButtonQuarterRing from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
@@ -246,21 +247,7 @@ export default function GameScreen() {
 				))}
 			</div>
 			{!gameOngoing && <GameEndModal score={score} />}
-			{pointerPosition && (
-				<div
-					style={{
-						position: "fixed",
-						left: pointerPosition.x,
-						top: pointerPosition.y,
-						fontSize: "2rem",
-						pointerEvents: "none",
-						zIndex: 1000,
-						transition: "left 300ms ease, top 300ms ease",
-					}}
-				>
-					👆
-				</div>
-			)}
+			<AnimatedCursor pos={pointerPosition} />
 		</div>
 	);
 }
