@@ -4,6 +4,7 @@ import "./style/index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./page/App";
 import GameScreen from "./page/GameScreen";
+import ScoreBoard from "./page/ScoreBoard"
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -15,6 +16,7 @@ root.render(
 		<Routes>
 			<Route path="/" element={<App />} />
 			<Route path="/game" element={<GameScreen />} />
+			<Route path="/score" element={<ScoreBoard />} />
 		</Routes>
 	</BrowserRouter>,
 	// </React.StrictMode>,
