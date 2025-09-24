@@ -115,6 +115,8 @@ export default function GameScreen() {
 		setActions((prev) => [...prev, action]);
 	};
 
+	const rotations = [270, 0, 180, 90];
+
 	return (
 		<div
 			style={{
@@ -165,34 +167,16 @@ export default function GameScreen() {
 						aspectRatio: "1/1",
 					}}
 				>
-					<ButtonQuarterRing
-						color="red"
-						onPress={() => addAction(`simon-red:pressed`)}
-						additionalStyles={{ transform: "rotate(270deg)" }}
-						triggerAnimation={currentHighlight === "simon-red"}
-						id="simon-red"
-					/>
-					<ButtonQuarterRing
-						color="green"
-						onPress={() => addAction(`simon-green:pressed`)}
-						additionalStyles={{ transform: "rotate(0deg)" }}
-						triggerAnimation={currentHighlight === "simon-green"}
-						id="simon-green"
-					/>
-					<ButtonQuarterRing
-						color="blue"
-						onPress={() => addAction(`simon-blue:pressed`)}
-						additionalStyles={{ transform: "rotate(180deg)" }}
-						triggerAnimation={currentHighlight === "simon-blue"}
-						id="simon-blue"
-					/>
-					<ButtonQuarterRing
-						color="yellow"
-						onPress={() => addAction(`simon-yellow:pressed`)}
-						additionalStyles={{ transform: "rotate(90deg)" }}
-						triggerAnimation={currentHighlight === "simon-yellow"}
-						id="simon-yellow"
-					/>
+					{enabledButtons.map((input, index) => (
+						<ButtonQuarterRing
+							key={input.id}
+							color={input.id.split("-")[1]}
+							onPress={() => addAction(`${input.id}:pressed`)}
+							additionalStyles={{ transform: `rotate(${rotations[index]}deg)` }}
+							triggerAnimation={currentHighlight === input.id}
+							id={input.id}
+						/>
+					))}
 				</div>
 			</div>
 			<div></div>
