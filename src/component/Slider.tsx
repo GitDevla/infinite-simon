@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Slider({
 	min = 0,
@@ -15,6 +15,7 @@ export default function Slider({
 }) {
 	const [internalValue, setInternalValue] = useState(min);
 	const currentValue = internalValue;
+	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (externalValue !== undefined) {
@@ -22,32 +23,56 @@ export default function Slider({
 		}
 	}, [externalValue]);
 
-	const handleMouseDown = (e: React.MouseEvent) => {
+	const calulateNewValue = (clientY: number) => {
+		const parentRect = ref.current?.getBoundingClientRect();
+		if (!parentRect) return currentValue;
+
+		const relativeY = clientY - parentRect.top;
+		const clampedY = Math.max(0, Math.min(relativeY, parentRect.height));
+		const newValue = Math.round(
+			(1 - clampedY / parentRect.height) * (max - 1),
+		);
+
+		return newValue;
+	}
+
+	const idk = () => {
+		setInternalValue(v => {
+			v = Math.round(v);
+			onChange?.(v);
+			return v;
+		});
+	}
+
+	const handleInteraction = (e: React.MouseEvent| React.TouchEvent) => {
 		e.preventDefault();
 
-		const parentRect = (
-			e.target as HTMLDivElement
-		).parentElement?.getBoundingClientRect();
+		const parentRect = ref.current?.getBoundingClientRect();
 		if (!parentRect) return;
 
 		const onMouseMove = (moveEvent: MouseEvent) => {
-			const relativeY = moveEvent.clientY - parentRect.top;
-			const clampedY = Math.max(0, Math.min(relativeY, parentRect.height));
-			const newValue = Math.round(
-				(1 - clampedY / parentRect.height) * (max - 1),
-			);
-
-			setInternalValue(newValue);
+			setInternalValue(calulateNewValue(moveEvent.clientY));
 		};
+
+		const onTouchMove = (touchEvent: TouchEvent) => {
+			const touch = touchEvent.touches[0];
+			setInternalValue(calulateNewValue(touch.clientY));
+		}
+
 		const onMouseUp = () => {
-			setInternalValue((v) => {
-				v = Math.round(v);
-				onChange?.(v);
-				return v;
-			});
+			idk();
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("mouseup", onMouseUp);
 		};
+		const onTouchEnd = () => {
+			idk();
+			window.removeEventListener("touchmove", onTouchMove);
+			window.removeEventListener("touchend", onTouchEnd);
+		}
+
+		window.addEventListener("touchmove", onTouchMove, { passive: false });
+		window.addEventListener("touchend", onTouchEnd);
+
 		window.addEventListener("mousemove", onMouseMove);
 		window.addEventListener("mouseup", onMouseUp);
 	};
@@ -86,6 +111,7 @@ export default function Slider({
 							transform: "translateX(-50%)",
 							backgroundColor: "black",
 						}}
+						ref={ref}
 					>
 						{Array.from({ length: max }).map((_, i) => (
 							<div
@@ -126,7 +152,8 @@ export default function Slider({
 						touchAction: "none",
 						transition: "top 0.2s ease-out",
 					}}
-					onMouseDown={handleMouseDown}
+					onMouseDown={handleInteraction}
+					onTouchStart={handleInteraction}
 				></div>
 			</div>
 			<div
