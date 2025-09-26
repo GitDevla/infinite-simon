@@ -24,6 +24,7 @@ function App() {
         </table>
       </div>
     </nav>
+    
   );
 }
 
