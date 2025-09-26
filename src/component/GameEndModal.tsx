@@ -1,13 +1,23 @@
-import SaveScore from "./SaveScore";
 import { useState } from "react";
+import SaveScore from "./SaveScore";
 
 export default function GameEndModal({ score = 0 }: { score?: number }) {
-	function updateUsernameAndSave(){
-		let unsafeName = document.getElementById('username') as HTMLInputElement | null;
-		let name = unsafeName ? unsafeName.value : 'N/A';
-		SaveScore(name,score)
-		alert(name+"! Your "+ score+" was successfully saved!")
+	const [username, setUsername] = useState("");
+
+	const validUsername = username.trim().length > 0;
+
+	function updateUsernameAndSave() {
+		SaveScore(username, score);
+		alert(username + "! Your " + score + " was successfully saved!");
 	}
+
+	function handleKeyPress() {
+		if (validUsername) {
+			updateUsernameAndSave();
+		}
+		window.location.reload();
+	}
+
 	return (
 		<>
 			<div
@@ -26,8 +36,15 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				<h2>You lost</h2>
 				<p>Correct sequence was ...</p>
 				<p>Enter your name to save your score ({score}) as the #1 player!</p>
-				<input id="username"  className="p-2" type="text" placeholder="Your name"/>
-				<button type="button" style={{marginLeft:"2%"}} onClick={updateUsernameAndSave} >Save score!</button>
+				<input
+					id="username"
+					className="p-2"
+					type="text"
+					placeholder="Your name"
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
+				/>
+				<br />
 				<button
 					type="button"
 					className="rounded-sm pointer"
@@ -37,11 +54,9 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 						outline: "none",
 						border: "none",
 					}}
-					onClick={() => {
-						window.location.reload();
-					}}
+					onClick={handleKeyPress}
 				>
-					Or give it one more try
+					{validUsername ? "Save and try again" : "Or give it one more try"}
 				</button>
 			</div>
 		</>
