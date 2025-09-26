@@ -93,12 +93,18 @@ export default function GameScreen() {
 
 	const reenactSequence = async () => {
 		enableUserInteraction(false);
+		setPointerPosition({
+			x: window.innerWidth / 2,
+			y: window.innerHeight / 2,
+		});
+		await sleep(moveSpeedInMs);
 		for (let i = 0; i < sequence.length; i++) {
 			const { id, value } = sequence[i];
 			await moveCursorToComponent(id);
 			await highlightInput(id, value);
 			await sleep(moveSpeedInMs);
 		}
+		await sleep(moveSpeedInMs);
 		resetScene();
 		setPointerPosition(null);
 		enableUserInteraction(true);
