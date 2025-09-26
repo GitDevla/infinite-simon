@@ -124,43 +124,11 @@ export default function GameScreen() {
 	const rotations = [270, 0, 180, 90];
 
 	return (
-		<div
-			className="grid"
-			style={{
-				gridTemplateRows: "auto 1fr auto",
-				gridTemplateColumns: "1fr 5fr 1fr",
-				gap: "20px",
-				height: "100vh",
-			}}
-		>
-			<div
-				className="align-center"
-				style={{
-					gridColumn: "1 / -1",
-				}}
-			>
+		<div className="layout">
+			<div className="topbar align-center">
 				<span style={{ fontSize: "3rem" }}>Score: {score}</span>
 			</div>
-			<div
-				className="flex w-full p-2 gap-2"
-				style={{
-					backgroundColor: "lightgrey",
-					borderRadius: "0 40px 40px 0",
-					height: "70%",
-					margin: "auto",
-				}}
-			>
-				{enabledSliders.map((input) => (
-					<Slider
-						key={input.id}
-						max={5}
-						value={typeof input.value === "number" ? input.value : 0}
-						onChange={(value) => handleUserInput(input.id, value)}
-						id={input.id}
-					/>
-				))}
-			</div>
-			<div className="flex content-center">
+			<div className="center flex content-center">
 				<div
 					className="grid"
 					style={{
@@ -181,13 +149,41 @@ export default function GameScreen() {
 					))}
 				</div>
 			</div>
-			<div></div>
-
+			<div className="bottom-middle flex flex-center">
+				<button
+					type="button"
+					onClick={() => setGameOngoing(false)}
+					className="p-2 text-xl pointer"
+					style={{
+						border: "none",
+						borderRadius: "4000px",
+					}}
+				>
+					GIVE UP
+				</button>
+			</div>
 			<div
-				className="flex gap-2 flex-center p-2"
+				className="left flex w-full p-2 gap-2"
 				style={{
 					backgroundColor: "lightgrey",
-					borderRadius: "0 40px 0 0",
+					height: "100%",
+				}}
+			>
+				{enabledSliders.map((input) => (
+					<Slider
+						key={input.id}
+						max={5}
+						value={typeof input.value === "number" ? input.value : 0}
+						onChange={(value) => handleUserInput(input.id, value)}
+						id={input.id}
+					/>
+				))}
+			</div>
+
+			<div
+				className="bottom-left flex gap-2 flex-center p-2"
+				style={{
+					backgroundColor: "lightgrey",
 				}}
 			>
 				{enabledSwitches.map((input) => (
@@ -199,25 +195,10 @@ export default function GameScreen() {
 					/>
 				))}
 			</div>
-			<div className="flex flex-center">
-				<button
-					type="button"
-					onClick={() => setGameOngoing(false)}
-					className="p-2 text-xl pointer"
-					style={{
-						width: "25%",
-						border: "none",
-						borderRadius: "4000px",
-					}}
-				>
-					GIVE UP
-				</button>
-			</div>
 			<div
-				className="flex gap-2 flex-center p-2"
+				className="bottom-right flex gap-2 flex-center p-2"
 				style={{
 					backgroundColor: "lightgrey",
-					borderRadius: "40px 0 0 0",
 				}}
 			>
 				{enabledKnobs.map((input) => (
