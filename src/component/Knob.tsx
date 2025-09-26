@@ -6,7 +6,7 @@ export default function Knob({
 	max = 5,
 	value: externalValue,
 	onChange,
-	id
+	id,
 }: {
 	min?: number;
 	max?: number;
@@ -50,34 +50,19 @@ export default function Knob({
 	};
 
 	return (
-		<div style={{ position: "relative", width: "100px", height: "100px" }} id={id}>
+		<div
+			className="relative"
+			style={{ width: "100px", height: "100px" }}
+			id={id}
+		>
 			<div
-				style={{
-					position: "absolute",
-					width: "50%",
-					height: "50%",
-					top: "50%",
-					left: "50%",
-					transform: "translate(-50%, -50%)",
-					borderRadius: "25px",
-					backgroundColor: "gray",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-				}}
+				className="simon-knob absolute left-1/2 top-1/2 size-1/2 transform-center rounded-full flex flex-center"
 				onMouseDown={handleMouseDown}
 			>
 				<div
+					className="simon-knob-inner absolute rounded-sm"
 					style={{
-						position: "absolute",
-						width: "4px",
-						height: "20px",
-						backgroundColor: "black",
-						top: "5px",
-						borderRadius: "2px",
 						transform: `rotate(${((innerValue - min) / (max - min)) * 360}deg)`,
-						transformOrigin: "bottom center",
-						transition: "transform 0.2s ease-out",
 					}}
 				></div>
 			</div>
@@ -85,19 +70,11 @@ export default function Knob({
 				{Array.from({ length: max }, (_, i) => (
 					<span
 						key={i}
+						className="absolute top-1/2 left-1/2 transform-center transition-all flex text-sm"
 						style={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							width: "20px",
-							height: "20px",
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							transform: `translate(-50%, -50%) rotate(${(i / max) * 360}deg) translateY(-40px) rotate(-${(i / max) * 360}deg)`,
+							transform: `translate(-50%, -50%) rotate(${(i / max) * 360}deg) translateY(-40px) rotate(-${(i / max) * 360}deg) scale(${i === clamp(innerValue) ? 1.2 : 1})`,
 							transformOrigin: "center center",
 							color: i === clamp(innerValue) ? "red" : "black",
-							fontSize: "14px",
 						}}
 					>
 						{i}

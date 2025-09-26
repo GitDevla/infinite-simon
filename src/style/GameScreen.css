@@ -1,0 +1,49 @@
+.simon-button {
+	cursor: pointer;
+	transition: filter 0.5s ease;
+}
+
+.simon-button:hover {
+	filter: drop-shadow(0 0 3px var(--button-color))
+		drop-shadow(0 0 16px var(--button-color));
+}
+
+.simon-button.animate {
+	filter: drop-shadow(0 0 10px var(--button-color))
+		drop-shadow(0 0 20px var(--button-color));
+}
+
+.simon-switch {
+	cursor: pointer;
+	background-color: rgba(109, 1, 1, 1);
+	box-shadow: none;
+	transform: rotateX(-15deg);
+}
+
+.simon-switch[data-ison="true"] {
+	background-color: red;
+	box-shadow: 0 0 20px red;
+	transform: rotateX(15deg);
+}
+
+.simon-knob {
+	cursor: grab;
+	background-color: #ccc;
+}
+
+.simon-knob .simon-knob-inner {
+	width: 4px;
+	height: 20px;
+	background-color: black;
+	top: 5px;
+	transform-origin: bottom center;
+	transition: transform 0.1s ease;
+}
+
+.simon-slider .ball {
+	cursor: grab;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	background-color: red;
+}

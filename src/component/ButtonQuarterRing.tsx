@@ -5,7 +5,7 @@ export default function ButtonQuarterRing({
 	onPress,
 	additionalStyles,
 	triggerAnimation,
-	id
+	id,
 }: {
 	color?: string;
 	onPress?: () => void;
@@ -17,12 +17,9 @@ export default function ButtonQuarterRing({
 
 	function onClickAnimation() {
 		if (!ref.current) return;
-		ref.current.style.setProperty(
-			"filter",
-			`drop-shadow(0 0 10px ${color}) drop-shadow(0 0 20px ${color})`,
-		);
+		ref.current.classList.add("animate");
 		setTimeout(() => {
-			ref.current?.style.setProperty("filter", "none");
+			ref.current?.classList.remove("animate");
 		}, 200);
 	}
 
@@ -44,19 +41,12 @@ export default function ButtonQuarterRing({
 				ref={ref}
 				viewBox="-40 -65 95 95"
 				xmlns="http://www.w3.org/2000/svg"
-				style={{
-					cursor: "pointer",
-					transition: "filter 0.5s ease",
-				}}
-				onMouseEnter={(e) => {
-					ref.current?.style.setProperty(
-						"filter",
-						`drop-shadow(0 0 3px ${color}) drop-shadow(0 0 16px ${color})`,
-					);
-				}}
-				onMouseLeave={(e) => {
-					ref.current?.style.setProperty("filter", "none");
-				}}
+				className="simon-button"
+				style={
+					{
+						"--button-color": color,
+					} as React.CSSProperties
+				}
 				onClick={onClickAnimation}
 			>
 				<path

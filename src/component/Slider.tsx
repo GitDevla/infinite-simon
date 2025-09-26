@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Slider({
 	min = 0,
@@ -29,22 +30,20 @@ export default function Slider({
 
 		const relativeY = clientY - parentRect.top;
 		const clampedY = Math.max(0, Math.min(relativeY, parentRect.height));
-		const newValue = Math.round(
-			(1 - clampedY / parentRect.height) * (max - 1),
-		);
+		const newValue = Math.round((1 - clampedY / parentRect.height) * (max - 1));
 
 		return newValue;
-	}
+	};
 
-	const idk = () => {
-		setInternalValue(v => {
+	const updateValueAndNotify = () => {
+		setInternalValue((v) => {
 			v = Math.round(v);
 			onChange?.(v);
 			return v;
 		});
-	}
+	};
 
-	const handleInteraction = (e: React.MouseEvent| React.TouchEvent) => {
+	const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
 		e.preventDefault();
 
 		const parentRect = ref.current?.getBoundingClientRect();
@@ -57,18 +56,18 @@ export default function Slider({
 		const onTouchMove = (touchEvent: TouchEvent) => {
 			const touch = touchEvent.touches[0];
 			setInternalValue(calulateNewValue(touch.clientY));
-		}
+		};
 
 		const onMouseUp = () => {
-			idk();
+			updateValueAndNotify();
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("mouseup", onMouseUp);
 		};
 		const onTouchEnd = () => {
-			idk();
+			updateValueAndNotify();
 			window.removeEventListener("touchmove", onTouchMove);
 			window.removeEventListener("touchend", onTouchEnd);
-		}
+		};
 
 		window.addEventListener("touchmove", onTouchMove, { passive: false });
 		window.addEventListener("touchend", onTouchEnd);
@@ -79,35 +78,18 @@ export default function Slider({
 
 	return (
 		<div
+			className="simon-slider rounded-sm size-full flex flex-column gap-2 content-between p-2"
 			style={{
-				width: "100%",
-				height: "100%",
 				backgroundColor: "darkgrey",
-				padding: "10px",
-				display: "flex",
-				flexDirection: "column",
-				gap: "7%",
-				justifyContent: "space-between",
 			}}
 			id={id}
 		>
-			<div
-				style={{
-					position: "relative",
-					height: "100%",
-				}}
-			>
+			<div className="relative size-full">
 				<div>
 					<div
+						className="absolute size-full flex flex-column flex-center content-between h-full left-1/2"
 						style={{
-							position: "absolute",
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-							justifyContent: "space-between",
-							height: "100%",
 							width: `3px`,
-							left: `50%`,
 							transform: "translateX(-50%)",
 							backgroundColor: "black",
 						}}
@@ -139,28 +121,18 @@ export default function Slider({
 					</div>
 				</div>
 				<div
+					className="ball absolute left-1/2 transform-center transition-all"
 					style={{
-						width: `20px`,
-						height: `20px`,
-						backgroundColor: "red",
-						borderRadius: "50%",
-						position: "absolute",
-						left: "50%",
-						transform: "translate(-50%,-50%)",
 						top: `${100 - (currentValue / (max - 1)) * 100}%`,
-						cursor: "pointer",
-						touchAction: "none",
-						transition: "top 0.2s ease-out",
 					}}
 					onMouseDown={handleInteraction}
 					onTouchStart={handleInteraction}
 				></div>
 			</div>
 			<div
+				className="flex flex-center text-xl"
 				style={{
-					textAlign: "center",
 					backgroundColor: "white",
-					fontSize: "1.5rem",
 				}}
 			>
 				<span>{currentValue + 1}</span>

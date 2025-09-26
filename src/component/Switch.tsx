@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function Switch({
 	onToggle,
 	value,
-	id
+	id,
 }: {
 	onToggle?: (isOn: boolean) => void;
 	value?: boolean;
@@ -23,30 +23,18 @@ export default function Switch({
 	}
 
 	return (
-		<div id={id}
+		<div
+			id={id}
+			className="size-full flex flex-center"
 			style={{
-				width: "100%",
-				height: "100%",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
 				perspective: "400px",
 			}}
 		>
-			<div style={{
-				width: "100%",
-				height: "100%",
-				backgroundColor: isOn ? "red" : "rgba(109, 1, 1, 1)",
-				boxShadow: isOn ? "0 0 20px red" : "none",
-				transform: isOn ? "rotateX(15deg)" : "rotateX(-15deg)",
-				transition: "transform 0.5s",
-				borderRadius: "10px",
-				cursor: "pointer",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "space-around",
-				flexDirection: "column",
-			}} onClick={() => handleToggleChange(!isOn) }>
+			<div
+				className="simon-switch size-full flex flex-column transition-all rounded-sm flex-center content-around"
+				onClick={() => handleToggleChange(!isOn)}
+				data-ison={isOn}
+			>
 				<span>I</span>
 				<span>O</span>
 			</div>

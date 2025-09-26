@@ -11,46 +11,38 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 	return (
 		<>
 			<div
+				className="fixed top-0 left-0 size-full"
 				style={{
-					position: "fixed",
-					top: 0,
-					left: 0,
-					width: "100%",
-					height: "100%",
 					backgroundColor: "rgba(0, 0, 0, 0.5)",
 				}}
 			></div>
 			<div
+				className="fixed p-2 rounded-lg top-1/2 left-1/2 transform-center align-center"
 				style={{
-					position: "fixed",
-					padding: "20px",
-					borderRadius: "10px",
-					top: "50%",
-					left: "50%",
-					transform: "translate(-50%, -50%)",
 					backgroundColor: "white",
 					zIndex: 1000,
-					textAlign: "center",
 				}}
 			>
 				<h2>You lost</h2>
 				<p>Correct sequence was ...</p>
 				<p>Enter your name to save your score ({score}) as the #1 player!</p>
-				<input id="username" type="text" placeholder="Your name"/>
-				
+				<input id="username"  className="p-2" type="text" placeholder="Your name"/>
 				<button type="button" style={{marginLeft:"2%"}} onClick={updateUsernameAndSave} >Save score!</button>
-				<br />
-				<button type="button" style={{
-					marginTop: "10px",
-					padding: "10px 20px",
-					fontSize: "1rem",
-					cursor: "pointer",
-					outline: "none",
-					border: "none",
-					borderRadius: "5px",
-				}} onClick={()=>{
-					window.location.reload();					
-				}}>Or give it one more try</button>
+				<button
+					type="button"
+					className="rounded-sm pointer"
+					style={{
+						marginTop: "10px",
+						padding: "10px 20px",
+						outline: "none",
+						border: "none",
+					}}
+					onClick={() => {
+						window.location.reload();
+					}}
+				>
+					Or give it one more try
+				</button>
 			</div>
 		</>
 	);

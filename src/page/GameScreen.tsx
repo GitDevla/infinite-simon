@@ -7,6 +7,7 @@ import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 import { MockGame } from "../service/MockGame";
 import sleep from "../util/sleep";
+import "../style/GameScreen.css";
 
 export type GameInput = {
 	type: "button" | "slider" | "switch" | "knob";
@@ -124,8 +125,8 @@ export default function GameScreen() {
 
 	return (
 		<div
+			className="grid"
 			style={{
-				display: "grid",
 				gridTemplateRows: "auto 1fr auto",
 				gridTemplateColumns: "1fr 5fr 1fr",
 				gap: "20px",
@@ -133,23 +134,19 @@ export default function GameScreen() {
 			}}
 		>
 			<div
+				className="align-center"
 				style={{
 					gridColumn: "1 / -1",
-					marginBottom: "20px",
-					textAlign: "center",
 				}}
 			>
 				<span style={{ fontSize: "3rem" }}>Score: {score}</span>
 			</div>
 			<div
+				className="flex w-full p-2 gap-2"
 				style={{
-					display: "flex",
-					gap: "10px",
 					backgroundColor: "lightgrey",
-					padding: "20%",
 					borderRadius: "0 40px 40px 0",
 					height: "70%",
-					width: "100%",
 					margin: "auto",
 				}}
 			>
@@ -163,10 +160,10 @@ export default function GameScreen() {
 					/>
 				))}
 			</div>
-			<div style={{ display: "flex", justifyContent: "center" }}>
+			<div className="flex content-center">
 				<div
+					className="grid"
 					style={{
-						display: "grid",
 						gridTemplateColumns: "1fr 1fr",
 						gap: "40px",
 						aspectRatio: "1/1",
@@ -187,13 +184,9 @@ export default function GameScreen() {
 			<div></div>
 
 			<div
+				className="flex gap-2 flex-center p-2"
 				style={{
-					display: "flex",
-					gap: "10px",
-					alignItems: "center",
-					justifyContent: "center",
 					backgroundColor: "lightgrey",
-					padding: "10px",
 					borderRadius: "0 40px 0 0",
 				}}
 			>
@@ -206,36 +199,24 @@ export default function GameScreen() {
 					/>
 				))}
 			</div>
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-				}}
-			>
+			<div className="flex flex-center">
 				<button
 					type="button"
 					onClick={() => setGameOngoing(false)}
+					className="p-2 text-xl pointer"
 					style={{
 						width: "25%",
-						padding: "10px",
-						fontSize: "1.5rem",
 						border: "none",
 						borderRadius: "4000px",
-						cursor: "pointer",
 					}}
 				>
 					GIVE UP
 				</button>
 			</div>
 			<div
+				className="flex gap-2 flex-center p-2"
 				style={{
-					display: "flex",
-					gap: "10px",
-					justifyContent: "center",
-					alignItems: "center",
 					backgroundColor: "lightgrey",
-					padding: "10px",
 					borderRadius: "40px 0 0 0",
 				}}
 			>
