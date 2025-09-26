@@ -7,7 +7,7 @@ function App() {
   return (
     <nav>
       <div className='wrapper'> 
-        <table>
+        <table className='title_table'>
           <div className='title'>
             <span style={{color:"#ca1515ff"}}>IN</span>
             <span style={{color:"#1e8b1eff"}}>FI</span>

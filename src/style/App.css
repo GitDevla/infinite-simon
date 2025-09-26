@@ -57,11 +57,6 @@ div.navButton{
   margin-left: 20%;
   margin-right: 20%;
 }
-table{
-  background-color: #757575;
-  border-top-left-radius: 15%;
-  border-top-right-radius: 15%;
-}
 div.title{
   padding: 0 5% 5% 5%;
   margin-bottom: 5%;
@@ -70,5 +65,37 @@ div.title{
   background-color: #575757;
   border-top-left-radius: 20%;
   border-top-right-radius: 20%;
-
+}
+table{
+  border-collapse: collapse;
+  background-color: #757575;
+}
+table.title_table{
+  border-top-left-radius: 15%;
+  border-top-right-radius: 15%;
+}
+table.scoreboard{
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 5%
+}
+table.scoreboard > tr:nth-child(even) {
+  background-color: #A9A9A9;
+}
+table.scoreboard > tr > td{
+  padding-left: 1%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  border: solid #444444;
+}
+table.scoreboard > tr >th{
+  padding: 1% 0% 1% 0%;
+  background-color: #444444;
+  color: #BBBBBB;
+}
+table.scoreboard > tr.number_one{
+  background-color: #c24f4f;
+}
+table.scoreboard > tr.number_one > td{
+  color: yellow;
 }
