@@ -28,23 +28,26 @@ export default function GameScreen() {
 		{ type: "button", id: "simon-green", enabled: true },
 		{ type: "button", id: "simon-blue", enabled: true },
 		{ type: "button", id: "simon-yellow", enabled: true },
-		{ type: "slider", id: "slider-1", enabled: true, value: 0 },
-		{ type: "switch", id: "switch-1", enabled: true, value: false },
-		{ type: "switch", id: "switch-2", enabled: true, value: false },
-		{ type: "knob", id: "knob-1", enabled: true, value: 0 },
-		{ type: "knob", id: "knob-2", enabled: true, value: 0 },
+		{ type: "slider", id: "slider-1", enabled: false, value: 0 },
+		{ type: "switch", id: "switch-1", enabled: false, value: false },
+		{ type: "switch", id: "switch-2", enabled: false, value: false },
+		{ type: "knob", id: "knob-1", enabled: false, value: 0 },
+		{ type: "knob", id: "knob-2", enabled: false, value: 0 },
 	]);
 
+	const [forceUpdate, setForceUpdate] = useState(0);
 	const game = MockGame.getInstance();
 	const [sequence, setSequence] = useState<any[]>(game.getSequence());
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
-	const moveSpeedInMs = 700;
+	const moveSpeedInMs = Math.max(700 - score * 20, 400);
+	const [replaying, setReplaying] = useState(false);
 
 	const handleUserInput = (id: string, value: any) => {
 		const actionString = value !== undefined ? `${id}:${value}` : id;
 		if (!game.validateUserAction(actionString)) setGameOngoing(false);
 
 		if (game.isEndOfSequence()) {
+			game.nextRound();
 			setScore((s) => s + 1);
 			setSequence(game.getSequence());
 		}
@@ -74,7 +77,7 @@ export default function GameScreen() {
 		}
 	};
 
-	const resetScene = async () => {
+	const resetScene = () => {
 		setCurrentHighlight("");
 		setInputs((prev) =>
 			prev.map((input) => {
@@ -85,14 +88,18 @@ export default function GameScreen() {
 			}),
 		);
 		setPointerPosition(null);
+		setForceUpdate((f) => f + 1);
 	};
 
 	const enableUserInteraction = (value: boolean) => {
 		document.body.style.pointerEvents = value ? "auto" : "none";
+		setReplaying(!value);
 	};
 
 	const reenactSequence = async () => {
 		enableUserInteraction(false);
+		await sleep(moveSpeedInMs);
+		resetScene();
 		setPointerPosition({
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 2,
@@ -104,13 +111,20 @@ export default function GameScreen() {
 			await highlightInput(id, value);
 			await sleep(moveSpeedInMs);
 		}
-		await sleep(moveSpeedInMs);
+		await sleep(1000);
 		resetScene();
 		setPointerPosition(null);
 		enableUserInteraction(true);
 	};
 
 	useEffect(() => {
+		setInputs((prev) => {
+			const ids = sequence.map((s) => s.id);
+			return prev.map((input) => {
+				if (input.type === "button") return input; // Keep buttons always enabled
+				return { ...input, enabled: ids.includes(input.id) };
+			});
+		});
 		reenactSequence();
 	}, [sequence]);
 
@@ -133,6 +147,11 @@ export default function GameScreen() {
 		<div className="layout">
 			<div className="topbar align-center">
 				<span style={{ fontSize: "3rem" }}>Score: {score}</span>
+				{replaying ? (
+					<p>Wait for sequence to end</p>
+				) : (
+					<p>Now it's your turn</p>
+				)}
 			</div>
 			<div className="center flex content-center">
 				<div
@@ -177,7 +196,7 @@ export default function GameScreen() {
 			>
 				{enabledSliders.map((input) => (
 					<Slider
-						key={input.id}
+						key={`${input.id}-${forceUpdate}`}
 						max={5}
 						value={typeof input.value === "number" ? input.value : 0}
 						onChange={(value) => handleUserInput(input.id, value)}
@@ -194,7 +213,7 @@ export default function GameScreen() {
 			>
 				{enabledSwitches.map((input) => (
 					<Switch
-						key={input.id}
+						key={`${input.id}-${forceUpdate}`}
 						onToggle={(state) => handleUserInput(input.id, state)}
 						value={typeof input.value === "boolean" ? input.value : false}
 						id={input.id}
@@ -209,7 +228,7 @@ export default function GameScreen() {
 			>
 				{enabledKnobs.map((input) => (
 					<Knob
-						key={input.id}
+						key={`${input.id}-${forceUpdate}`}
 						max={8}
 						onChange={(value) => handleUserInput(input.id, value)}
 						value={typeof input.value === "number" ? input.value : 0}
