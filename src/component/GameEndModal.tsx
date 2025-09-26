@@ -23,11 +23,14 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 			<div
 				style={{
 					position: "fixed",
+					padding: "20px",
+					borderRadius: "10px",
 					top: "50%",
 					left: "50%",
 					transform: "translate(-50%, -50%)",
 					backgroundColor: "white",
 					zIndex: 1000,
+					textAlign: "center",
 				}}
 			>
 				<h2>You lost</h2>
@@ -37,7 +40,17 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				
 				<button type="button" style={{marginLeft:"2%"}} onClick={updateUsernameAndSave} >Save score!</button>
 				<br />
-				<button type="button">Or give it one more try</button>
+				<button type="button" style={{
+					marginTop: "10px",
+					padding: "10px 20px",
+					fontSize: "1rem",
+					cursor: "pointer",
+					outline: "none",
+					border: "none",
+					borderRadius: "5px",
+				}} onClick={()=>{
+					window.location.reload();					
+				}}>Or give it one more try</button>
 			</div>
 		</>
 	);
