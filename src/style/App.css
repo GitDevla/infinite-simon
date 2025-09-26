@@ -40,7 +40,7 @@
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: #999999;
+
   border-radius: 5%;
   margin: 0% 5% 0% 5%;
 }
@@ -54,7 +54,21 @@ div.navButton{
   border-radius: 20%;
   border: solid, gray;
   padding: 10px;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 table{
-  border-collapse: collapse;
+  background-color: #757575;
+  border-top-left-radius: 15%;
+  border-top-right-radius: 15%;
+}
+div.title{
+  padding: 0 5% 5% 5%;
+  margin-bottom: 5%;
+  text-align: center;
+  font-size:xx-large;
+  background-color: #575757;
+  border-top-left-radius: 20%;
+  border-top-right-radius: 20%;
+
 }
