@@ -19,23 +19,40 @@ export class Game {
     private generateNextSequance(): void {
         const types = ["button", "slider", "knob", "switch"];
         const randomType = types[Math.floor(Math.random() * types.length)];
-        switch (randomType) {
+        let nextPart: SequencePart;
+        while (true) {
+            switch (randomType) {
             case "button":
-                this.sequence.addPart(new ButtonPart());
+                nextPart = new ButtonPart();
                 break;
             case "slider":
-                this.sequence.addPart(new SliderPart());
+                nextPart = new SliderPart();
                 break;
             case "knob":
-                this.sequence.addPart(new KnobPart());
+                nextPart = new KnobPart();
                 break;
             case "switch":
-                this.sequence.addPart(new SwitchPart());
+                nextPart = new SwitchPart();
                 break;
             default:
-                throw new Error("Uknown seqence part type")
-        }
+                throw new Error("Unkown seqence part type")
+            }
 
+            const parts = this.sequence.getParts()
+
+            // prevent game over on first switch false value
+            if (nextPart.type === "switch" && nextPart.expectedValue === false && !this.sequence.getParts().some(part => part.id === nextPart.id)){
+                continue;
+            }
+            
+            // check for state change
+            const lastSameId = parts.slice().reverse().find(part => part.id === nextPart.id)
+
+            if (!lastSameId || lastSameId.expectedValue !== nextPart.expectedValue) {
+                this.sequence.addPart(nextPart);
+                break;
+            }
+        }
     }
 
     public checkPlayerInput(input: SequencePart): boolean {
