@@ -24,6 +24,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				className="fixed top-0 left-0 size-full"
 				style={{
 					backgroundColor: "rgba(0, 0, 0, 0.5)",
+					zIndex: 999,
 				}}
 			></div>
 			<div

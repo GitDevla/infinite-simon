@@ -13,7 +13,7 @@ export default function AnimatedCursor({
 				top: pos.y,
 				fontSize: "2rem",
 				pointerEvents: "none",
-				zIndex: 1000,
+				zIndex: 500,
 				transition: `left ${speed}ms ease, top ${speed}ms ease`,
 			}}
 		>

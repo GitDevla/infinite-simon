@@ -184,6 +184,7 @@ export default function GameScreen() {
 					style={{
 						border: "none",
 						borderRadius: "4000px",
+						pointerEvents: "auto",
 					}}
 				>
 					GIVE UP
