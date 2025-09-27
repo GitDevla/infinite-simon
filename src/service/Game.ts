@@ -3,7 +3,6 @@ import { Sequence } from "./Sequence";
 import { SequencePart } from "./SequencePart";
 
 export class Game {
-    private static instance: Game = new Game();
     private sequence: Sequence = new Sequence();
     private currentRound: number = 1;
     private gameOver: boolean = false;
@@ -85,10 +84,6 @@ export class Game {
         const v = this.sequence;
         // Deep clone to prevent external mutations and ensure React detects changes
         return Object.assign(Object.create(Object.getPrototypeOf(v)), v);
-    }
-
-    public getInstance(): Game {
-        return Game.instance;
     }
 
     public onNewRound(callback: () => void): void {
