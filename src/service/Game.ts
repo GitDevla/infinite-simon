@@ -37,17 +37,21 @@ export class Game {
                 throw new Error("Unkown seqence part type")
             }
 
-            const parts = this.sequence.getParts()
-
-            // prevent game over on first switch false value
-            if (nextPart.type === "switch" && nextPart.expectedValue === false && !this.sequence.getParts().some(part => part.id === nextPart.id)){
-                continue;
+            // Always allow parts without expected value (like buttons)
+            if (nextPart.expectedValue === null) {
+                this.sequence.addPart(nextPart);
+                break;
             }
-            
-            // check for state change
-            const lastSameId = parts.slice().reverse().find(part => part.id === nextPart.id)
 
-            if (!lastSameId || lastSameId.expectedValue !== nextPart.expectedValue) {
+            const parts = this.sequence.getParts()
+       
+            let lastExpectedValue = 0; // default to 0 (or false)
+            const lastFound = parts.slice().reverse().find(part => part.id === nextPart.id)
+            if (lastFound) {
+                lastExpectedValue = lastFound.expectedValue;
+            }
+
+            if (lastExpectedValue != nextPart.expectedValue) {
                 this.sequence.addPart(nextPart);
                 break;
             }
