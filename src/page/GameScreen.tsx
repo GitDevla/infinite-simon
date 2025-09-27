@@ -63,6 +63,7 @@ export default function GameScreen() {
 
 	const highlightInput = async (id: string, value: any) => {
 		if (value !== undefined && value !== null) {
+			setCurrentHighlight("");
 			setInputs((prev) =>
 				prev.map((input) =>
 					input.id === id ? { ...input, value: value } : input,
