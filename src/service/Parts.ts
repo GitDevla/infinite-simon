@@ -1,12 +1,14 @@
 import { SequencePart } from "./SequencePart"
 
 export class ButtonPart extends SequencePart{
-    private static VALID_COLORS = ["red", "green", "blue", "yellow"];
+    private static AVAILABLE_IDS = ["simon-red", "simon-green", "simon-blue", "simon-yellow"];
 
     constructor(){
-        super("button", ButtonPart.VALID_COLORS[
-            Math.floor(Math.random() * ButtonPart.VALID_COLORS.length)
-        ])
+        super(
+            "button",
+            ButtonPart.AVAILABLE_IDS[Math.floor(Math.random() * ButtonPart.AVAILABLE_IDS.length)],
+            null
+        )
     }
 
     public isCorrect(input: any): boolean {
@@ -15,8 +17,14 @@ export class ButtonPart extends SequencePart{
 }
 
 export class SliderPart extends SequencePart{
+    private static AVAILABLE_IDS = ["slider-1"];
+
     constructor(){
-        super("slider", Math.floor(Math.random() * 6))
+        super(
+            "slider",
+            SliderPart.AVAILABLE_IDS[Math.floor(Math.random() * SliderPart.AVAILABLE_IDS.length)],
+            Math.floor(Math.random() * 5),
+        )
     }
 
     public isCorrect(input: any): boolean {
@@ -25,8 +33,14 @@ export class SliderPart extends SequencePart{
 }
 
 export class KnobPart extends SequencePart{
+    private static AVAILABLE_IDS = ["knob-1", "knob-2"];
+
     constructor(){
-        super("knob", Math.floor(Math.random() * 8))
+        super(
+            "knob",
+            KnobPart.AVAILABLE_IDS[Math.floor(Math.random() * KnobPart.AVAILABLE_IDS.length)],
+            Math.floor(Math.random() * 4),
+        )
     }
 
     public isCorrect(input: any): boolean {
@@ -35,8 +49,14 @@ export class KnobPart extends SequencePart{
 }
 
 export class SwitchPart extends SequencePart{
+    private static AVAILABLE_IDS = ["switch-1", "switch-2"];
+
     constructor(){
-        super("switch", Math.random() >= 0.5);
+        super(
+            "switch",
+            SwitchPart.AVAILABLE_IDS[Math.floor(Math.random() * SwitchPart.AVAILABLE_IDS.length)],
+            Math.random() >= 0.5,
+        );
     }
 
     public isCorrect(input: any): boolean {
