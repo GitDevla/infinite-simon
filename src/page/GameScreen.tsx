@@ -8,13 +8,12 @@ import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
 import { Game } from "../service/Game";
-import { Sequence } from "../service/Sequence";
 import { ReactPart } from "../service/Parts";
+import type { Sequence } from "../service/Sequence";
 
 export type GameInput = {
-	type: "button" | "slider" | "switch" | "knob";
+	type: string;
 	id: string;
-	enabled: boolean;
 	value?: number | boolean;
 };
 
@@ -25,38 +24,27 @@ export default function GameScreen() {
 	} | null>(null);
 	const [score, setScore] = useState(0);
 	const [gameOngoing, setGameOngoing] = useState(true);
-	const [inputs, setInputs] = useState<GameInput[]>([
-		{ type: "button", id: "simon-red", enabled: true },
-		{ type: "button", id: "simon-green", enabled: true },
-		{ type: "button", id: "simon-blue", enabled: true },
-		{ type: "button", id: "simon-yellow", enabled: true },
-		{ type: "slider", id: "slider-1", enabled: false, value: 0 },
-		{ type: "switch", id: "switch-1", enabled: false, value: false },
-		{ type: "switch", id: "switch-2", enabled: false, value: false },
-		{ type: "knob", id: "knob-1", enabled: false, value: 0 },
-		{ type: "knob", id: "knob-2", enabled: false, value: 0 },
-	]);
+	const [inputs, setInputs] = useState<GameInput[]>([]);
 
 	const [forceUpdate, setForceUpdate] = useState(0);
-	const game = useRef<Game|null>(null)
-	const [sequence, setSequence] = useState<Sequence|null>(null);
+	const game = useRef<Game | null>(null);
+	const [sequence, setSequence] = useState<Sequence | null>(null);
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 	const moveSpeedInMs = Math.max(700 - score * 20, 400);
 	const [replaying, setReplaying] = useState(false);
 
-
-	useEffect(()=>{
+	useEffect(() => {
 		game.current = new Game();
 		game.current.startNewGame();
-		game.current.onNewRound(()=>{
-			setScore(game.current!.getCurrentRound() - 1)
+		game.current.onNewRound(() => {
+			setScore(game.current!.getCurrentRound() - 1);
 			setSequence(game.current!.getSequence());
-		})
-		setSequence(game.current.getSequence())
-	}, [])
+		});
+		setSequence(game.current.getSequence());
+	}, []);
 
 	const handleUserInput = (id: string, value: any) => {
-		if (game.current===null) return;
+		if (game.current === null) return;
 		const action = new ReactPart(id, value);
 		if (!game.current.checkPlayerInput(action)) setGameOngoing(false);
 	};
@@ -113,7 +101,7 @@ export default function GameScreen() {
 			y: window.innerHeight / 2,
 		});
 		await sleep(moveSpeedInMs);
-		if (!sequence) return
+		if (!sequence) return;
 		for (let i = 0; i < sequence.getParts().length; i++) {
 			const { id, expectedValue } = sequence.getParts()[i];
 			await moveCursorToComponent(id);
@@ -129,27 +117,31 @@ export default function GameScreen() {
 	useEffect(() => {
 		setInputs((prev) => {
 			if (!sequence) return prev;
-			const ids = sequence.getParts().map((s) => s.id);
-			return prev.map((input) => {
-				if (input.type === "button") return input; // Keep buttons always enabled
-				return { ...input, enabled: ids.includes(input.id) };
-			});
+			// Always have the 4 default buttons
+			const defaults = [
+				{ type: "button", id: "simon-red" },
+				{ type: "button", id: "simon-green" },
+				{ type: "button", id: "simon-blue" },
+				{ type: "button", id: "simon-yellow" },
+			] as GameInput[];
+			for (const input of sequence.getParts()) {
+				if (!defaults.find((d) => d.id === input.id))
+					defaults.push({
+						type: input.type,
+						id: input.id,
+						value: 0,
+					});
+			}
+			return defaults;
 		});
+
 		reenactSequence();
 	}, [sequence]);
 
-	const enabledButtons = inputs.filter(
-		(input) => input.type === "button" && input.enabled,
-	);
-	const enabledSliders = inputs.filter(
-		(input) => input.type === "slider" && input.enabled,
-	);
-	const enabledSwitches = inputs.filter(
-		(input) => input.type === "switch" && input.enabled,
-	);
-	const enabledKnobs = inputs.filter(
-		(input) => input.type === "knob" && input.enabled,
-	);
+	const enabledButtons = inputs.filter((input) => input.type === "button");
+	const enabledSliders = inputs.filter((input) => input.type === "slider");
+	const enabledSwitches = inputs.filter((input) => input.type === "switch");
+	const enabledKnobs = inputs.filter((input) => input.type === "knob");
 
 	const rotations = [270, 0, 180, 90];
 
