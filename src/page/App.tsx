@@ -1,4 +1,5 @@
 import '../style/App.css';
+import {Link} from "react-router-dom";
 
 function App() {
   return (
@@ -13,10 +14,10 @@ function App() {
             simon
           </div>
           <tr>
-            <a href='/game'><div className='navButton'>Play!</div></a>
+            <Link to='/game'><div className='navButton'>Play!</div></Link>
           </tr>
           <tr>
-            <a href='/score'><div className='navButton' id='nonFirstButton'>Scoreboard!</div></a>
+            <Link to='/score'><div className='navButton' id='nonFirstButton'>Scoreboard!</div></Link>
           </tr>
         </table>
       </div>
