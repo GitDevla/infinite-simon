@@ -201,23 +201,28 @@ classDiagram
     class SequencePart {
         <<abstract>>
         +type: String
+        +id: String
         +expectedValue: any
         +isCorrect(input: any): Boolean
     }
 
     class ButtonPart {
+        -static AVAILABLE_IDS: List~String~
         +isCorrect(input: String): Boolean
     }
 
     class SliderPart {
+        -static AVAILABLE_IDS: List~String~
         +isCorrect(input: Number): Boolean
     }
 
     class KnobPart {
+        -static AVAILABLE_IDS: List~String~
         +isCorrect(input: Number): Boolean
     }
 
     class SwitchPart {
+        -static AVAILABLE_IDS: List~String~
         +isCorrect(input: Number): Boolean
     }
 
