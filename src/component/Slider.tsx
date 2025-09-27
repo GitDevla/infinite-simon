@@ -125,6 +125,11 @@ export default function Slider({
 					style={{
 						top: `${100 - (currentValue / (max - 1)) * 100}%`,
 					}}
+					role="slider"
+					aria-valuemin={min}
+					aria-valuemax={max - 1}
+					aria-valuenow={currentValue}
+					tabIndex={0}
 					onMouseDown={handleInteraction}
 					onTouchStart={handleInteraction}
 				></div>

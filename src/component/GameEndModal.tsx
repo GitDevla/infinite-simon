@@ -37,7 +37,6 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				<p>Correct sequence was ...</p>
 				<p>Enter your name to save your score ({score}) as the #1 player!</p>
 				<input
-					id="username"
 					className="p-2"
 					type="text"
 					placeholder="Your name"

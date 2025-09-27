@@ -57,6 +57,11 @@ export default function Knob({
 		>
 			<div
 				className="simon-knob absolute left-1/2 top-1/2 size-1/2 transform-center rounded-full flex flex-center"
+				role="slider"
+				aria-valuemin={min}
+				aria-valuemax={max - 1}
+				aria-valuenow={clamp(innerValue)}
+				tabIndex={0}
 				onMouseDown={handleMouseDown}
 			>
 				<div

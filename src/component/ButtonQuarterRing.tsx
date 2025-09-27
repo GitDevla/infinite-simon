@@ -34,6 +34,10 @@ export default function ButtonQuarterRing({
 			style={{
 				...additionalStyles,
 			}}
+			role="button"
+			aria-pressed="false"
+			tabIndex={0}
+			onKeyDown={() => {}}
 			onClick={onPress}
 			id={id}
 		>
@@ -48,7 +52,9 @@ export default function ButtonQuarterRing({
 					} as React.CSSProperties
 				}
 				onClick={onClickAnimation}
+				onKeyDown={() => {}}
 			>
+				<title>Simon Button</title>
 				<path
 					d="
       M -40 -40

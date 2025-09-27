@@ -32,6 +32,10 @@ export default function Switch({
 		>
 			<div
 				className="simon-switch size-full flex flex-column transition-all rounded-sm flex-center content-around"
+				role="switch"
+				aria-checked={isOn}
+				tabIndex={0}
+				onKeyDown={() => {}}
 				onClick={() => handleToggleChange(!isOn)}
 				data-ison={isOn}
 			>
