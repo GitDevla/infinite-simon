@@ -39,7 +39,7 @@ export class KnobPart extends SequencePart{
         super(
             "knob",
             KnobPart.AVAILABLE_IDS[Math.floor(Math.random() * KnobPart.AVAILABLE_IDS.length)],
-            Math.floor(Math.random() * 4),
+            Math.floor(Math.random() * 8),
         )
     }
 
