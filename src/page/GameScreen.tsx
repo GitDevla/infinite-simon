@@ -74,7 +74,7 @@ export default function GameScreen() {
 	};
 
 	const highlightInput = async (id: string, value: any) => {
-		if (value !== undefined) {
+		if (value !== undefined && value !== null) {
 			setInputs((prev) =>
 				prev.map((input) =>
 					input.id === id ? { ...input, value: value } : input,
