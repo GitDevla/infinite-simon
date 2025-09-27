@@ -11,8 +11,8 @@ export class ButtonPart extends SequencePart{
         )
     }
 
-    public isCorrect(input: any): boolean {
-        return input === this.expectedValue;
+    public isCorrect(input: ButtonPart): boolean {
+        return input.id === this.id;
     }
 }
 
@@ -27,8 +27,8 @@ export class SliderPart extends SequencePart{
         )
     }
 
-    public isCorrect(input: any): boolean {
-        return input === this.expectedValue;
+    public isCorrect(input: SliderPart): boolean {
+        return input.id === this.id && input.expectedValue === this.expectedValue;
     }
 }
 
@@ -43,8 +43,8 @@ export class KnobPart extends SequencePart{
         )
     }
 
-    public isCorrect(input: any): boolean {
-        return input === this.expectedValue;
+    public isCorrect(input: KnobPart): boolean {
+        return input.id === this.id && input.expectedValue === this.expectedValue;
     }
 }
 
@@ -59,7 +59,20 @@ export class SwitchPart extends SequencePart{
         );
     }
 
-    public isCorrect(input: any): boolean {
-        return input === this.expectedValue;
+    public isCorrect(input: SwitchPart): boolean {
+        return input.id === this.id && input.expectedValue === this.expectedValue;
+    }
+}
+
+/**
+ * This class should not be used in the game logic, only for React component interaction
+ */
+export class ReactPart extends SequencePart{
+    constructor(id: string, expectedValue: any){
+        super("react", id, expectedValue);
+    }
+
+    public isCorrect(input: SequencePart): boolean {
+        throw new Error("ReactPart is not meant to be used in game logic");
     }
 }
