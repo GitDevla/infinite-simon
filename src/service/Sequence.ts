@@ -23,4 +23,8 @@ export class Sequence {
     public isComplete(): boolean {
         return this.currentPosition == this.parts.length
     }
+
+    public getParts(): SequencePart[] {
+        return this.parts;
+    }
 }
