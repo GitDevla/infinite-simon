@@ -15,17 +15,29 @@ app.post("/save-score", (req, res) => {
   const { player, score } = req.body;
 
   if (!player || typeof score !== "number") {
-    return res.status(400).json({ error: "Invalid data" });
+    return res.status(400).json({
+      success: false,
+      error: "Invalid data",
+      details: err.message
+    });
   }
 
   fs.readFile(scoresFile, "utf8", (err, data) => {
-    if (err) return res.status(500).json({ error: "Could not read scores" });
+    if (err) return res.status(500).json({
+      success: false,
+      error: "Could not read scores",
+      details: err.message
+    });
 
     let scoresJSON = { scores: [] };
     try {
       scoresJSON = JSON.parse(data);
     } catch (parseErr) {
-      return res.status(500).json({ error: "Invalid JSON" });
+      return res.status(500).json({
+        success: false,
+        error: "Invalid JSON",
+        details: parseErr.message
+      });
     }
 
     scoresJSON.scores.push({
@@ -39,6 +51,20 @@ app.post("/save-score", (req, res) => {
 
       res.json({ success: true });
     });
+  });
+});
+
+app.post("/default-scoreboard", (req, res) => {
+  fs.writeFile(scoresFile, JSON.stringify(req.body), "utf8", (err) => {
+
+    if (err){
+      return res.status(500).json({
+        success:false,
+        error: "Could not reset to default", 
+      });
+  }
+    
+    res.json({ success: true });
   });
 });
 

@@ -1,7 +1,4 @@
-import React from 'react';
-import logo from '../asset/logo.svg';
 import '../style/App.css';
-import { BrowserRouter, Link } from 'react-router-dom';
 
 function App() {
   return (
@@ -24,7 +21,6 @@ function App() {
         </table>
       </div>
     </nav>
-    
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect,useState } from "react";
+import defaultScoreboard from "../component/defaultScoreboard";
 
 interface Score{
     player: string,
@@ -32,15 +33,26 @@ const ScoreBoard: React.FC = () => {
           </tr>
         ))}
       </table>
-      <a href='/'>
-        <div className='navButton'
-          style={{
-              width: "120px",
-              marginTop:"2%"
-            }}>
-              Homescreen
-        </div>
-      </a>
+      <div>
+        <a href='/'>
+          <div className='navButton'
+            style={{
+                width: "120px",
+                marginTop:"2%"
+              }}>
+                Homescreen
+          </div>
+        </a>
+        <a href='/score' onClick={defaultScoreboard}>
+          <div className='navButton'
+            style={{
+                width: "120px",
+                marginTop:"2%"
+              }}>
+                Clear scores
+          </div>
+        </a>
+      </div>
     </div>
   );
 }
