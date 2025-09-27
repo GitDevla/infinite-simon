@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedCursor from "../component/AnimatedCursor";
 import ButtonQuarterRing from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
-import { MockGame } from "../service/MockGame";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
+import { Game } from "../service/Game";
+import { Sequence } from "../service/Sequence";
+import { ReactPart } from "../service/Parts";
 
 export type GameInput = {
 	type: "button" | "slider" | "switch" | "knob";
@@ -36,21 +38,27 @@ export default function GameScreen() {
 	]);
 
 	const [forceUpdate, setForceUpdate] = useState(0);
-	const game = MockGame.getInstance();
-	const [sequence, setSequence] = useState<any[]>(game.getSequence());
+	const game = useRef<Game|null>(null)
+	const [sequence, setSequence] = useState<Sequence|null>(null);
 	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 	const moveSpeedInMs = Math.max(700 - score * 20, 400);
 	const [replaying, setReplaying] = useState(false);
 
-	const handleUserInput = (id: string, value: any) => {
-		const actionString = value !== undefined ? `${id}:${value}` : id;
-		if (!game.validateUserAction(actionString)) setGameOngoing(false);
 
-		if (game.isEndOfSequence()) {
-			game.nextRound();
-			setScore((s) => s + 1);
-			setSequence(game.getSequence());
-		}
+	useEffect(()=>{
+		game.current = new Game();
+		game.current.startNewGame();
+		game.current.onNewRound(()=>{
+			setScore(game.current!.getCurrentRound() - 1)
+			setSequence(game.current!.getSequence());
+		})
+		setSequence(game.current.getSequence())
+	}, [])
+
+	const handleUserInput = (id: string, value: any) => {
+		if (game.current===null) return;
+		const action = new ReactPart(id, value);
+		if (!game.current.checkPlayerInput(action)) setGameOngoing(false);
 	};
 
 	const moveCursorToComponent = async (id: string) => {
@@ -105,10 +113,11 @@ export default function GameScreen() {
 			y: window.innerHeight / 2,
 		});
 		await sleep(moveSpeedInMs);
-		for (let i = 0; i < sequence.length; i++) {
-			const { id, value } = sequence[i];
+		if (!sequence) return
+		for (let i = 0; i < sequence.getParts().length; i++) {
+			const { id, expectedValue } = sequence.getParts()[i];
 			await moveCursorToComponent(id);
-			await highlightInput(id, value);
+			await highlightInput(id, expectedValue);
 			await sleep(moveSpeedInMs);
 		}
 		await sleep(1000);
@@ -119,7 +128,8 @@ export default function GameScreen() {
 
 	useEffect(() => {
 		setInputs((prev) => {
-			const ids = sequence.map((s) => s.id);
+			if (!sequence) return prev;
+			const ids = sequence.getParts().map((s) => s.id);
 			return prev.map((input) => {
 				if (input.type === "button") return input; // Keep buttons always enabled
 				return { ...input, enabled: ids.includes(input.id) };
