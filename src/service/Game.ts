@@ -7,6 +7,7 @@ export class Game {
     private sequence: Sequence = new Sequence();
     private currentRound: number = 1;
     private gameOver: boolean = false;
+    private onNewRoundCallbacks: (() => void)[] = [];
 
     public startNewGame(): void {
         this.currentRound = 1;
@@ -40,13 +41,13 @@ export class Game {
     public checkPlayerInput(input: SequencePart): boolean {
         const currentPart = this.sequence.getCurrentPart();
         const expectedAction = currentPart.isCorrect(input);
-
         if (expectedAction) {
             this.sequence.moveToNextPart();
             if (this.sequence.isComplete()) {
                 this.currentRound++;
                 this.generateNextSequance();
                 this.sequence.reset();
+                this.onNewRoundCallbacks.forEach(cb => cb());
             }
         } else {
             this.gameOver = true;
@@ -64,10 +65,16 @@ export class Game {
     }
 
     public getSequence(): Sequence {
-        return this.sequence;
+        const v = this.sequence;
+        // Deep clone to prevent external mutations and ensure React detects changes
+        return Object.assign(Object.create(Object.getPrototypeOf(v)), v);
     }
 
     public getInstance(): Game {
         return Game.instance;
+    }
+
+    public onNewRound(callback: () => void): void {
+        this.onNewRoundCallbacks.push(callback);
     }
 }
