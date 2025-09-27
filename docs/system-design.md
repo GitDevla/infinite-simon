@@ -217,6 +217,10 @@ classDiagram
         +isCorrect(input: Number): Boolean
     }
 
+    class SwitchPart {
+        +isCorrect(input: Number): Boolean
+    }
+
     class Sequence {
         -currentPosition: Int
         -parts: List~SequencePart~
@@ -244,6 +248,7 @@ classDiagram
     SequencePart <|-- ButtonPart
     SequencePart <|-- SliderPart
     SequencePart <|-- KnobPart
+    SequencePart <|-- SwitchPart
 ```
 - A `Game` osztály kezeli a játék állapotát, generálja a bemeneti sorozatot, ellenőrzi a játékos bemenetét, és nyomon követi a körök számát.
 - A `SequencePart` osztály reprezentálja a bemeneti elemeket, amelyek lehetnek gombok, csúszkák, tekerők vagy egyéb interaktív elemek.
