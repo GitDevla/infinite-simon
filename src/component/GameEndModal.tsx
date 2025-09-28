@@ -35,6 +35,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 			></div>
 			<div
 				className="fixed p-2 rounded-lg top-1/2 left-1/2 transform-center align-center"
+				role="dialog"
 				style={{
 					backgroundColor: "var(--bg-2)",
 					zIndex: 1000,
