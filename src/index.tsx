@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./style/index.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import App from "./page/App";
 import GameScreen from "./page/GameScreen";
 import ScoreBoard from "./page/ScoreBoard"
@@ -12,13 +12,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
 	// <React.StrictMode>
-	<BrowserRouter>
+	<HashRouter>
 		<Routes>
 			<Route path="/" element={<App />} />
 			<Route path="/game" element={<GameScreen />} />
 			<Route path="/score" element={<ScoreBoard />} />
 		</Routes>
-	</BrowserRouter>,
+	</HashRouter>,
 	// </React.StrictMode>,
 );
 
