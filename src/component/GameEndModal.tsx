@@ -38,6 +38,8 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				style={{
 					backgroundColor: "var(--bg-2)",
 					zIndex: 1000,
+					pointerEvents: "auto",
+
 				}}
 			>
 				<h2
