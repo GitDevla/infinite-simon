@@ -16,8 +16,12 @@ export class Game {
     }
 
     private generateNextSequance(): void {
-        const types = ["button", "slider", "knob", "switch"];
-        const randomType = types[Math.floor(Math.random() * types.length)];
+        const parts = this.sequence.getParts()
+        const types = ["button","switch", "slider", "knob"];
+        const difficultyIncrease = 2;
+        const numberOfTypes =  Math.min(Math.floor(parts.length / difficultyIncrease) + 1, types.length)
+        console.log("Number of input types: %s", numberOfTypes)
+        const randomType = types[Math.floor(Math.random() * numberOfTypes)];
         let nextPart: SequencePart;
         while (true) {
             switch (randomType) {
@@ -42,8 +46,6 @@ export class Game {
                 this.sequence.addPart(nextPart);
                 break;
             }
-
-            const parts = this.sequence.getParts()
        
             let lastExpectedValue = 0; // default to 0 (or false)
             const lastFound = parts.slice().reverse().find(part => part.id === nextPart.id)
