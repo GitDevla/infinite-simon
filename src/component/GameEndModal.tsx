@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { positionOnScoreboardIfInserted, saveScore } from "../service/ScoreLocal";
 
+/**
+ * A modal component that appears at the end of the game, allowing the player to enter their name and save their score.
+ * @param score - The player's score to be saved. Default is 0.
+ */
 export default function GameEndModal({ score = 0 }: { score?: number }) {
 	const [username, setUsername] = useState("");
 	const [wouldBePosition, setWouldBePosition] = useState(1);

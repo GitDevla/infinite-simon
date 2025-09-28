@@ -1,6 +1,14 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * A vertical slider component that allows users to select a value within a specified range by dragging a ball along a track.
+ * @param min - The minimum value of the slider. Default is 0.
+ * @param max - The maximum value of the slider (exclusive). Default is 5.
+ * @param value - The current value of the slider. If provided, the component acts as a controlled component.
+ * @param onChange - A callback function that is called when the value changes.
+ * @param id - An optional id for the slider container.
+ */
 export default function Slider({
 	min = 0,
 	max = 5,

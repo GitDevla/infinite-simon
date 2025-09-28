@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
 
+/**
+ * A button component that renders a quarter ring SVG and handles click animations for a Simon game.
+ * @param color - The color of the button. It should correspond to a CSS variable (e.g., "red", "blue").
+ * @param onPress - The function to call when the button is pressed.
+ * @param additionalStyles - Additional CSS styles to apply to the button container.
+ * @param triggerAnimation - A boolean that, when changed to true, triggers the click animation.
+ * @param id - An optional id for the button container.
+ */
 export default function ButtonQuarterRing({
 	color,
 	onPress,

@@ -18,6 +18,11 @@ export type GameInput = {
 	value?: number | boolean;
 };
 
+/**
+ * The main game screen component that manages the game state, user interactions, and rendering of game inputs.
+ * It handles the game logic, including starting a new game, processing user inputs, and reenacting the sequence of actions.
+ * The component also displays the current score and manages the layout of various input components like buttons, sliders, switches, and knobs.
+ */
 export default function GameScreen() {
 	const [pointerPosition, setPointerPosition] = useState<{
 		x: number;

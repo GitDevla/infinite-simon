@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { mod } from "../util/mod";
 
+/**
+ * A knob component that allows users to select a value within a specified range by rotating the knob.
+ * @param min - The minimum value of the knob. Default is 0.
+ * @param max - The maximum value of the knob (exclusive). Default is 5.
+ * @param value - The current value of the knob. If provided, the component acts as a controlled component.
+ * @param onChange - A callback function that is called when the value changes.
+ * @param id - An optional id for the knob container.
+ */
 export default function Knob({
 	min = 0,
 	max = 5,

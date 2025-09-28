@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+/**
+ * A switch component that toggles between on and off states.
+ * @param onToggle - A callback function that is called when the switch is toggled, receiving the new state as a boolean.
+ * @param value - The current state of the switch. If provided, the component acts as a controlled component.
+ * @param id - An optional id for the switch container.
+ */
 export default function Switch({
 	onToggle,
 	value,
