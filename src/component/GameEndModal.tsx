@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import SaveScore from "./SaveScore";
-import { positionOnScoreboardIfInserted } from "../service/Score";
+import { positionOnScoreboardIfInserted, saveScore } from "../service/Score";
 import { useNavigate } from 'react-router-dom';
 
 export default function GameEndModal({ score = 0 }: { score?: number }) {
@@ -11,7 +10,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 	const validUsername = username.trim().length > 0;
 
 	function updateUsernameAndSave() {
-		SaveScore(username, score);
+		saveScore(username, score);
 		alert(`${username}! Your ${score} was successfully saved!`);
 	}
 

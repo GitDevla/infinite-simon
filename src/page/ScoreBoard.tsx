@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
-import defaultScoreboard from "../component/defaultScoreboard";
 import { Link } from "react-router-dom";
+import { defaultScoreboard, fetchScoreboard } from "../service/Score";
 
 interface Score{
     player: string,
@@ -12,11 +12,9 @@ const ScoreBoard: React.FC = () => {
   const [scores, setScores] = useState<Score[]>([]);
 
   useEffect(() => {
-    fetch("/scores/scores.json")
-      .then((res) => res.json())
+    fetchScoreboard()
       .then((data) => {
-        const sorted = data.scores.sort((a: Score, b: Score) => b.score - a.score);
-        setScores(sorted);
+        setScores(data);
       })
       .catch((err) => console.error("Failed to load scores:", err));
   }, []);
