@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SaveScore from "./SaveScore";
+import { positionOnScoreboardIfInserted } from "../service/Score";
 
 export default function GameEndModal({ score = 0 }: { score?: number }) {
 	const [username, setUsername] = useState("");
+	const [wouldBePosition, setWouldBePosition] = useState(1);
 
 	const validUsername = username.trim().length > 0;
 
@@ -17,6 +19,10 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 		}
 		window.location.reload();
 	}
+
+	useEffect(() => {
+		positionOnScoreboardIfInserted(score).then((pos) => setWouldBePosition(pos));
+	}, [score]);
 
 	return (
 		<>
@@ -47,7 +53,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 						marginBottom: "10px",
 					}}
 				>
-					Enter your name to save your score ({score}) as the #1 player!
+					Enter your name to save your score ({score}) as the #{wouldBePosition} player!
 				</p>
 				<input
 					className="p-2"
