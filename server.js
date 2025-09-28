@@ -3,13 +3,16 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 
+
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
 
-const scoresFile = path.join(__dirname, "public/scores/scores.json");
+isProd = process.env.NODE_ENV === "production";
+
+const scoresFile = path.join(__dirname, isProd?"build/scores/scores.json":"public/scores/scores.json");
 
 app.post("/save-score", (req, res) => {
   const { player, score } = req.body;
@@ -68,6 +71,14 @@ app.post("/default-scoreboard", (req, res) => {
   });
 });
 
+if (isProd){
+  app.use(express.static(path.join(__dirname, "./build")));
+
+  app.use((req, res,next) => {
+    res.sendFile(path.join(__dirname, "./build/index.html"));
+  });
+}
+
 app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT} (${isProd?"Production":"Development"})`);
 });
