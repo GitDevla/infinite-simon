@@ -63,15 +63,15 @@ export default function GameScreen() {
 	};
 
 	const highlightInput = async (id: string, value: any) => {
+		setCurrentHighlight("");
 		if (value !== undefined && value !== null) {
-			setCurrentHighlight("");
 			setInputs((prev) =>
 				prev.map((input) =>
 					input.id === id ? { ...input, value: value } : input,
 				),
 			);
 		} else {
-			setCurrentHighlight(id);
+			requestAnimationFrame(() => setCurrentHighlight(id)); // Force a re-render if the same button is highlighted twice in a row
 		}
 	};
 
