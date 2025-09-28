@@ -79,7 +79,7 @@ export default function Knob({
 						style={{
 							transform: `translate(-50%, -50%) rotate(${(i / max) * 360}deg) translateY(-40px) rotate(-${(i / max) * 360}deg) scale(${i === clamp(innerValue) ? 1.2 : 1})`,
 							transformOrigin: "center center",
-							color: i === clamp(innerValue) ? "red" : "black",
+							color: i === clamp(innerValue) ? "red" : "var(--fg)",
 						}}
 					>
 						{i}

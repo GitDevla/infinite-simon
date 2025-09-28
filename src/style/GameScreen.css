@@ -6,11 +6,16 @@
 	gap: 0px;
 	height: 100vh;
 	width: 100vw;
+	background: var(--bg);
+	color: var(--fg);
 }
 
 .layout > .topbar {
 	grid-column: 1 / -1;
 	grid-row: 1;
+	align-items: center;
+	justify-content: center;
+	display: flex;
 }
 
 .layout > .center {
@@ -21,11 +26,17 @@
 .layout > .left {
 	grid-column: 1;
 	grid-row: 4 / 6;
+	transition: max-width 0.3s ease;
+	width: fit-content;
+	overflow: hidden;
 }
 
 .layout > .bottom-left {
 	grid-column: 2;
 	grid-row: 4;
+	transition: max-width 0.3s ease;
+	width: fit-content;
+	overflow: hidden;
 }
 
 .layout > .bottom-middle {
@@ -36,6 +47,13 @@
 .layout > .bottom-right {
 	grid-column: 2;
 	grid-row: 5;
+}
+
+.layout > .bottom-right > div {
+	height: 100%;
+	transition: max-width 0.3s ease;
+	width: fit-content;
+	overflow: hidden;
 }
 
 @media (min-width: 600px) {
@@ -59,13 +77,15 @@
 	.layout > .left {
 		grid-column: 1;
 		grid-row: 2;
-		border-radius: 0 40px 40px 0;
+		border-radius: 0 24px 24px 0;
+		background-color: var(--bg-2);
 	}
 
 	.layout > .bottom-left {
 		grid-column: 1;
 		grid-row: 3;
-		border-radius: 0 40px 0 0;
+		border-radius: 0 24px 0 0;
+		background-color: var(--bg-2);
 	}
 
 	.layout > .bottom-middle {
@@ -76,7 +96,12 @@
 	.layout > .bottom-right {
 		grid-column: 3;
 		grid-row: 3;
-		border-radius: 40px 0 0 0;
+		direction: rtl;
+	}
+	.layout > .bottom-right > div {
+		background-color: var(--bg-2);
+
+		border-radius: 24px 0 0 0;
 	}
 }
 
@@ -128,4 +153,41 @@
 	height: 20px;
 	border-radius: 100%;
 	background-color: red;
+}
+
+.give-up-button {
+	cursor: pointer;
+	background-color: red;
+	pointer-events: auto;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 10px;
+	font-size: 1.2rem;
+	transition:
+		background-color 0.3s ease,
+		transform 0.2s ease;
+}
+
+.give-up-button:hover {
+	background-color: darkred;
+	transform: scale(1.05);
+}
+
+.status-pill {
+	padding: 5px;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-left: 20px;
+	width: min(250px, 50%);
+	color: black;
+}
+
+.status-pill .status-indicator {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
 }

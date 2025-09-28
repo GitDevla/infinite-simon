@@ -28,6 +28,8 @@ export default function Switch({
 			className="size-full flex flex-center"
 			style={{
 				perspective: "400px",
+				aspectRatio: "5/6",
+				width: "90px",
 			}}
 		>
 			<div

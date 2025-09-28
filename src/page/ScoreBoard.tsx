@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import defaultScoreboard from "../component/defaultScoreboard";
+import { Link } from "react-router-dom";
 
 interface Score{
     player: string,
@@ -33,26 +34,34 @@ const ScoreBoard: React.FC = () => {
           </tr>
         ))}
       </table>
-      <div>
-        <a href='/'>
-          <div className='navButton'
-            style={{
-                width: "120px",
-                marginTop:"2%"
-              }}>
-                Homescreen
-          </div>
-        </a>
-        <a href='/score' onClick={defaultScoreboard}>
-          <div className='navButton'
-            style={{
-                width: "120px",
-                marginTop:"2%"
-              }}>
-                Clear scores
-          </div>
-        </a>
-      </div>
+      <div
+				style={{
+					display: "flex",
+					justifyContent: "space-evenly",
+					marginTop: "20px",
+				}}
+			>
+				<Link to="/">
+					<div
+						className="navButton"
+						style={{
+							width: "120px",
+						}}
+					>
+						Homescreen
+					</div>
+				</Link>
+				<Link to="/score" onClick={defaultScoreboard}>
+					<div
+						className="navButton"
+						style={{
+							width: "120px",
+						}}
+					>
+						Clear scores
+					</div>
+				</Link>
+			</div>
     </div>
   );
 }

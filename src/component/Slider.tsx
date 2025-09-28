@@ -81,6 +81,7 @@ export default function Slider({
 			className="simon-slider rounded-sm size-full flex flex-column gap-2 content-between p-2"
 			style={{
 				backgroundColor: "darkgrey",
+				width: "clamp(60px, 20vw, 100px)",
 			}}
 			id={id}
 		>
@@ -137,7 +138,9 @@ export default function Slider({
 			<div
 				className="flex flex-center text-xl"
 				style={{
+					borderRadius: "10px",
 					backgroundColor: "white",
+					color: "black",
 				}}
 			>
 				<span>{currentValue + 1}</span>

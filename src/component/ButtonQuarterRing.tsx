@@ -48,7 +48,7 @@ export default function ButtonQuarterRing({
 				className="simon-button"
 				style={
 					{
-						"--button-color": color,
+						"--button-color": `var(--simon-${color}, gray)`,
 					} as React.CSSProperties
 				}
 				onClick={onClickAnimation}
@@ -60,7 +60,7 @@ export default function ButtonQuarterRing({
       M -40 -40
       A 70 70 0 0 1 30 32"
 					fill="none"
-					stroke={color}
+					stroke={`var(--simon-${color}, gray)`}
 					strokeWidth="50"
 				/>
 			</svg>

@@ -7,6 +7,7 @@ import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
+import ScoreButton from "../component/ScoreButton";
 import { Game } from "../service/Game";
 import { ReactPart } from "../service/Parts";
 import type { Sequence } from "../service/Sequence";
@@ -149,17 +150,32 @@ export default function GameScreen() {
 	return (
 		<div className="layout">
 			<div className="topbar align-center">
-				<span style={{ fontSize: "3rem" }}>Score: {score}</span>
-				{replaying ? (
-					<p>Wait for sequence to end</p>
-				) : (
-					<p>Now it's your turn</p>
-				)}
+				<div
+					className="status-pill"
+					style={{
+						backgroundColor: replaying
+							? "rgba(255, 130, 47, 0.8)"
+							: "rgba(0, 255, 0, 0.7)",
+					}}
+				>
+					<div
+						className="status-indicator"
+						style={{
+							backgroundColor: replaying ? "red" : "green",
+						}}
+					></div>
+					{replaying ? (
+						<p>Wait for sequence to end</p>
+					) : (
+						<p>Now it's your turn</p>
+					)}
+				</div>
 			</div>
 			<div className="center flex content-center">
 				<div
 					className="grid"
 					style={{
+						position: "relative",
 						gridTemplateColumns: "1fr 1fr",
 						gap: "40px",
 						aspectRatio: "1/1",
@@ -175,70 +191,76 @@ export default function GameScreen() {
 							id={input.id}
 						/>
 					))}
+					<ScoreButton value={score} />
 				</div>
 			</div>
 			<div className="bottom-middle flex flex-center">
 				<button
 					type="button"
 					onClick={() => setGameOngoing(false)}
-					className="p-2 text-xl pointer"
-					style={{
-						border: "none",
-						borderRadius: "4000px",
-						pointerEvents: "auto",
-					}}
+					className="give-up-button p-2 text-xl pointer"
 				>
 					GIVE UP
 				</button>
 			</div>
 			<div
-				className="left flex w-full p-2 gap-2"
+				className="left"
 				style={{
-					backgroundColor: "lightgrey",
 					height: "100%",
+					maxWidth: enabledSliders.length > 0 ? enabledSliders.length * 200 : 0,
 				}}
 			>
-				{enabledSliders.map((input) => (
-					<Slider
-						key={`${input.id}-${forceUpdate}`}
-						max={5}
-						value={typeof input.value === "number" ? input.value : 0}
-						onChange={(value) => handleUserInput(input.id, value)}
-						id={input.id}
-					/>
-				))}
+				<div className="p-2  flex w-full gap-2 h-full flex-center">
+					{enabledSliders.map((input) => (
+						<Slider
+							key={`${input.id}-${forceUpdate}`}
+							max={5}
+							value={typeof input.value === "number" ? input.value : 0}
+							onChange={(value) => handleUserInput(input.id, value)}
+							id={input.id}
+						/>
+					))}
+				</div>
 			</div>
 
 			<div
-				className="bottom-left flex gap-2 flex-center p-2"
+				className="bottom-left"
 				style={{
-					backgroundColor: "lightgrey",
+					height: "100%",
+					maxWidth:
+						enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
 				}}
 			>
-				{enabledSwitches.map((input) => (
-					<Switch
-						key={`${input.id}-${forceUpdate}`}
-						onToggle={(state) => handleUserInput(input.id, state)}
-						value={typeof input.value === "boolean" ? input.value : false}
-						id={input.id}
-					/>
-				))}
+				<div className="p-2 flex gap-2 flex-center">
+					{enabledSwitches.map((input) => (
+						<Switch
+							key={`${input.id}-${forceUpdate}`}
+							onToggle={(state) => handleUserInput(input.id, state)}
+							value={typeof input.value === "boolean" ? input.value : false}
+							id={input.id}
+						/>
+					))}
+				</div>
 			</div>
-			<div
-				className="bottom-right flex gap-2 flex-center p-2"
-				style={{
-					backgroundColor: "lightgrey",
-				}}
-			>
-				{enabledKnobs.map((input) => (
-					<Knob
-						key={`${input.id}-${forceUpdate}`}
-						max={8}
-						onChange={(value) => handleUserInput(input.id, value)}
-						value={typeof input.value === "number" ? input.value : 0}
-						id={input.id}
-					/>
-				))}
+			<div className="bottom-right">
+				<div
+					style={{
+						height: "100%",
+						maxWidth: enabledKnobs.length > 0 ? enabledKnobs.length * 200 : 0,
+					}}
+				>
+					<div className="flex gap-2 flex-center p-2">
+						{enabledKnobs.map((input) => (
+							<Knob
+								key={`${input.id}-${forceUpdate}`}
+								max={8}
+								onChange={(value) => handleUserInput(input.id, value)}
+								value={typeof input.value === "number" ? input.value : 0}
+								id={input.id}
+							/>
+						))}
+					</div>
+				</div>
 			</div>
 			{!gameOngoing && <GameEndModal score={score} />}
 			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />

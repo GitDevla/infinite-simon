@@ -8,7 +8,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 
 	function updateUsernameAndSave() {
 		SaveScore(username, score);
-		alert(username + "! Your " + score + " was successfully saved!");
+		alert(`${username}! Your ${score} was successfully saved!`);
 	}
 
 	function handleKeyPress() {
@@ -30,13 +30,25 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 			<div
 				className="fixed p-2 rounded-lg top-1/2 left-1/2 transform-center align-center"
 				style={{
-					backgroundColor: "white",
+					backgroundColor: "var(--bg-2)",
 					zIndex: 1000,
 				}}
 			>
-				<h2>You lost</h2>
-				<p>Correct sequence was ...</p>
-				<p>Enter your name to save your score ({score}) as the #1 player!</p>
+				<h2
+					style={{
+						marginBottom: "10px",
+						fontSize: "3rem",
+					}}
+				>
+					You lost
+				</h2>
+				<p
+					style={{
+						marginBottom: "10px",
+					}}
+				>
+					Enter your name to save your score ({score}) as the #1 player!
+				</p>
 				<input
 					className="p-2"
 					type="text"
@@ -53,10 +65,32 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 						padding: "10px 20px",
 						outline: "none",
 						border: "none",
+						backgroundColor: validUsername ? "var(--simon-green)" : "grey",
+						color: validUsername ? "black" : "white",
+						fontSize: "1.2rem",
+						minWidth: "250px",
 					}}
 					onClick={handleKeyPress}
 				>
 					{validUsername ? "Save and try again" : "Or give it one more try"}
+				</button>
+				<br />
+				<button
+					type="button"
+					className="rounded-sm pointer"
+					style={{
+						marginTop: "10px",
+						padding: "10px 20px",
+						outline: "none",
+						border: "none",
+						backgroundColor: validUsername ? "var(--simon-green)" : "var(--simon-red)",
+						color: validUsername ? "black" : "white",
+						fontSize: "1rem",
+						minWidth: "200px",
+
+					}}
+				>
+					{validUsername ? "Save and go back to home" : "Go back to home"}
 				</button>
 			</div>
 		</>
