@@ -43,6 +43,19 @@ export default function Slider({
 		});
 	};
 
+	const handleKeyBoard = (e: React.KeyboardEvent) => {
+		if (e.key === "ArrowUp" || e.key === "ArrowRight") {
+			setInternalValue((v) => Math.min(v + 1, max - 1));
+			onChange?.(Math.min(currentValue + 1, max - 1));
+			e.preventDefault();
+		}
+		if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
+			setInternalValue((v) => Math.max(v - 1, 0));
+			onChange?.(Math.max(currentValue - 1, 0));
+			e.preventDefault();
+		}
+	}
+
 	const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
 		e.preventDefault();
 
@@ -85,7 +98,7 @@ export default function Slider({
 			}}
 			id={id}
 		>
-			<div className="relative size-full">
+			<div className="relative size-full">						
 				<div>
 					<div
 						className="absolute size-full flex flex-column flex-center content-between h-full left-1/2"
@@ -133,6 +146,7 @@ export default function Slider({
 					tabIndex={0}
 					onMouseDown={handleInteraction}
 					onTouchStart={handleInteraction}
+					onKeyDown={handleKeyBoard}
 				></div>
 			</div>
 			<div

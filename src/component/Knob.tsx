@@ -24,6 +24,25 @@ export default function Knob({
 
 	const clamp = (v: number) => mod(Math.round(v), max);
 
+	const handleKeyboard = (e: React.KeyboardEvent) => {
+		if (e.key === "ArrowUp" || e.key === "ArrowRight") {
+			setInnerValue((v) => {
+				const newValue = clamp(v + 1);
+				onChange?.(newValue);
+				return newValue;
+			});
+			e.preventDefault();
+		}
+		if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
+			setInnerValue((v) => {
+				const newValue = clamp(v - 1);
+				onChange?.(newValue);
+				return newValue;
+			});
+			e.preventDefault();
+		}
+	};
+
 	const handleMouseDown = (e: React.MouseEvent) => {
 		e.preventDefault();
 
@@ -63,6 +82,7 @@ export default function Knob({
 				aria-valuenow={clamp(innerValue)}
 				tabIndex={0}
 				onMouseDown={handleMouseDown}
+				onKeyDown={handleKeyboard}
 			>
 				<div
 					className="simon-knob-inner absolute rounded-sm"
