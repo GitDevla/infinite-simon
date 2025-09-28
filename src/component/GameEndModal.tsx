@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import SaveScore from "./SaveScore";
 import { positionOnScoreboardIfInserted } from "../service/Score";
+import { useNavigate } from 'react-router-dom';
 
 export default function GameEndModal({ score = 0 }: { score?: number }) {
 	const [username, setUsername] = useState("");
 	const [wouldBePosition, setWouldBePosition] = useState(1);
+	const navigate = useNavigate();
 
 	const validUsername = username.trim().length > 0;
 
@@ -96,7 +98,9 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 						color: validUsername ? "black" : "white",
 						fontSize: "1rem",
 						minWidth: "200px",
-
+					}}
+					onClick={() => {
+						navigate('/');
 					}}
 				>
 					{validUsername ? "Save and go back to home" : "Go back to home"}
