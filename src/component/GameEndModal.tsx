@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { positionOnScoreboardIfInserted, saveScore } from "../service/Score";
 import { useNavigate } from 'react-router-dom';
+import { positionOnScoreboardIfInserted, saveScore } from "../service/ScoreLocal";
 
 export default function GameEndModal({ score = 0 }: { score?: number }) {
 	const [username, setUsername] = useState("");

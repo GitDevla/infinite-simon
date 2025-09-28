@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
-import { defaultScoreboard, fetchScoreboard } from "../service/Score";
+import { defaultScoreboard, fetchScoreboard } from "../service/ScoreLocal";
 
 interface Score{
     player: string,
@@ -25,12 +25,12 @@ const ScoreBoard: React.FC = () => {
           <th>Playername</th>
           <th>Points</th>
         </tr>
-        {scores.slice(0, 10).map((entry, index) => (
+        {scores.length?scores.slice(0, 10).map((entry, index) => (
           <tr key={index}>
             <td>{entry.player}</td>
             <td>{entry.score}</td>
           </tr>
-        ))}
+        )): <tr><td colSpan={2} style={{textAlign:"center"}}>No scores yet!</td></tr>}
       </table>
       <div
 				style={{
