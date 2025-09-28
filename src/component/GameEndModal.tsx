@@ -100,6 +100,7 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 						minWidth: "200px",
 					}}
 					onClick={() => {
+						if (validUsername) updateUsernameAndSave();
 						navigate('/');
 					}}
 				>
