@@ -71,7 +71,7 @@ export default function GameScreen() {
 				),
 			);
 		} else {
-			requestAnimationFrame(() => setCurrentHighlight(id)); // Force a re-render if the same button is highlighted twice in a row
+			requestAnimationFrame(() => requestAnimationFrame(()=>setCurrentHighlight(id))); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
 		}
 	};
 
