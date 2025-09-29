@@ -58,7 +58,8 @@ app.post("/save-score", (req, res) => {
 });
 
 app.post("/default-scoreboard", (req, res) => {
-  fs.writeFile(scoresFile, JSON.stringify(req.body), "utf8", (err) => {
+  const defaultScoreJson ='{"scores":[{"player":"Simonfi Sándor né","score":-2,"date":"2025-09-21T14:32:00Z"},{"player":"Simonfi Sándor","score":-1,"date":"2025-09-21T14:40:00Z"}]}';
+  fs.writeFile(scoresFile, JSON.stringify(defaultScoreJson), "utf8", (err) => {
 
     if (err){
       return res.status(500).json({
