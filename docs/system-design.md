@@ -1,15 +1,4 @@
 # Rendszerterv
-## A rendszer célja
-- Memória fejlődést elősegítő játékos felület weboldalon való megvalósítása
-- Rekord értékek segítségével a gyakorlottság és emlékezőképesség fejlődésének követése
-- Versenyszerű kézségösszemérés egyéb játékosokkal
-
-**A rendszernek nem célja**:
-- Regisztráció vagy felhasználói fiók létrehozása
-- Pontszámok felhőben való tárolása
-- Többjátékos mód
-- Közösségi funkciók (pl. barátok hozzáadása, üzenetküldés)
-
 ## Projekt terv
 - Rendszer terv megírása 09.21.
 - További követelmények megismerése 09.22.
@@ -48,11 +37,6 @@
 - **Látogató**: aki csak belép az oldalra, és megnézheti az eredménytáblát.
 - **Játékos**: aki ténylegesen elindítja a játékot, interakcióba lép vele, pontot szerez.
 
-### Folyamatok
-- **Játék indítása**: A látogató elindítja a játékot, ekkor a rendszer generál egy input-kombinációt, amit a játékosnak meg kell jegyeznie.
-- **Játék menete**: A játékos megpróbálja megismételni az input-kombinációt. Ha sikerül, a rendszer újabb inputot ad a kombinációhoz, növeli a pontszámot, és a játék folytatódik. Ha nem sikerül, a játék véget ér, és a játékos pontszáma rögzítésre kerülhet.
-- **Eredménytábla megtekintése**: A látogatók és játékosok megtekinthetik az eredménytáblát, ahol a legjobb pontszámokat látják az adott számitógépen.
-
 ### Entitások
 - **Játék**: Aktuális input-sorozat, játék állapota (aktív vagy véget ért), körök száma.
 - **Játékos**: Felhasználónév.
@@ -80,47 +64,10 @@
 - A rendszer adjon lehetőséget a pontszám mentés kihagyására amennyiben a felhasználó nem igényli.
 - A pontszámokat ne lehessen véglegesen módosítani a játékmenet szakszerű használata nélkül.
 
-## Funkcionális terv
-### Rendszer szereplők
-[Több információ](#szereplők)
-
-### Használati esetek
-[Több információ](#folyamatok)
-
-[User Story](user-story1.md)
-
-### Határ osztályok
-| Határ osztály | Leírás |
-|---------------|--------|
-| App | A fő alkalmazás osztály, amely kezeli a képernyők közötti navigációt. |
-| WelcomeScreen | A játék indítására és az eredménytábla megtekintésére szolgál. |
-| GameScreen | A játékos interakcióját kezeli, bemenetet fogad és visszajelzést ad. |
-| GameOverModal | A játék végét jelző ablak, amely megjeleníti a pontszámot és lehetőséget ad a pontszám mentésére. |
-| ScoreboardScreen | A legjobb pontszámokat jeleníti meg. |
-
-### Menü hierarchia
-```mermaid
-graph LR
-    A[Kezdőképernyő]
-    A --> B[Játék indítása]
-    B --> C[Játék képernyő]
-    C --> D[Játék vége]
-    D --> E[Game Over ablak]
-    E --> F[Eredménytábla]
-    A --> F
-```
-
-### Képernyő tervek
-
-> **Figyelem:** A képernyőtervek előzetes vázlatok, amelyek a fejlesztés során változhatnak. A végleges felhasználói felület eltérhet az itt bemutatott vázlatoktól.
-
-![](assets/Wireframe%20-%201.png)
-![](assets/Wireframe%20-%202.png)
-![](assets/Wireframe%20-%203.png)
-![](assets/Wireframe%20-%204.png)
-![](assets/Wireframe%20-%205.png)
-
 ## Fizikai környezet
+- A rendszer webes környezetben fusson, elérhető legyen modern böngészőkben (Chrome, Firefox, Edge).
+- A rendszer frontendje React alapú legyen.
+- A rendszer ne igényeljen szerver oldali adatbázist, a pontszámok a kliens oldalon tárolódjanak.
 
 ## Absztrakt domain modell
 ```mermaid
@@ -149,6 +96,19 @@ classDiagram
     Játék "1" --> "1" Játékos
 ```
 ## Architektúra terv
+- A rendszer három rétegből áll: prezentációs réteg, üzleti logika réteg, perszisztencia réteg.
+- A prezentációs réteg React komponensekből áll, amelyek a felhasználói interakciókat kezelik.
+- Az üzleti logika réteg a játék szabályait és állapotát kezeli.
+- A perszisztencia réteg a pontszámok tárolásáért felelős, a böngésző `localStorage`-jában.
+```mermaid
+graph TD
+    A[Felhasználói Interakció] -->|Interakció| B[Prezentációs Réteg]
+    B -->|Játék Indítása, Bemenet Kezelés| C[Üzleti Logika Réteg]
+    C -->|Játék Állapot Kezelés| D[Perszisztencia Réteg]
+    D -->|Pontszám Mentés/Betöltés| C
+    C -->|Játék Állapot Visszajelzés| B
+    B -->|Eredménytábla Megjelenítés| A
+```
 
 ## Adatbázis terv
 Az adatok JSON formátumban kerülnek mentésre egy fix kulcs alatt `scores`. A tárolt adatok struktúrája a következő:
@@ -315,5 +275,6 @@ classDiagram
 - Játékos sebesség teszt: a bemenet sorrendjének pontossága még akkor is ha a felhasználó gyorsan üti be őket.
 
 ## Telepítési terv
+A játék GitHub Pages szolgáltatáson keresztül lesz elérhető, ezért nincs szükség hagyományos telepítésre a felhasználók részéről. A telepítési folyamat a fejlesztői oldalon a `gh-pages` branch frissítésével történik.
 
 ## Karbantartási terv
