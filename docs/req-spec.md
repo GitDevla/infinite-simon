@@ -43,7 +43,20 @@ A weboldal megfelel az alábbi törvényeknek:
     - A webfelület szabványos eszközökkel készüljön (HTML, CSS, JavaScript)
 
 ## Követelménylista
-#todo
+| Modul | ID  | Név | V. | Kifejtés |
+|-------|-----|-----|----|----------|
+| Frontend | FR1 | Felhasználói fiók létrehozása | v0.1 | A felhasználók regisztrálhatnak és bejelentkezhetnek a rendszerbe. |
+| Backend | BE1 | Felhasználói kezelés | v0.1 | A rendszer kezeli a felhasználói fiókokat, beleértve a regisztrációt, bejelentkezést és profilkezelést. |
+| Backend | BE6 | Biztonság | v0.1 | A rendszer biztosítja a felhasználói adatok és pontszámok biztonságát. |
+| Frontend | FR3 | Játékos profil | v0.2 | A felhasználók megtekinthetik és szerkeszthetik profiljukat. |
+| Backend | BE2 | Játék logika | v0.3 | A rendszer kezeli a játék szabályait és logikáját. |
+| Frontend | FR6 | Egyjátékos mód | v0.3 | A felhasználók elindíthatják a játékot egyjátékos |
+| Frontend | FR2 | Többjátékos mód | v0.4 | A felhasználók elindíthatják a játékot többjátékos módban. |
+| Backend | BE4 | Többjátékos támogatás | v0.4 | A rendszer lehetővé teszi a többjátékos játékot valós időben. |
+| Frontend | FR4 | Eredménytábla | v0.5 | A felhasználók megtekinthetik a legjobb pontszámokat és statisztikákat. |
+| Backend | BE3 | Pontszámok tárolása | v0.5 | A rendszer szerveren tárolja a játékosok pontszámait és statisztikáit. |
+| Backend | BE5 | Statisztikák és elemzések | v0.6 | A rendszer részletes statisztikákat és elemzéseket biztosít a játékosok teljesítményéről. |   
+
 
 ## Fogalomszótár
 [^1]: **Simon says**: Egy memóriára és figyelemre épülő játék, ahol a játékosnak egyre hosszabb és bonyolultabb utasítás-sorozatot kell követnie.

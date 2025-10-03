@@ -24,7 +24,9 @@
 - **Más Játékosok**: felhasználón kívüli más Játékosok akik a többjátékos módban részt vesznek.
 
 ### Entitások
-#todo
+- **Játékos**: felhasználónév, email, jelszó (hash-elve), avatar URI, regisztráció dátuma, utolsó bejelentkezés dátuma.
+- **Játék**: sorozat (lista a bemenetekről), állapot (folyamatban, befejezett), mód (egyjátékos, többjátékos), nehézség (eredeti, kibővített), körök száma.
+- **Pontszám**: pontszám érték, dátum.
 
 ## Követelmények
 
@@ -120,7 +122,21 @@ graph TD
 - WebSocket: Valós idejű játékmenet, játékosok csatlakozása, játékállapot szinkronizáció, játékbemenetek továbbítása
 
 ## Adatbázis terv
-#todo
+- Az adatbázis a felhasználói adatok, játékok és pontszámok tárolására szolgál.
+- Valós idejű játékmenet adatai nem kerülnek tárolásra, csak a végleges pontszámok.
+- Az adatbázis relációs adatbázis, amely a következő táblákat tartalmazza:
+    - Felhasználók (Users)
+    - Játékok (Games)
+    - Játékmódok (Modes)
+    - Nehézségi szintek (Difficulties)
+    - Játék menetek (Matches)
+    - Résztvevők (Participants)
+- A táblák közötti kapcsolatok:
+    - Egy játékban több résztvevő is lehet (többjátékos esetén).
+    - Egy játékmód több játékhoz is tartozhat.
+    - Egy nehézségi szint több játékhoz is tartozhat.
+    - Egy játék több játékmenetet is tartalmazhat.
+    - Egy játékmenet több résztvevőt is tartalmazhat (több játékos esetén).
 ```mermaid
 erDiagram
     USER {
@@ -252,10 +268,8 @@ classDiagram
         +login(req: Request, res: Response): Promise~void~
         +getUserProfile(req: Request, res: Response): Promise~void~
         +updateUserProfile(req: Request, res: Response): Promise~void~
-        +startNewGame(req: Request, res: Response): Promise~void~
-        +joinGame(req: Request, res: Response): Promise~void~
+        +queueUpGame(req: Request, res: Response): Promise~void~
         +submitInput(req: Request, res: Response): Promise~void~
-        +endGame(req: Request, res: Response): Promise~void~
     }
     class WebSocketServer {
         +onConnection(socket: WebSocket): void
