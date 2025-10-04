@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Logo from "../component/Logo";
 
 function App() {
@@ -11,14 +11,12 @@ function App() {
 				<div className="flex gap-2 flex-col">
 					<Link
 						to="/game"
-						className="bg-[#aaa] text-center text-black rounded-xl border-[gray] p-3 mx-7 border-4"
-					>
+						className="bg-[#aaa] text-center text-black rounded-xl border-[gray] p-3 mx-7 border-4">
 						Play!
 					</Link>
 					<Link
 						to="/score"
-						className="bg-[#aaa] text-center text-black rounded-xl border-[gray] p-3 mx-7 border-4"
-					>
+						className="bg-[#aaa] text-center text-black rounded-xl border-[gray] p-3 mx-7 border-4">
 						Scoreboard!
 					</Link>
 				</div>

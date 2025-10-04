@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
 /**
  * A vertical slider component that allows users to select a value within a specified range by dragging a ball along a track.
@@ -44,7 +44,7 @@ export default function Slider({
 	};
 
 	const updateValueAndNotify = () => {
-		setInternalValue((v) => {
+		setInternalValue(v => {
 			v = Math.round(v);
 			onChange?.(v);
 			return v;
@@ -53,12 +53,12 @@ export default function Slider({
 
 	const handleKeyBoard = (e: React.KeyboardEvent) => {
 		if (e.key === "ArrowUp" || e.key === "ArrowRight") {
-			setInternalValue((v) => Math.min(v + 1, max - 1));
+			setInternalValue(v => Math.min(v + 1, max - 1));
 			onChange?.(Math.min(currentValue + 1, max - 1));
 			e.preventDefault();
 		}
 		if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
-			setInternalValue((v) => Math.max(v - 1, 0));
+			setInternalValue(v => Math.max(v - 1, 0));
 			onChange?.(Math.max(currentValue - 1, 0));
 			e.preventDefault();
 		}
@@ -90,7 +90,7 @@ export default function Slider({
 			window.removeEventListener("touchend", onTouchEnd);
 		};
 
-		window.addEventListener("touchmove", onTouchMove, { passive: false });
+		window.addEventListener("touchmove", onTouchMove, {passive: false});
 		window.addEventListener("touchend", onTouchEnd);
 
 		window.addEventListener("mousemove", onMouseMove);
@@ -100,18 +100,14 @@ export default function Slider({
 	return (
 		<div
 			className="simon-slider rounded-lg size-full flex flex-col gap-2 content-between p-2 bg-gray-400 min-w-[60px] w-[20vw] max-w-[100px]"
-			id={id}
-		>
+			id={id}>
 			<div className="relative size-full">
 				<div
 					className="absolute size-full flex flex-col items-center justify-between h-full left-1/2 w-1 -translate-x-1/2 bg-black"
-					ref={ref}
-				>
-					{Array.from({ length: max }).map((_, i) => (
+					ref={ref}>
+					{Array.from({length: max}).map((_, i) => (
 						<div key={i} className="h-1 w-10 bg-black rounded-sm">
-							<span className="relative block left-[-30%] top-[-300%]">
-								{max - i}
-							</span>
+							<span className="relative block left-[-30%] top-[-300%]">{max - i}</span>
 						</div>
 					))}
 				</div>
@@ -127,8 +123,7 @@ export default function Slider({
 					tabIndex={0}
 					onMouseDown={handleInteraction}
 					onTouchStart={handleInteraction}
-					onKeyDown={handleKeyBoard}
-				></div>
+					onKeyDown={handleKeyBoard}></div>
 			</div>
 			<div className="flex justify-center items-center text-xl rounded-xl bg-white text-black">
 				<span>{currentValue + 1}</span>

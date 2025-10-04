@@ -1,55 +1,52 @@
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import GameEndModal from '../component/GameEndModal';
-import { positionOnScoreboardIfInserted } from '../service/Score';
-
+import {render, screen} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import GameEndModal from "../component/GameEndModal";
 
 describe("Game End Screen Component", () => {
-  test('Game End Modal Exists', async () => {
-    render(<GameEndModal score={5}/>);
-    const modalElement = screen.getByRole('dialog');
-    expect(modalElement).toBeInTheDocument();
-  });
+	test("Game End Modal Exists", async () => {
+		render(<GameEndModal score={5} />);
+		const modalElement = screen.getByRole("dialog");
+		expect(modalElement).toBeInTheDocument();
+	});
 
-    test('Username Input and Save Button Functionality', async () => {
-    render(<GameEndModal score={999}/>);
-    const user = userEvent;
-    
-    // mock reload function
-    delete (window as any).location;
-    (window as any).location = { reload: jest.fn() };
+	test("Username Input and Save Button Functionality", async () => {
+		render(<GameEndModal score={999} />);
+		const user = userEvent;
 
-    const inputElement = screen.getByRole('textbox');
-    expect(inputElement).toBeInTheDocument();
+		// mock reload function
+		delete (window as any).location;
+		(window as any).location = {reload: jest.fn()};
 
-    await user.type(inputElement, 'TestUser');
-    expect((inputElement as HTMLInputElement).value).toBe('TestUser');
+		const inputElement = screen.getByRole("textbox");
+		expect(inputElement).toBeInTheDocument();
 
-    const saveButton = screen.getAllByRole('button')[0];
-    expect(saveButton).toBeInTheDocument();
+		await user.type(inputElement, "TestUser");
+		expect((inputElement as HTMLInputElement).value).toBe("TestUser");
 
-    // Mock window.alert
-    window.alert = jest.fn();
+		const saveButton = screen.getAllByRole("button")[0];
+		expect(saveButton).toBeInTheDocument();
 
-    await user.click(saveButton);
-    expect(window.alert).toHaveBeenCalledWith('TestUser! Your 999 was successfully saved!');
-    
-    expect((window as any).location.reload).toHaveBeenCalled();
-  });
+		// Mock window.alert
+		window.alert = jest.fn();
 
-  test('Save button without username reloads the page', async () => {
-    render(<GameEndModal score={5}/>);
-    const user = userEvent;
-    
-    // mock reload function
-    delete (window as any).location;
-    (window as any).location = { reload: jest.fn() };
+		await user.click(saveButton);
+		expect(window.alert).toHaveBeenCalledWith("TestUser! Your 999 was successfully saved!");
 
-    const saveButton = screen.getAllByRole('button')[0];
-    expect(saveButton).toBeInTheDocument();
+		expect((window as any).location.reload).toHaveBeenCalled();
+	});
 
-    await user.click(saveButton);
-    expect((window as any).location.reload).toHaveBeenCalled();
-  });
+	test("Save button without username reloads the page", async () => {
+		render(<GameEndModal score={5} />);
+		const user = userEvent;
+
+		// mock reload function
+		delete (window as any).location;
+		(window as any).location = {reload: jest.fn()};
+
+		const saveButton = screen.getAllByRole("button")[0];
+		expect(saveButton).toBeInTheDocument();
+
+		await user.click(saveButton);
+		expect((window as any).location.reload).toHaveBeenCalled();
+	});
 });

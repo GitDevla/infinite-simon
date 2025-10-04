@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { defaultScoreboard, fetchScoreboard } from "../service/ScoreLocal";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {defaultScoreboard, fetchScoreboard} from "../service/ScoreLocal";
 
 interface Score {
 	player: string;
@@ -13,10 +13,10 @@ const ScoreBoard: React.FC = () => {
 
 	useEffect(() => {
 		fetchScoreboard()
-			.then((data) => {
+			.then(data => {
 				setScores(data);
 			})
-			.catch((err) => console.error("Failed to load scores:", err));
+			.catch(err => console.error("Failed to load scores:", err));
 	}, []);
 	return (
 		<div>
@@ -28,12 +28,8 @@ const ScoreBoard: React.FC = () => {
 				{scores.length ? (
 					scores.slice(0, 10).map((entry, index) => (
 						<tr key={index}>
-							<td className="p-2 pr-0 border-4 border-[#444444]">
-								{entry.player}
-							</td>
-							<td className="p-2 pr-0 border-4 border-[#444444]">
-								{entry.score}
-							</td>
+							<td className="p-2 pr-0 border-4 border-[#444444]">{entry.player}</td>
+							<td className="p-2 pr-0 border-4 border-[#444444]">{entry.score}</td>
 						</tr>
 					))
 				) : (

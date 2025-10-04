@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {useEffect, useRef} from "react";
 
 /**
  * A button component that renders a quarter ring SVG and handles click animations for a Simon game.
@@ -31,6 +31,7 @@ export default function ButtonQuarterRing({
 		}, 200);
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only want to trigger on triggerAnimation change
 	useEffect(() => {
 		if (triggerAnimation) {
 			onClickAnimation();
@@ -47,8 +48,7 @@ export default function ButtonQuarterRing({
 			tabIndex={0}
 			onKeyDown={() => {}}
 			onClick={onPress}
-			id={id}
-		>
+			id={id}>
 			<svg
 				ref={ref}
 				viewBox="-40 -65 95 95"
@@ -60,8 +60,7 @@ export default function ButtonQuarterRing({
 					} as React.CSSProperties
 				}
 				onClick={onClickAnimation}
-				onKeyDown={() => {}}
-			>
+				onKeyDown={() => {}}>
 				<title>Simon Button</title>
 				<path
 					d="

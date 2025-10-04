@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 
-
 const app = express();
 const PORT = 3001;
 
@@ -12,74 +11,75 @@ app.use(express.json());
 
 isProd = process.env.NODE_ENV === "production";
 
-const scoresFile = path.join(__dirname, isProd?"build/scores/scores.json":"public/scores/scores.json");
+const scoresFile = path.join(__dirname, isProd ? "build/scores/scores.json" : "public/scores/scores.json");
 
 app.post("/save-score", (req, res) => {
-  const { player, score } = req.body;
+	const {player, score} = req.body;
 
-  if (!player || typeof score !== "number") {
-    return res.status(400).json({
-      success: false,
-      error: "Invalid data",
-      details: err.message
-    });
-  }
+	if (!player || typeof score !== "number") {
+		return res.status(400).json({
+			success: false,
+			error: "Invalid data",
+			details: err.message,
+		});
+	}
 
-  fs.readFile(scoresFile, "utf8", (err, data) => {
-    if (err) return res.status(500).json({
-      success: false,
-      error: "Could not read scores",
-      details: err.message
-    });
+	fs.readFile(scoresFile, "utf8", (err, data) => {
+		if (err)
+			return res.status(500).json({
+				success: false,
+				error: "Could not read scores",
+				details: err.message,
+			});
 
-    let scoresJSON = { scores: [] };
-    try {
-      scoresJSON = JSON.parse(data);
-    } catch (parseErr) {
-      return res.status(500).json({
-        success: false,
-        error: "Invalid JSON",
-        details: parseErr.message
-      });
-    }
+		let scoresJSON = {scores: []};
+		try {
+			scoresJSON = JSON.parse(data);
+		} catch (parseErr) {
+			return res.status(500).json({
+				success: false,
+				error: "Invalid JSON",
+				details: parseErr.message,
+			});
+		}
 
-    scoresJSON.scores.push({
-      player,
-      score,
-      date: new Date().toISOString(),
-    });
+		scoresJSON.scores.push({
+			player,
+			score,
+			date: new Date().toISOString(),
+		});
 
-    fs.writeFile(scoresFile, JSON.stringify(scoresJSON, null, 2), (err) => {
-      if (err) return res.status(500).json({ error: "Could not write score" });
+		fs.writeFile(scoresFile, JSON.stringify(scoresJSON, null, 2), err => {
+			if (err) return res.status(500).json({error: "Could not write score"});
 
-      res.json({ success: true });
-    });
-  });
+			res.json({success: true});
+		});
+	});
 });
 
 app.post("/default-scoreboard", (req, res) => {
-  const defaultScoreJson ='{"scores":[{"player":"Simonfi Sándor né","score":-2,"date":"2025-09-21T14:32:00Z"},{"player":"Simonfi Sándor","score":-1,"date":"2025-09-21T14:40:00Z"}]}';
-  fs.writeFile(scoresFile, JSON.stringify(defaultScoreJson), "utf8", (err) => {
+	const defaultScoreJson =
+		'{"scores":[{"player":"Simonfi Sándor né","score":-2,"date":"2025-09-21T14:32:00Z"},{"player":"Simonfi Sándor","score":-1,"date":"2025-09-21T14:40:00Z"}]}';
+	fs.writeFile(scoresFile, JSON.stringify(defaultScoreJson), "utf8", err => {
+		if (err) {
+			return res.status(500).json({
+				success: false,
+				error: "Could not reset to default",
+			});
+		}
 
-    if (err){
-      return res.status(500).json({
-        success:false,
-        error: "Could not reset to default", 
-      });
-  }
-    
-    res.json({ success: true });
-  });
+		res.json({success: true});
+	});
 });
 
-if (isProd){
-  app.use(express.static(path.join(__dirname, "./build")));
+if (isProd) {
+	app.use(express.static(path.join(__dirname, "./build")));
 
-  app.use((req, res,next) => {
-    res.sendFile(path.join(__dirname, "./build/index.html"));
-  });
+	app.use((req, res, next) => {
+		res.sendFile(path.join(__dirname, "./build/index.html"));
+	});
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT} (${isProd?"Production":"Development"})`);
+	console.log(`Server running on http://localhost:${PORT} (${isProd ? "Production" : "Development"})`);
 });

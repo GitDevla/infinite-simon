@@ -1,14 +1,12 @@
 import ReactDOM from "react-dom/client";
 import "./style/index.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import {HashRouter, Route, Routes} from "react-router-dom";
 import App from "./page/App";
 import GameScreen from "./page/GameScreen";
 import ScoreBoard from "./page/ScoreBoard";
 import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(
-	document.getElementById("root") as HTMLElement,
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<div className="w-screen h-screen overflow-hidden">
 		<HashRouter>

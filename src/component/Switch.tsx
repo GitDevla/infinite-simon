@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 /**
  * A switch component that toggles between on and off states.
@@ -36,8 +36,7 @@ export default function Switch({
 				perspective: "400px",
 				aspectRatio: "5/6",
 				width: "90px",
-			}}
-		>
+			}}>
 			<div
 				className="simon-switch size-full flex flex-col transition-all rounded-sm  items-center justify-around"
 				role="switch"
@@ -45,8 +44,7 @@ export default function Switch({
 				tabIndex={0}
 				onKeyDown={() => {}}
 				onClick={() => handleToggleChange(!isOn)}
-				data-ison={isOn}
-			>
+				data-ison={isOn}>
 				<span>I</span>
 				<span>O</span>
 			</div>

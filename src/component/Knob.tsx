@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { mod } from "../util/mod";
+import {useEffect, useState} from "react";
+import {mod} from "../util/mod";
 
 /**
  * A knob component that allows users to select a value within a specified range by rotating the knob.
@@ -35,7 +35,7 @@ export default function Knob({
 
 	const handleKeyboard = (e: React.KeyboardEvent) => {
 		if (e.key === "ArrowUp" || e.key === "ArrowRight") {
-			setInnerValue((v) => {
+			setInnerValue(v => {
 				const newValue = clamp(v + 1);
 				onChange?.(newValue);
 				return newValue;
@@ -43,7 +43,7 @@ export default function Knob({
 			e.preventDefault();
 		}
 		if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
-			setInnerValue((v) => {
+			setInnerValue(v => {
 				const newValue = clamp(v - 1);
 				onChange?.(newValue);
 				return newValue;
@@ -65,7 +65,7 @@ export default function Knob({
 			setInnerValue(newValue);
 		};
 		const onMouseUp = () => {
-			setInnerValue((v) => {
+			setInnerValue(v => {
 				v = Math.round(v);
 				onChange?.(clamp(v));
 				return v;
@@ -87,29 +87,24 @@ export default function Knob({
 				aria-valuenow={clamp(innerValue)}
 				tabIndex={0}
 				onMouseDown={handleMouseDown}
-				onKeyDown={handleKeyboard}
-			>
+				onKeyDown={handleKeyboard}>
 				<div
 					className="simon-knob-inner absolute rounded-sm"
 					style={{
 						transform: `rotate(${((innerValue - min) / (max - min)) * 360}deg)`,
-					}}
-				></div>
+					}}></div>
 			</div>
 			<div>
-				{Array.from({ length: max }, (_, i) => (
+				{Array.from({length: max}, (_, i) => (
 					<span
 						key={i}
 						className={clsx(
 							"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all flex text-sm origin-center",
-							i === clamp(innerValue)
-								? "font-bold text-red-600"
-								: "font-normal text-[var(--fg)]",
+							i === clamp(innerValue) ? "font-bold text-red-600" : "font-normal text-[var(--fg)]",
 						)}
 						style={{
 							transform: `translate(-50%, -50%) rotate(${(i / max) * 360}deg) translateY(-40px) rotate(-${(i / max) * 360}deg) scale(${i === clamp(innerValue) ? 1.2 : 1})`,
-						}}
-					>
+						}}>
 						{i}
 					</span>
 				))}

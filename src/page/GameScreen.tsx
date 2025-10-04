@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import AnimatedCursor from "../component/AnimatedCursor";
 import ButtonQuarterRing from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
@@ -8,9 +8,9 @@ import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
 import ScoreButton from "../component/ScoreButton";
-import { Game } from "../service/Game";
-import { ReactPart } from "../service/Parts";
-import type { Sequence } from "../service/Sequence";
+import {Game} from "../service/Game";
+import {ReactPart} from "../service/Parts";
+import type {Sequence} from "../service/Sequence";
 
 export type GameInput = {
 	type: string;
@@ -43,8 +43,9 @@ export default function GameScreen() {
 		game.current = new Game();
 		game.current.startNewGame();
 		game.current.onNewRound(() => {
-			setScore(game.current!.getCurrentRound() - 1);
-			setSequence(game.current!.getSequence());
+			if (game.current === null) return;
+			setScore(game.current.getCurrentRound() - 1);
+			setSequence(game.current.getSequence());
 		});
 		setSequence(game.current.getSequence());
 	}, []);
@@ -70,30 +71,24 @@ export default function GameScreen() {
 	const highlightInput = async (id: string, value: any) => {
 		setCurrentHighlight("");
 		if (value !== undefined && value !== null) {
-			setInputs((prev) =>
-				prev.map((input) =>
-					input.id === id ? { ...input, value: value } : input,
-				),
-			);
+			setInputs(prev => prev.map(input => (input.id === id ? {...input, value: value} : input)));
 		} else {
-			requestAnimationFrame(() =>
-				requestAnimationFrame(() => setCurrentHighlight(id)),
-			); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
+			requestAnimationFrame(() => requestAnimationFrame(() => setCurrentHighlight(id))); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
 		}
 	};
 
 	const resetScene = () => {
 		setCurrentHighlight("");
-		setInputs((prev) =>
-			prev.map((input) => {
-				if (input.type === "switch") return { ...input, value: false };
-				if (input.type === "knob") return { ...input, value: 0 };
-				if (input.type === "slider") return { ...input, value: 0 };
+		setInputs(prev =>
+			prev.map(input => {
+				if (input.type === "switch") return {...input, value: false};
+				if (input.type === "knob") return {...input, value: 0};
+				if (input.type === "slider") return {...input, value: 0};
 				return input;
 			}),
 		);
 		setPointerPosition(null);
-		setForceUpdate((f) => f + 1);
+		setForceUpdate(f => f + 1);
 	};
 
 	const enableUserInteraction = (value: boolean) => {
@@ -112,7 +107,7 @@ export default function GameScreen() {
 		await sleep(moveSpeedInMs);
 		if (!sequence) return;
 		for (let i = 0; i < sequence.getParts().length; i++) {
-			const { id, expectedValue } = sequence.getParts()[i];
+			const {id, expectedValue} = sequence.getParts()[i];
 			await moveCursorToComponent(id);
 			await highlightInput(id, expectedValue);
 			await sleep(moveSpeedInMs);
@@ -123,18 +118,19 @@ export default function GameScreen() {
 		enableUserInteraction(true);
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Only want to run this when sequence changes
 	useEffect(() => {
-		setInputs((prev) => {
+		setInputs(prev => {
 			if (!sequence) return prev;
 			// Always have the 4 default buttons
 			const defaults = [
-				{ type: "button", id: "simon-red" },
-				{ type: "button", id: "simon-green" },
-				{ type: "button", id: "simon-blue" },
-				{ type: "button", id: "simon-yellow" },
+				{type: "button", id: "simon-red"},
+				{type: "button", id: "simon-green"},
+				{type: "button", id: "simon-blue"},
+				{type: "button", id: "simon-yellow"},
 			] as GameInput[];
 			for (const input of sequence.getParts()) {
-				if (!defaults.find((d) => d.id === input.id))
+				if (!defaults.find(d => d.id === input.id))
 					defaults.push({
 						type: input.type,
 						id: input.id,
@@ -147,10 +143,10 @@ export default function GameScreen() {
 		reenactSequence();
 	}, [sequence]);
 
-	const enabledButtons = inputs.filter((input) => input.type === "button");
-	const enabledSliders = inputs.filter((input) => input.type === "slider");
-	const enabledSwitches = inputs.filter((input) => input.type === "switch");
-	const enabledKnobs = inputs.filter((input) => input.type === "knob");
+	const enabledButtons = inputs.filter(input => input.type === "button");
+	const enabledSliders = inputs.filter(input => input.type === "slider");
+	const enabledSwitches = inputs.filter(input => input.type === "switch");
+	const enabledKnobs = inputs.filter(input => input.type === "knob");
 
 	const rotations = [270, 0, 180, 90];
 
@@ -160,22 +156,14 @@ export default function GameScreen() {
 				<div
 					className="status-pill"
 					style={{
-						backgroundColor: replaying
-							? "rgba(255, 130, 47, 0.8)"
-							: "rgba(0, 255, 0, 0.7)",
-					}}
-				>
+						backgroundColor: replaying ? "rgba(255, 130, 47, 0.8)" : "rgba(0, 255, 0, 0.7)",
+					}}>
 					<div
 						className="status-indicator"
 						style={{
 							backgroundColor: replaying ? "red" : "green",
-						}}
-					></div>
-					{replaying ? (
-						<p>Wait for sequence to end</p>
-					) : (
-						<p>Now it's your turn</p>
-					)}
+						}}></div>
+					{replaying ? <p>Wait for sequence to end</p> : <p>Now it's your turn</p>}
 				</div>
 			</div>
 			<div className="center flex justify-center">
@@ -186,14 +174,13 @@ export default function GameScreen() {
 						gridTemplateColumns: "1fr 1fr",
 						gap: "40px",
 						aspectRatio: "1/1",
-					}}
-				>
+					}}>
 					{enabledButtons.map((input, index) => (
 						<ButtonQuarterRing
 							key={input.id}
 							color={input.id.split("-")[1]}
 							onPress={() => handleUserInput(input.id, true)}
-							additionalStyles={{ transform: `rotate(${rotations[index]}deg)` }}
+							additionalStyles={{transform: `rotate(${rotations[index]}deg)`}}
 							triggerAnimation={currentHighlight === input.id}
 							id={input.id}
 						/>
@@ -205,8 +192,7 @@ export default function GameScreen() {
 				<button
 					type="button"
 					onClick={() => setGameOngoing(false)}
-					className="give-up-button p-2 text-xl cursor-pointer"
-				>
+					className="give-up-button p-2 text-xl cursor-pointer">
 					GIVE UP
 				</button>
 			</div>
@@ -215,15 +201,14 @@ export default function GameScreen() {
 				style={{
 					height: "100%",
 					maxWidth: enabledSliders.length > 0 ? enabledSliders.length * 200 : 0,
-				}}
-			>
+				}}>
 				<div className="p-2 flex w-full gap-2 h-full justify-center items-center">
-					{enabledSliders.map((input) => (
+					{enabledSliders.map(input => (
 						<Slider
 							key={`${input.id}-${forceUpdate}`}
 							max={5}
 							value={typeof input.value === "number" ? input.value : 0}
-							onChange={(value) => handleUserInput(input.id, value)}
+							onChange={value => handleUserInput(input.id, value)}
 							id={input.id}
 						/>
 					))}
@@ -234,15 +219,13 @@ export default function GameScreen() {
 				className="bottom-left"
 				style={{
 					height: "100%",
-					maxWidth:
-						enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
-				}}
-			>
+					maxWidth: enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
+				}}>
 				<div className="p-2 flex gap-2 justify-center items-center">
-					{enabledSwitches.map((input) => (
+					{enabledSwitches.map(input => (
 						<Switch
 							key={`${input.id}-${forceUpdate}`}
-							onToggle={(state) => handleUserInput(input.id, state)}
+							onToggle={state => handleUserInput(input.id, state)}
 							value={typeof input.value === "boolean" ? input.value : false}
 							id={input.id}
 						/>
@@ -254,14 +237,13 @@ export default function GameScreen() {
 					style={{
 						height: "100%",
 						maxWidth: enabledKnobs.length > 0 ? enabledKnobs.length * 200 : 0,
-					}}
-				>
+					}}>
 					<div className="flex gap-2  justify-center items-center p-2">
-						{enabledKnobs.map((input) => (
+						{enabledKnobs.map(input => (
 							<Knob
 								key={`${input.id}-${forceUpdate}`}
 								max={8}
-								onChange={(value) => handleUserInput(input.id, value)}
+								onChange={value => handleUserInput(input.id, value)}
 								value={typeof input.value === "number" ? input.value : 0}
 								id={input.id}
 							/>

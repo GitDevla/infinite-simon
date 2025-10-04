@@ -109,13 +109,11 @@
 }
 
 .simon-button:hover {
-	filter: drop-shadow(0 0 3px var(--button-color))
-		drop-shadow(0 0 16px var(--button-color));
+	filter: drop-shadow(0 0 3px var(--button-color)) drop-shadow(0 0 16px var(--button-color));
 }
 
 .simon-button.animate {
-	filter: drop-shadow(0 0 10px var(--button-color))
-		drop-shadow(0 0 20px var(--button-color));
+	filter: drop-shadow(0 0 10px var(--button-color)) drop-shadow(0 0 20px var(--button-color));
 }
 
 .simon-switch {
