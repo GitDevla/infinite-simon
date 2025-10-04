@@ -19,10 +19,9 @@ const ButtonQuarterRing = forwardRef<
 	{
 		color?: string;
 		onPress?: () => void;
-		additionalStyles?: React.CSSProperties;
 		id?: string;
 	}
->(({color, onPress, additionalStyles, id}, ref) => {
+>(({color, onPress, id}, ref) => {
 	const svgRef = useRef<SVGSVGElement>(null);
 
 	function onClickAnimation() {
@@ -40,9 +39,7 @@ const ButtonQuarterRing = forwardRef<
 
 	return (
 		<button
-			style={{
-				...additionalStyles,
-			}}
+			className="size-full"
 			type="button"
 			aria-pressed="false"
 			tabIndex={0}

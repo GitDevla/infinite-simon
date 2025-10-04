@@ -183,14 +183,14 @@ export default function GameScreen() {
 							buttonRefs.current[input.id] = ref;
 						}
 						return (
-							<ButtonQuarterRing
-								key={input.id}
-								color={input.id.split("-")[1]}
-								onPress={() => handleUserInput(input.id, true)}
-								additionalStyles={{transform: `rotate(${rotations[index]}deg)`}}
-								ref={ref}
-								id={input.id}
-							/>
+							<div key={input.id} style={{transform: `rotate(${rotations[index]}deg)`}}>
+								<ButtonQuarterRing
+									color={input.id.split("-")[1]}
+									onPress={() => handleUserInput(input.id, true)}
+									ref={ref}
+									id={input.id}
+								/>
+							</div>
 						);
 					})}
 					<ScoreButton value={score} />
