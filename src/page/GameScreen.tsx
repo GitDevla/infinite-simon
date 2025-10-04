@@ -1,6 +1,6 @@
-import {useEffect, useRef, useState} from "react";
+import {createRef, useEffect, useRef, useState} from "react";
 import AnimatedCursor from "../component/AnimatedCursor";
-import ButtonQuarterRing from "../component/ButtonQuarterRing";
+import ButtonQuarterRing, {type ButtonQuarterRingHandle} from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
 import Slider from "../component/Slider";
@@ -35,9 +35,9 @@ export default function GameScreen() {
 	const [forceUpdate, setForceUpdate] = useState(0);
 	const game = useRef<Game | null>(null);
 	const [sequence, setSequence] = useState<Sequence | null>(null);
-	const [currentHighlight, setCurrentHighlight] = useState<string>("");
 	const moveSpeedInMs = Math.max(700 - score * 20, 400);
 	const [replaying, setReplaying] = useState(false);
+	const buttonRefs = useRef<any>({});
 
 	useEffect(() => {
 		game.current = new Game();
@@ -69,16 +69,17 @@ export default function GameScreen() {
 	};
 
 	const highlightInput = async (id: string, value: any) => {
-		setCurrentHighlight("");
 		if (value !== undefined && value !== null) {
 			setInputs(prev => prev.map(input => (input.id === id ? {...input, value: value} : input)));
 		} else {
-			requestAnimationFrame(() => requestAnimationFrame(() => setCurrentHighlight(id))); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
+			const ref = buttonRefs.current[id];
+			if (ref?.current) {
+				ref.current.triggerAnimation();
+			}
 		}
 	};
 
 	const resetScene = () => {
-		setCurrentHighlight("");
 		setInputs(prev =>
 			prev.map(input => {
 				if (input.type === "switch") return {...input, value: false};
@@ -175,16 +176,23 @@ export default function GameScreen() {
 						gap: "40px",
 						aspectRatio: "1/1",
 					}}>
-					{enabledButtons.map((input, index) => (
-						<ButtonQuarterRing
-							key={input.id}
-							color={input.id.split("-")[1]}
-							onPress={() => handleUserInput(input.id, true)}
-							additionalStyles={{transform: `rotate(${rotations[index]}deg)`}}
-							triggerAnimation={currentHighlight === input.id}
-							id={input.id}
-						/>
-					))}
+					{enabledButtons.map((input, index) => {
+						let ref = buttonRefs.current[input.id];
+						if (!ref) {
+							ref = createRef<ButtonQuarterRingHandle>();
+							buttonRefs.current[input.id] = ref;
+						}
+						return (
+							<ButtonQuarterRing
+								key={input.id}
+								color={input.id.split("-")[1]}
+								onPress={() => handleUserInput(input.id, true)}
+								additionalStyles={{transform: `rotate(${rotations[index]}deg)`}}
+								ref={ref}
+								id={input.id}
+							/>
+						);
+					})}
 					<ScoreButton value={score} />
 				</div>
 			</div>
