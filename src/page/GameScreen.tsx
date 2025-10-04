@@ -7,6 +7,7 @@ import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
+import clsx from "clsx";
 import ScoreButton from "../component/ScoreButton";
 import {Game} from "../service/Game";
 import {ReactPart} from "../service/Parts";
@@ -154,28 +155,13 @@ export default function GameScreen() {
 	return (
 		<div className="layout">
 			<div className="topbar text-center">
-				<div
-					className="status-pill"
-					style={{
-						backgroundColor: replaying ? "rgba(255, 130, 47, 0.8)" : "rgba(0, 255, 0, 0.7)",
-					}}>
-					<div
-						className="status-indicator"
-						style={{
-							backgroundColor: replaying ? "red" : "green",
-						}}></div>
+				<div className={clsx("status-pill bg-opacity-75", replaying ? "bg-orange-500" : "bg-green-500")}>
+					<div className={clsx("status-indicator", replaying ? "bg-red-600" : "bg-green-700")}></div>
 					{replaying ? <p>Wait for sequence to end</p> : <p>Now it's your turn</p>}
 				</div>
 			</div>
 			<div className="center flex justify-center">
-				<div
-					className="grid"
-					style={{
-						position: "relative",
-						gridTemplateColumns: "1fr 1fr",
-						gap: "40px",
-						aspectRatio: "1/1",
-					}}>
+				<div className="grid relative grid-cols-[1fr_1fr] gap-10 aspect-square">
 					{enabledButtons.map((input, index) => {
 						let ref = buttonRefs.current[input.id];
 						if (!ref) {
@@ -205,9 +191,8 @@ export default function GameScreen() {
 				</button>
 			</div>
 			<div
-				className="left"
+				className="left w-full"
 				style={{
-					height: "100%",
 					maxWidth: enabledSliders.length > 0 ? enabledSliders.length * 200 : 0,
 				}}>
 				<div className="p-2 flex w-full gap-2 h-full justify-center items-center">
@@ -224,9 +209,8 @@ export default function GameScreen() {
 			</div>
 
 			<div
-				className="bottom-left"
+				className="bottom-left w-full"
 				style={{
-					height: "100%",
 					maxWidth: enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
 				}}>
 				<div className="p-2 flex gap-2 justify-center items-center">
@@ -240,10 +224,9 @@ export default function GameScreen() {
 					))}
 				</div>
 			</div>
-			<div className="bottom-right">
+			<div className="bottom-right w-full">
 				<div
 					style={{
-						height: "100%",
 						maxWidth: enabledKnobs.length > 0 ? enabledKnobs.length * 200 : 0,
 					}}>
 					<div className="flex gap-2  justify-center items-center p-2">
