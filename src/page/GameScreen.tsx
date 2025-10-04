@@ -8,6 +8,7 @@ import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
 import clsx from "clsx";
+import InputShelf from "../component/InputShelf";
 import ScoreButton from "../component/ScoreButton";
 import {Game} from "../service/Game";
 import {ReactPart} from "../service/Parts";
@@ -190,58 +191,39 @@ export default function GameScreen() {
 					GIVE UP
 				</button>
 			</div>
-			<div
-				className="left w-full"
-				style={{
-					maxWidth: enabledSliders.length > 0 ? enabledSliders.length * 200 : 0,
-				}}>
-				<div className="p-2 flex w-full gap-2 h-full justify-center items-center">
-					{enabledSliders.map(input => (
-						<Slider
-							key={`${input.id}-${forceUpdate}`}
-							max={5}
-							value={typeof input.value === "number" ? input.value : 0}
-							onChange={value => handleUserInput(input.id, value)}
-							id={input.id}
-						/>
-					))}
-				</div>
-			</div>
+			<InputShelf className="left w-full">
+				{enabledSliders.map(input => (
+					<Slider
+						key={`${input.id}-${forceUpdate}`}
+						max={5}
+						value={typeof input.value === "number" ? input.value : 0}
+						onChange={value => handleUserInput(input.id, value)}
+						id={input.id}
+					/>
+				))}
+			</InputShelf>
 
-			<div
-				className="bottom-left w-full"
-				style={{
-					maxWidth: enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
-				}}>
-				<div className="p-2 flex gap-2 justify-center items-center">
-					{enabledSwitches.map(input => (
-						<Switch
-							key={`${input.id}-${forceUpdate}`}
-							onToggle={state => handleUserInput(input.id, state)}
-							value={typeof input.value === "boolean" ? input.value : false}
-							id={input.id}
-						/>
-					))}
-				</div>
-			</div>
-			<div className="bottom-right w-full">
-				<div
-					style={{
-						maxWidth: enabledKnobs.length > 0 ? enabledKnobs.length * 200 : 0,
-					}}>
-					<div className="flex gap-2  justify-center items-center p-2">
-						{enabledKnobs.map(input => (
-							<Knob
-								key={`${input.id}-${forceUpdate}`}
-								max={8}
-								onChange={value => handleUserInput(input.id, value)}
-								value={typeof input.value === "number" ? input.value : 0}
-								id={input.id}
-							/>
-						))}
-					</div>
-				</div>
-			</div>
+			<InputShelf className="bottom-left">
+				{enabledSwitches.map(input => (
+					<Switch
+						key={`${input.id}-${forceUpdate}`}
+						onToggle={state => handleUserInput(input.id, state)}
+						value={typeof input.value === "boolean" ? input.value : false}
+						id={input.id}
+					/>
+				))}
+			</InputShelf>
+			<InputShelf className="bottom-right">
+				{enabledKnobs.map(input => (
+					<Knob
+						key={`${input.id}-${forceUpdate}`}
+						max={8}
+						onChange={value => handleUserInput(input.id, value)}
+						value={typeof input.value === "number" ? input.value : 0}
+						id={input.id}
+					/>
+				))}
+			</InputShelf>
 			{!gameOngoing && <GameEndModal score={score} />}
 			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />
 		</div>
