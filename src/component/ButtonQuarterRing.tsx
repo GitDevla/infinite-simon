@@ -38,11 +38,11 @@ export default function ButtonQuarterRing({
 	}, [triggerAnimation]);
 
 	return (
-		<div
+		<button
 			style={{
 				...additionalStyles,
 			}}
-			role="button"
+			type="button"
 			aria-pressed="false"
 			tabIndex={0}
 			onKeyDown={() => {}}
@@ -56,7 +56,7 @@ export default function ButtonQuarterRing({
 				className="simon-button"
 				style={
 					{
-						"--button-color": `var(--simon-${color}, gray)`,
+						"--button-color": `rgb(var(--simon-${color}))`,
 					} as React.CSSProperties
 				}
 				onClick={onClickAnimation}
@@ -68,10 +68,10 @@ export default function ButtonQuarterRing({
       M -40 -40
       A 70 70 0 0 1 30 32"
 					fill="none"
-					stroke={`var(--simon-${color}, gray)`}
+					stroke={`rgb(var(--simon-${color}))`}
 					strokeWidth="50"
 				/>
 			</svg>
-		</div>
+		</button>
 	);
 }

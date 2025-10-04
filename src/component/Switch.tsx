@@ -31,7 +31,7 @@ export default function Switch({
 	return (
 		<div
 			id={id}
-			className="size-full flex flex-center"
+			className="size-full flex justify-center items-center "
 			style={{
 				perspective: "400px",
 				aspectRatio: "5/6",
@@ -39,7 +39,7 @@ export default function Switch({
 			}}
 		>
 			<div
-				className="simon-switch size-full flex flex-column transition-all rounded-sm flex-center content-around"
+				className="simon-switch size-full flex flex-col transition-all rounded-sm  items-center justify-around"
 				role="switch"
 				aria-checked={isOn}
 				tabIndex={0}

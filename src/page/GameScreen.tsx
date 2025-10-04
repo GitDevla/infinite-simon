@@ -76,7 +76,9 @@ export default function GameScreen() {
 				),
 			);
 		} else {
-			requestAnimationFrame(() => requestAnimationFrame(()=>setCurrentHighlight(id))); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
+			requestAnimationFrame(() =>
+				requestAnimationFrame(() => setCurrentHighlight(id)),
+			); // Force a re-render if the same button is highlighted twice in a row, double rAF hack for firefox
 		}
 	};
 
@@ -154,7 +156,7 @@ export default function GameScreen() {
 
 	return (
 		<div className="layout">
-			<div className="topbar align-center">
+			<div className="topbar text-center">
 				<div
 					className="status-pill"
 					style={{
@@ -176,7 +178,7 @@ export default function GameScreen() {
 					)}
 				</div>
 			</div>
-			<div className="center flex content-center">
+			<div className="center flex justify-center">
 				<div
 					className="grid"
 					style={{
@@ -199,11 +201,11 @@ export default function GameScreen() {
 					<ScoreButton value={score} />
 				</div>
 			</div>
-			<div className="bottom-middle flex flex-center">
+			<div className="bottom-middle flex justify-center items-center">
 				<button
 					type="button"
 					onClick={() => setGameOngoing(false)}
-					className="give-up-button p-2 text-xl pointer"
+					className="give-up-button p-2 text-xl cursor-pointer"
 				>
 					GIVE UP
 				</button>
@@ -215,7 +217,7 @@ export default function GameScreen() {
 					maxWidth: enabledSliders.length > 0 ? enabledSliders.length * 200 : 0,
 				}}
 			>
-				<div className="p-2  flex w-full gap-2 h-full flex-center">
+				<div className="p-2 flex w-full gap-2 h-full justify-center items-center">
 					{enabledSliders.map((input) => (
 						<Slider
 							key={`${input.id}-${forceUpdate}`}
@@ -236,7 +238,7 @@ export default function GameScreen() {
 						enabledSwitches.length > 0 ? enabledSwitches.length * 200 : 0,
 				}}
 			>
-				<div className="p-2 flex gap-2 flex-center">
+				<div className="p-2 flex gap-2 justify-center items-center">
 					{enabledSwitches.map((input) => (
 						<Switch
 							key={`${input.id}-${forceUpdate}`}
@@ -254,7 +256,7 @@ export default function GameScreen() {
 						maxWidth: enabledKnobs.length > 0 ? enabledKnobs.length * 200 : 0,
 					}}
 				>
-					<div className="flex gap-2 flex-center p-2">
+					<div className="flex gap-2  justify-center items-center p-2">
 						{enabledKnobs.map((input) => (
 							<Knob
 								key={`${input.id}-${forceUpdate}`}

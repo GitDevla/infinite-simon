@@ -62,7 +62,7 @@ export default function Slider({
 			onChange?.(Math.max(currentValue - 1, 0));
 			e.preventDefault();
 		}
-	}
+	};
 
 	const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
 		e.preventDefault();
@@ -99,51 +99,24 @@ export default function Slider({
 
 	return (
 		<div
-			className="simon-slider rounded-sm size-full flex flex-column gap-2 content-between p-2"
-			style={{
-				backgroundColor: "darkgrey",
-				width: "clamp(60px, 20vw, 100px)",
-			}}
+			className="simon-slider rounded-lg size-full flex flex-col gap-2 content-between p-2 bg-gray-400 min-w-[60px] w-[20vw] max-w-[100px]"
 			id={id}
 		>
-			<div className="relative size-full">						
-				<div>
-					<div
-						className="absolute size-full flex flex-column flex-center content-between h-full left-1/2"
-						style={{
-							width: `3px`,
-							transform: "translateX(-50%)",
-							backgroundColor: "black",
-						}}
-						ref={ref}
-					>
-						{Array.from({ length: max }).map((_, i) => (
-							<div
-								key={i}
-								style={{
-									display: "absolute",
-									height: "3px",
-									width: `40px`,
-									backgroundColor: "black",
-									borderRadius: "2px",
-								}}
-							>
-								<span
-									style={{
-										position: "relative",
-										display: "block",
-										left: "-30%",
-										top: "-300%",
-									}}
-								>
-									{max - i}
-								</span>
-							</div>
-						))}
-					</div>
+			<div className="relative size-full">
+				<div
+					className="absolute size-full flex flex-col items-center justify-between h-full left-1/2 w-1 -translate-x-1/2 bg-black"
+					ref={ref}
+				>
+					{Array.from({ length: max }).map((_, i) => (
+						<div key={i} className="h-1 w-10 bg-black rounded-sm">
+							<span className="relative block left-[-30%] top-[-300%]">
+								{max - i}
+							</span>
+						</div>
+					))}
 				</div>
 				<div
-					className="ball absolute left-1/2 transform-center transition-all"
+					className="ball absolute left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all"
 					style={{
 						top: `${100 - (currentValue / (max - 1)) * 100}%`,
 					}}
@@ -157,14 +130,7 @@ export default function Slider({
 					onKeyDown={handleKeyBoard}
 				></div>
 			</div>
-			<div
-				className="flex flex-center text-xl"
-				style={{
-					borderRadius: "10px",
-					backgroundColor: "white",
-					color: "black",
-				}}
-			>
+			<div className="flex justify-center items-center text-xl rounded-xl bg-white text-black">
 				<span>{currentValue + 1}</span>
 			</div>
 		</div>

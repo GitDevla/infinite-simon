@@ -1,6 +1,10 @@
+import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { positionOnScoreboardIfInserted, saveScore } from "../service/ScoreLocal";
+import { useNavigate } from "react-router-dom";
+import {
+	positionOnScoreboardIfInserted,
+	saveScore,
+} from "../service/ScoreLocal";
 
 /**
  * A modal component that appears at the end of the game, allowing the player to enter their name and save their score.
@@ -26,42 +30,22 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 	}
 
 	useEffect(() => {
-		positionOnScoreboardIfInserted(score).then((pos) => setWouldBePosition(pos));
+		positionOnScoreboardIfInserted(score).then((pos) =>
+			setWouldBePosition(pos),
+		);
 	}, [score]);
 
 	return (
 		<>
+			<div className="fixed top-0 left-0 size-full bg-black bg-opacity-50 z-[999]"></div>
 			<div
-				className="fixed top-0 left-0 size-full"
-				style={{
-					backgroundColor: "rgba(0, 0, 0, 0.5)",
-					zIndex: 999,
-				}}
-			></div>
-			<div
-				className="fixed p-2 rounded-lg top-1/2 left-1/2 transform-center align-center"
+				className="fixed p-2 rounded-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-[1000] pointer-events-auto bg-[--bg-2]"
 				role="dialog"
-				style={{
-					backgroundColor: "var(--bg-2)",
-					zIndex: 1000,
-					pointerEvents: "auto",
-
-				}}
 			>
-				<h2
-					style={{
-						marginBottom: "10px",
-						fontSize: "3rem",
-					}}
-				>
-					You lost
-				</h2>
-				<p
-					style={{
-						marginBottom: "10px",
-					}}
-				>
-					Enter your name to save your score ({score}) as the #{wouldBePosition} player!
+				<h2 className="mb-4 text-5xl">You lost</h2>
+				<p className="mb-4">
+					Enter your name to save your score ({score}) as the #{wouldBePosition}{" "}
+					player!
 				</p>
 				<input
 					className="p-2"
@@ -73,17 +57,12 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				<br />
 				<button
 					type="button"
-					className="rounded-sm pointer"
-					style={{
-						marginTop: "10px",
-						padding: "10px 20px",
-						outline: "none",
-						border: "none",
-						backgroundColor: validUsername ? "var(--simon-green)" : "grey",
-						color: validUsername ? "black" : "white",
-						fontSize: "1.2rem",
-						minWidth: "250px",
-					}}
+					className={clsx(
+						"rounded-xl cursor-pointer mt-4 px-4 py-3 text-xl min-w-[250px]",
+						validUsername
+							? "bg-simon-green text-black"
+							: "bg-gray-600 text-white",
+					)}
 					onClick={handleKeyPress}
 				>
 					{validUsername ? "Save and try again" : "Or give it one more try"}
@@ -91,20 +70,15 @@ export default function GameEndModal({ score = 0 }: { score?: number }) {
 				<br />
 				<button
 					type="button"
-					className="rounded-sm pointer"
-					style={{
-						marginTop: "10px",
-						padding: "10px 20px",
-						outline: "none",
-						border: "none",
-						backgroundColor: validUsername ? "var(--simon-green)" : "var(--simon-red)",
-						color: validUsername ? "black" : "white",
-						fontSize: "1rem",
-						minWidth: "200px",
-					}}
+					className={clsx(
+						"rounded-xl cursor-pointer mt-4 px-4 py-3 text-lg min-w-[200px]",
+						validUsername
+							? "bg-simon-green text-black"
+							: "bg-simon-red text-white",
+					)}
 					onClick={() => {
 						if (validUsername) updateUsernameAndSave();
-						navigate('/');
+						navigate("/");
 					}}
 				>
 					{validUsername ? "Save and go back to home" : "Go back to home"}

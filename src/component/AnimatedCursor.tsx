@@ -13,13 +13,10 @@ export default function AnimatedCursor({
 }) {
 	return pos ? (
 		<div
+			className="fixed pointer-events-none z-[500] select-none text-3xl"
 			style={{
-				position: "fixed",
 				left: pos.x,
 				top: pos.y,
-				fontSize: "2rem",
-				pointerEvents: "none",
-				zIndex: 500,
 				transition: `left ${speed}ms ease, top ${speed}ms ease`,
 			}}
 		>

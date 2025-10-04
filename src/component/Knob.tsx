@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { mod } from "../util/mod";
 
@@ -77,13 +78,9 @@ export default function Knob({
 	};
 
 	return (
-		<div
-			className="relative"
-			style={{ width: "100px", height: "100px" }}
-			id={id}
-		>
+		<div className="relative size-[100px]" id={id}>
 			<div
-				className="simon-knob absolute left-1/2 top-1/2 size-1/2 transform-center rounded-full flex flex-center"
+				className="simon-knob absolute left-1/2 top-1/2 size-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full flex justify-center items-center"
 				role="slider"
 				aria-valuemin={min}
 				aria-valuemax={max - 1}
@@ -103,11 +100,14 @@ export default function Knob({
 				{Array.from({ length: max }, (_, i) => (
 					<span
 						key={i}
-						className="absolute top-1/2 left-1/2 transform-center transition-all flex text-sm"
+						className={clsx(
+							"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all flex text-sm origin-center",
+							i === clamp(innerValue)
+								? "font-bold text-red-600"
+								: "font-normal text-[var(--fg)]",
+						)}
 						style={{
 							transform: `translate(-50%, -50%) rotate(${(i / max) * 360}deg) translateY(-40px) rotate(-${(i / max) * 360}deg) scale(${i === clamp(innerValue) ? 1.2 : 1})`,
-							transformOrigin: "center center",
-							color: i === clamp(innerValue) ? "red" : "var(--fg)",
 						}}
 					>
 						{i}
