@@ -8,6 +8,7 @@ import Switch from "../component/Switch";
 import sleep from "../util/sleep";
 import "../style/GameScreen.css";
 import clsx from "clsx";
+import GameStatusBar from "../component/GameStatusBar";
 import InputShelf from "../component/InputShelf";
 import ScoreButton from "../component/ScoreButton";
 import {Game} from "../service/Game";
@@ -156,10 +157,7 @@ export default function GameScreen() {
 	return (
 		<div className="layout">
 			<div className="topbar text-center">
-				<div className={clsx("status-pill bg-opacity-75", replaying ? "bg-orange-500" : "bg-green-500")}>
-					<div className={clsx("status-indicator", replaying ? "bg-red-600" : "bg-green-700")}></div>
-					{replaying ? <p>Wait for sequence to end</p> : <p>Now it's your turn</p>}
-				</div>
+				<GameStatusBar replaying={replaying} />
 			</div>
 			<div className="center flex justify-center">
 				<div className="grid relative grid-cols-[1fr_1fr] gap-10 aspect-square">
