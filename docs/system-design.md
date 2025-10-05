@@ -8,7 +8,7 @@
 - Implementáció
     - Frontend: Pataki Dávid
     - Backend
-        - Adatbázis: #TODO
+        - Adatbázis: Kerekes Bence
         - Játék Logika: Kerekes Bence
         - Websocket: #TODO
         - API: Csendes Dávid
