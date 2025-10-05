@@ -1,19 +1,17 @@
-import {createRef, useEffect, useRef, useState} from "react";
+import {createRef} from "react";
 import AnimatedCursor from "../component/AnimatedCursor";
 import ButtonQuarterRing, {type ButtonQuarterRingHandle} from "../component/ButtonQuarterRing";
 import GameEndModal from "../component/GameEndModal";
 import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
-import sleep from "../util/sleep";
 import "../style/GameScreen.css";
-import clsx from "clsx";
 import GameStatusBar from "../component/GameStatusBar";
 import InputShelf from "../component/InputShelf";
 import ScoreButton from "../component/ScoreButton";
-import {Game} from "../service/Game";
-import {ReactPart} from "../service/Parts";
-import type {Sequence} from "../service/Sequence";
+import {useGameInputs} from "../hook/useGameInputs";
+import {useGameLogic} from "../hook/useGameLogic";
+import {useSequenceAnimation} from "../hook/useSequenceAnimation";
 
 export type GameInput = {
 	type: string;
@@ -27,130 +25,17 @@ export type GameInput = {
  * The component also displays the current score and manages the layout of various input components like buttons, sliders, switches, and knobs.
  */
 export default function GameScreen() {
-	const [pointerPosition, setPointerPosition] = useState<{
-		x: number;
-		y: number;
-	} | null>(null);
-	const [score, setScore] = useState(0);
-	const [gameOngoing, setGameOngoing] = useState(true);
-	const [inputs, setInputs] = useState<GameInput[]>([]);
+	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic();
 
-	const [forceUpdate, setForceUpdate] = useState(0);
-	const game = useRef<Game | null>(null);
-	const [sequence, setSequence] = useState<Sequence | null>(null);
-	const moveSpeedInMs = Math.max(700 - score * 20, 400);
-	const [replaying, setReplaying] = useState(false);
-	const buttonRefs = useRef<any>({});
+	const {forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs} =
+		useGameInputs(sequence);
 
-	useEffect(() => {
-		game.current = new Game();
-		game.current.startNewGame();
-		game.current.onNewRound(() => {
-			if (game.current === null) return;
-			setScore(game.current.getCurrentRound() - 1);
-			setSequence(game.current.getSequence());
-		});
-		setSequence(game.current.getSequence());
-	}, []);
-
-	const handleUserInput = (id: string, value: any) => {
-		if (game.current === null) return;
-		const action = new ReactPart(id, value);
-		if (!game.current.checkPlayerInput(action)) setGameOngoing(false);
-	};
-
-	const moveCursorToComponent = async (id: string) => {
-		const element = document.getElementById(id);
-		if (element) {
-			const rect = element.getBoundingClientRect();
-			setPointerPosition({
-				x: rect.left + rect.width / 2,
-				y: rect.top + rect.height / 2,
-			});
-		}
-		await sleep(moveSpeedInMs);
-	};
-
-	const highlightInput = async (id: string, value: any) => {
-		if (value !== undefined && value !== null) {
-			setInputs(prev => prev.map(input => (input.id === id ? {...input, value: value} : input)));
-		} else {
-			const ref = buttonRefs.current[id];
-			if (ref?.current) {
-				ref.current.triggerAnimation();
-			}
-		}
-	};
-
-	const resetScene = () => {
-		setInputs(prev =>
-			prev.map(input => {
-				if (input.type === "switch") return {...input, value: false};
-				if (input.type === "knob") return {...input, value: 0};
-				if (input.type === "slider") return {...input, value: 0};
-				return input;
-			}),
-		);
-		setPointerPosition(null);
-		setForceUpdate(f => f + 1);
-	};
-
-	const enableUserInteraction = (value: boolean) => {
-		document.body.style.pointerEvents = value ? "auto" : "none";
-		setReplaying(!value);
-	};
-
-	const reenactSequence = async () => {
-		enableUserInteraction(false);
-		await sleep(moveSpeedInMs);
-		resetScene();
-		setPointerPosition({
-			x: window.innerWidth / 2,
-			y: window.innerHeight / 2,
-		});
-		await sleep(moveSpeedInMs);
-		if (!sequence) return;
-		for (let i = 0; i < sequence.getParts().length; i++) {
-			const {id, expectedValue} = sequence.getParts()[i];
-			await moveCursorToComponent(id);
-			await highlightInput(id, expectedValue);
-			await sleep(moveSpeedInMs);
-		}
-		await sleep(1000);
-		resetScene();
-		setPointerPosition(null);
-		enableUserInteraction(true);
-	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Only want to run this when sequence changes
-	useEffect(() => {
-		setInputs(prev => {
-			if (!sequence) return prev;
-			// Always have the 4 default buttons
-			const defaults = [
-				{type: "button", id: "simon-red"},
-				{type: "button", id: "simon-green"},
-				{type: "button", id: "simon-blue"},
-				{type: "button", id: "simon-yellow"},
-			] as GameInput[];
-			for (const input of sequence.getParts()) {
-				if (!defaults.find(d => d.id === input.id))
-					defaults.push({
-						type: input.type,
-						id: input.id,
-						value: 0,
-					});
-			}
-			return defaults;
-		});
-
-		reenactSequence();
-	}, [sequence]);
-
-	const enabledButtons = inputs.filter(input => input.type === "button");
-	const enabledSliders = inputs.filter(input => input.type === "slider");
-	const enabledSwitches = inputs.filter(input => input.type === "switch");
-	const enabledKnobs = inputs.filter(input => input.type === "knob");
+	const {pointerPosition, replaying, buttonRefs} = useSequenceAnimation(
+		sequence,
+		moveSpeedInMs,
+		updateInput,
+		resetInputs,
+	);
 
 	const rotations = [270, 0, 180, 90];
 
