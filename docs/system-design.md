@@ -268,6 +268,7 @@ classDiagram
         +login(req: Request, res: Response): Promise~void~
         +getUserProfile(req: Request, res: Response): Promise~void~
         +updateUserProfile(req: Request, res: Response): Promise~void~
+        +getGameModes(req: Request, res: Response): Promise~void~
         +queueUpGame(req: Request, res: Response): Promise~void~
         +submitInput(req: Request, res: Response): Promise~void~
     }
