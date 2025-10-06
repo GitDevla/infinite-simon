@@ -15,6 +15,12 @@ export function useSequenceAnimation(
 	const [replaying, setReplaying] = useState(false);
 	const buttonRefs = useRef<any>({});
 
+	useEffect(() => {
+		return () => {
+			document.body.style.pointerEvents = "auto";
+		};
+	}, []);
+
 	const moveCursorToComponent = async (id: string) => {
 		const element = document.getElementById(id);
 		if (element) {
