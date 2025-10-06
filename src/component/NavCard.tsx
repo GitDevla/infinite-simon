@@ -1,4 +1,6 @@
+import {useContext} from "react";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../context/AuthContext";
 
 export default function NavCard({
 	lvlId,
@@ -11,6 +13,9 @@ export default function NavCard({
 	description: string;
 	imageUrl: string;
 }) {
+	const authContext = useContext(AuthContext);
+	const loggedIn = authContext.loggedIn;
+
 	return (
 		<div className="bg-[#414141] bg-opacity-70 text-black rounded-xl w-80 aspect-[4/5]">
 			<div>
@@ -33,11 +38,13 @@ export default function NavCard({
 						className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-[80%] text-center">
 						Play Alone
 					</Link>
-					<Link
-						to={`/game?diff=${lvlId || "classic"}&mode=multi`}
-						className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-[80%] text-center">
-						Play with Friends
-					</Link>
+					{loggedIn && (
+						<Link
+							to={`/game?diff=${lvlId || "classic"}&mode=multi`}
+							className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-[80%] text-center">
+							Play with Friends
+						</Link>
+					)}
 				</div>
 			</div>
 		</div>

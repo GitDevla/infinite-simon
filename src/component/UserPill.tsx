@@ -1,9 +1,11 @@
+import {useContext} from "react";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../context/AuthContext";
 
 export default function UserPill() {
-	const userContext = null; // todo
-	const displayName = "Guest";
-	const userImg = "https://placehold.co/400";
+	const userContext = useContext(AuthContext);
+	const displayName = userContext.username || "Uh oh";
+	const userImg = userContext.useravatar || "https://placehold.co/100";
 	return (
 		<Link to="/profile">
 			<div className="flex items-center gap-3 hover:cursor-pointer">
