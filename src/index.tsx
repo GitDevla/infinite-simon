@@ -8,7 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-	<div className="w-screen h-screen overflow-hidden">
+	<div className="w-full min-h-screen overflow-x-hidden md:overflow-y-hidden">
 		<HashRouter>
 			<Routes>
 				<Route path="/" element={<App />} />
