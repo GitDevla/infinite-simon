@@ -7,13 +7,10 @@
 - Designer: Pataki Dávid
 - Implementáció
     - Frontend: Pataki Dávid
-    - Backend
+        - Backend
         - Adatbázis: Kerekes Bence
         - Játék Logika: Kerekes Bence
-        - Websocket: #TODO
-        - API: Csendes Dávid
-
-- Tesztelő: Csendes Dávid
+        - API: Csendes Dávid- Tesztelő: Csendes Dávid
 
 ## Üzleti folyamatok modellje
 [![](https://img.plantuml.biz/plantuml/dsvg/ZLJ1Rjim3BqRy3yGkUoKeNBQBXsAeCNG0XiQO5ZNtbM7SJJBaY4f1wVOH-mJSkmvm7v0s7zDikKuAheX5vlaUwGUATfNsb1brXLF4uvB0qQ2OiNAm88fp0sJ8atIXEP6AhYpMoCBQkmEg0RUXs-HhwZU2Blb7LBto1UNO5zAgTiewSDpkzLxI9OjcFbZQfgNj40OVHPB9fXfxbabnGYUqmHWhJ6dse7NQuF2iD9kSsPt8v_-y8b4b9kY-R4_UsvtYy3A8jPt-_lfwKtU9E9zLNB9EConC5WouUWQ0_4q8iunppMKg50xJg2SfSdFgBdusDVTXS70KlA6LjJGKEOyOjrBfL0i03b7yUUNsXne-X0n7r5lpA1c6iz9uQAoBwA12gE-BbwBFfpeiPB9oT6Q2VcVQ98TfvfCWkntC1wFuTflc_QcMsxtcdKRq9kaRN1mwe7IcvF1FFLi1xQktsLtitkx9e5rVc3xzkji05ovu9mDsItI2_w6dFfFJhjHAgZMtB2QqmPLruFZmljPTyFkqTbJ-0YNbolaZK4trzdCOzCEk_XNQSr4mJ6kJKww9DBsHaZmihVgksY7JY1DhjobjZ-Glm00)](https://editor.plantuml.com/uml/ZLJ1Rjim3BqRy3yGkUoKeNBQBXsAeCNG0XiQO5ZNtbM7SJJBaY4f1wVOH-mJSkmvm7v0s7zDikKuAheX5vlaUwGUATfNsb1brXLF4uvB0qQ2OiNAm88fp0sJ8atIXEP6AhYpMoCBQkmEg0RUXs-HhwZU2Blb7LBto1UNO5zAgTiewSDpkzLxI9OjcFbZQfgNj40OVHPB9fXfxbabnGYUqmHWhJ6dse7NQuF2iD9kSsPt8v_-y8b4b9kY-R4_UsvtYy3A8jPt-_lfwKtU9E9zLNB9EConC5WouUWQ0_4q8iunppMKg50xJg2SfSdFgBdusDVTXS70KlA6LjJGKEOyOjrBfL0i03b7yUUNsXne-X0n7r5lpA1c6iz9uQAoBwA12gE-BbwBFfpeiPB9oT6Q2VcVQ98TfvfCWkntC1wFuTflc_QcMsxtcdKRq9kaRN1mwe7IcvF1FFLi1xQktsLtitkx9e5rVc3xzkji05ovu9mDsItI2_w6dFfFJhjHAgZMtB2QqmPLruFZmljPTyFkqTbJ-0YNbolaZK4trzdCOzCEk_XNQSr4mJ6kJKww9DBsHaZmihVgksY7JY1DhjobjZ-Glm00)
@@ -35,10 +32,11 @@
 - A látogató képes legyen elindítani egy egyjátékos játékot a kezdőképernyőről.
 - A felhasználó képes legyen elindítani egy új játékot (egy- vagy többjátékos mód).
 - A felhasználó képes legyen csatlakozni egy többjátékos játékhoz.
-- A rendszer kezelje a többjátékos játékok létrehozását és csatlakozását.
-- A rendszer kezelje a játék állapotát és a játékosok bemenetét valós időben.
-- A rendszer jelenítse meg a sorozatot a játékos számára minden körben.
-- A rendszer véletlenszerűen generálja a sorozatot külön játék menetek között.
+- A rendszer kezelje a versenyek létrehozását és csatlakozását.
+- A rendszer tárolja a verseny paramétereit, seed-jét és résztvevőinek eredményeit.
+- A rendszer generáljon egyedi seed-et minden versenyhez.
+- A rendszer jelenítse meg a sorozatot a játékos számára minden körben (kliens oldalon).
+- A játék logika a kliens oldalon fusson a szerver által generált seed alapján, biztosítva hogy minden játékos ugyanazt a sorozatot kapja.
 - A rendszer ellenőrizze a játékos bemenetét és adjon visszajelzést.
 - A rendszer folytassa a játékot helyes bemenet után, növelve a sorozat hosszát és nehézségét.
 - A rendszer végezze el a játék lezárását, ha a játékos hibázik vagy túl sokáig gondolkodik.
@@ -58,7 +56,6 @@
 - A rendszer frontendje React alapú legyen.
 - A rendszer backendje #todo alapú legyen, #todo keretrendszerrel.
 - Az adatbázis #todo legyen.
-- A valós idejű kommunikáció WebSocket-en keresztül történjen.
 
 ## Absztrakt domain modell
 ```mermaid
@@ -89,41 +86,41 @@ classDiagram
 ## Architektúra terv
 ### Átfogó architektúra
 - A rendszer kliens-szerver architektúrára épül, Frontend és Backend részekre bontva.
-- A kommunikáció REST API és WebSocket kapcsolatokon keresztül zajlik.
+- A kommunikáció REST API kapcsolatokon keresztül zajlik.
 
 ### Frontend architektúra
 - A prezentációs réteg React komponensekből áll, amelyek a felhasználói interakciókat kezelik.
-- A felhasználói interakciók eseményeket generálnak, amelyek HTTP kéréseket vagy WebSocket üzeneteket küldenek a szervernek.
+- A felhasználói interakciók eseményeket generálnak, amelyek HTTP kéréseket küldenek a szervernek.
 
 ### Backend architektúra
-- Az üzleti logika réteg a játék szabályait és állapotát kezeli.
-- A valós idejű kommunikáció WebSocket-en keresztül történik (játék logika, többjátékos funkciók).
-- A REST API felelős a felhasználókezelésért, játékok listázásáért és nem valós idejű műveletekért.
-- A perszisztencia réteg a felhasználói adatok és pontszámok tárolásáért felelős adatbázisban.
+- A backend seed generálásért, felhasználókezelésért és verseny koordinációért felelős.
+- A játék logika a kliens oldalon fut, minden játékos ugyanazt a seed-et kapja egy adott versenyben.
+- A REST API felelős a felhasználókezelésért, seed generálásáért, versenyek kezeléséért és pontszámok rögzítéséért.
+- A perszisztencia réteg a felhasználói adatok, seed-ek, versenyek és pontszámok tárolásáért felelős adatbázisban.
 
 ```mermaid
 graph TD
     A[Felhasználói Interakció] -->|Interakció| B[Frontend/Prezentációs Réteg]
     B -->|HTTP kérések| C[Backend/REST API]
-    B -->|WebSocket üzenetek| D[Backend/WebSocket Szerver]
-    C -->|Felhasználókezelés, Játék létrehozás| E[Üzleti Logika Réteg]
-    D -->|Valós idejű játékmenet| E
-    E -->|Adatok mentése/lekérése| F[Perszisztencia Réteg/Adatbázis]
-    F -->|Adatok| E
-    E -->|Válaszok| C
-    E -->|Események| D
+    C -->|Felhasználókezelés, Verseny kezelés| D[Üzleti Logika Réteg]
+    D -->|Adatok mentése/lekérése| E[Perszisztencia Réteg/Adatbázis]
+    E -->|Adatok| D
+    D -->|Válaszok| C
     C -->|HTTP válaszok| B
-    D -->|WebSocket üzenetek| B
     B -->|Megjelenítés| A
 ```
 
 ### Kommunikációs folyamatok
-- REST API: Regisztráció, bejelentkezés, játéklista lekérdezés, játék létrehozás, pontszámok lekérdezése
-- WebSocket: Valós idejű játékmenet, játékosok csatlakozása, játékállapot szinkronizáció, játékbemenetek továbbítása
+- REST API: 
+  - Felhasználókezelés: Regisztráció, bejelentkezés, profil lekérdezés
+  - Verseny kezelés: Verseny létrehozás, seed lekérése, csatlakozás, állapot lekérdezés, eredmények beküldése
+  - Pontszámok: Pontszámok lekérdezése, ranglisták megtekintése
+  - Seed generálás: Minden versenyhez egyedi seed generálása, amely biztosítja hogy minden játékos ugyanazt a sorozatot kapja
 
 ## Adatbázis terv
-- Az adatbázis a felhasználói adatok, játékok és pontszámok tárolására szolgál.
-- Valós idejű játékmenet adatai nem kerülnek tárolásra, csak a végleges pontszámok.
+- Az adatbázis a felhasználói adatok, versenyek, seed-ek és pontszámok tárolására szolgál.
+- A játékmenet lokálisan fut a kliensen egy szerver által generált seed alapján, csak a végleges pontszámok kerülnek tárolásra.
+- Minden verseny egy egyedi seed-et kap, amely biztosítja hogy minden résztvevő ugyanazt a sorozatot kapja.
 - Az adatbázis relációs adatbázis, amely a következő táblákat tartalmazza:
     - Felhasználók (Users)
     - Játékok (Games)
@@ -164,6 +161,7 @@ erDiagram
     MATCH {
         int id PK
         int game_id FK
+        string seed
         datetime started_at
         datetime ended_at
     }
@@ -219,16 +217,17 @@ classDiagram
 + A ScoreRepository a pontszámok mentését és lekérdezését valósítja meg.
 
 ### Üzleti logika réteg
-+ Az üzleti logika réteg a játék szabályait és állapotát kezeli.
-+ A játék menetek létrehozása, kezelése és lezárása itt történik.
-+ A játékosok bemenetének ellenőrzése és a pontszámok számítása is ebben a rétegben valósul meg.
++ Az üzleti logika réteg a verseny koordinációt és seed generálást kezeli.
++ A játék menetek létrehozása, seed generálása és eredmények validálása itt történik.
++ A játék logika maga a kliens oldalon fut, a backend csak seed-et generál és eredményeket validál.
 ```mermaid
 classDiagram
     class GameService {
         +startNewGame(userId: int, modeId: int, difficultyId: int): Promise~Game~
-        +joinGame(userId: int, gameId: int): Promise~Game~
-        +submitInput(userId: int, gameId: int, input: Input): Promise~GameState~
-        +endGame(userId: int, gameId: int): Promise~Score~
+        +generateSeed(): String
+        +joinGame(userId: int, gameId: int): Promise~GameWithSeed~
+        +submitScore(userId: int, gameId: int, score: int, seed: String): Promise~Score~
+        +validateScore(seed: String, score: int): Boolean
     }   
 
     class UserService {
@@ -251,7 +250,8 @@ classDiagram
     UserService --> UserRepository
     AuthService --> UserRepository
 ```
-+ A GameService kezeli a játék menetek létrehozását, csatlakozását, bemenetek feldolgozását és a játék lezárását.
++ A GameService kezeli a játék menetek létrehozását, seed generálását, csatlakozást és eredmények validálását.
++ A játék logika a kliens oldalon fut a szerver által generált seed alapján.
 + A UserService a felhasználói regisztrációt, bejelentkezést és profilkezelést végzi.
 + Az AuthService a jelszavak hash-eléséért, ellenőrzéséért és a JWT tokenek kezeléséért felelős.
 + Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.    
@@ -260,7 +260,6 @@ classDiagram
 ### Prezentációs réteg
 + A prezentációs réteg a felhasználói interakciókat kezeli.
 + A REST API végpontok itt kerülnek definiálásra.
-+ A WebSocket szerver a valós idejű játékmenetet kezeli
 ```mermaid
 classDiagram
     class ApiController {
@@ -269,21 +268,20 @@ classDiagram
         +getUserProfile(req: Request, res: Response): Promise~void~
         +updateUserProfile(req: Request, res: Response): Promise~void~
         +getGameModes(req: Request, res: Response): Promise~void~
-        +queueUpGame(req: Request, res: Response): Promise~void~
-        +submitInput(req: Request, res: Response): Promise~void~
-    }
-    class WebSocketServer {
-        +onConnection(socket: WebSocket): void
-        +onMessage(socket: WebSocket, message: String): void
-        +broadcastGameState(gameId: int, gameState: GameState): void
+        +createCompetition(req: Request, res: Response): Promise~void~
+        +joinCompetition(req: Request, res: Response): Promise~void~
+        +getSeed(req: Request, res: Response): Promise~void~
+        +getCompetitionStatus(req: Request, res: Response): Promise~void~
+        +submitScore(req: Request, res: Response): Promise~void~
+        +getLeaderboard(req: Request, res: Response): Promise~void~
     }
     ApiController --> UserService
     ApiController --> GameService
-    WebSocketServer --> GameService
 ```
 + Az ApiController kezeli a REST API végpontokat, és a megfelelő szolgáltatásokat hívja meg.
-+ A WebSocketServer kezeli a WebSocket kapcsolatokat, fogadja az üzeneteket, és továbbítja a játék állapotát a játékosoknak.
-+ Mindkét komponens a megfelelő szolgáltatásokat használja az üzleti logika végrehajtásához.    
++ A játékmenet a kliens oldalon fut egy szerver által generált seed alapján.
++ A szerver csak a seed generálást, versenyek koordinálását és eredmények tárolását/validálását végzi.
++ Minden játékos ugyanazt a seed-et kapja egy adott versenyben, így biztosítva a fair versenyt.    
 
 ## Tesztterv
 ### 1. Egységtesztek

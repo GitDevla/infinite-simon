@@ -21,7 +21,7 @@ Simonfi Sándor felkeresi az Infinite-Simon weboldalt, hogy tesztelje a memóri�
 ### 2. Többjátékos mód
 **Cél:** Más játékosok elleni verseny  
 **Leírás:**  
-Simonfi Sándor a főmenüből kiválasztja a többjátékos módot, ahol a rendszer automatikusan hasonló képességű ellenfeleket keres. Csatlakozás után a játékosok felváltva követik a mintákat, és a rendszer valós időben mutatja az aktuális állást. Aki tovább bírja hibázás nélkül, az nyer. A játék végén a pontszámok frissülnek, és a felhasználó láthatja helyezését a ranglistán.
+Simonfi Sándor a főmenüből kiválasztja a többjátékos módot, ahol a rendszer automatikusan hasonló képességű ellenfeleket keres. Csatlakozás után minden játékos ugyanazt a seed-alapú sorozatot kapja, így mindenki ugyanazt a kihívást oldja meg. A játékosok egymástól függetlenül játszanak a saját eszközükön, és a verseny végén beküldik az elért körszámukat. Aki tovább jut hibázás nélkül, az nyer. A játék végén a pontszámok frissülnek, és a felhasználó láthatja helyezését a ranglistán.
 
 ### 3. Statisztikák megtekintése
 **Cél:** Saját teljesítmény elemzése  
