@@ -9,7 +9,7 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get("/login", loginController);
+app.post("/login", loginController);
 app.post("/register", registerController);
 app.get("/start-game", startNewGameController);
 
