@@ -27,14 +27,14 @@ export default function AuthScreen() {
 		<div className="mt-32">
 			<Logo size="large" />
 
-			<div style={{maxWidth: "500px", margin: "0 auto"}}>
+			<div className="max-w-[500px] mx-auto">
 				<h2 className="text-2xl font-semibold text-center mb-6 mt-2">{isLogin ? "Login" : "Register"}</h2>
 				<form onSubmit={handleSubmit}>
-					<div style={{marginBottom: "15px"}}>
+					<div className="mb-4">
 						<label htmlFor="username">Username</label>
 						<input
 							type="text"
-							style={{width: "100%", padding: "8px", marginTop: "5px", border: "1px solid #ccc"}}
+							className="w-full p-2 mt-1 border border-gray-300 text-black"
 							placeholder="Enter your username"
 							autoComplete="username"
 							value={username}
@@ -43,11 +43,11 @@ export default function AuthScreen() {
 					</div>
 
 					{!isLogin && (
-						<div style={{marginBottom: "15px"}}>
+						<div className="mb-4">
 							<label htmlFor="email">Email</label>
 							<input
 								type="email"
-								style={{width: "100%", padding: "8px", marginTop: "5px", border: "1px solid #ccc"}}
+								className="w-full p-2 mt-1 border border-gray-300 text-black"
 								autoComplete="email"
 								placeholder="Enter your email"
 								value={email}
@@ -56,45 +56,36 @@ export default function AuthScreen() {
 						</div>
 					)}
 
-					<div style={{marginBottom: "15px"}}>
+					<div className="mb-4">
 						<label htmlFor="password">Password</label>
 						<input
 							type="password"
 							autoComplete="current-password"
-							style={{width: "100%", padding: "8px", marginTop: "5px", border: "1px solid #ccc"}}
+							className="w-full p-2 mt-1 border border-gray-300 text-black"
 							placeholder="Enter your password"
 							value={password}
 							onChange={e => setPassword(e.target.value)}
 						/>
 					</div>
 
-					<button
-						type="submit"
-						style={{
-							width: "100%",
-							padding: "10px",
-							backgroundColor: "blue",
-							color: "white",
-							border: "none",
-							marginBottom: "15px",
-						}}>
+					<button type="submit" className="w-full p-2.5 bg-simon-blue text-white border-none mb-4">
 						{isLogin ? "Login" : "Register"}
 					</button>
 				</form>
-				<p style={{textAlign: "center"}}>
+				<p className="text-center">
 					{isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
 					<button
 						type="button"
 						onClick={() => setIsLogin(!isLogin)}
-						style={{color: "blue", background: "none", border: "none", cursor: "pointer"}}>
+						className="text-simon-blue bg-transparent border-none cursor-pointer">
 						{isLogin ? "Register" : "Login"}
 					</button>
 				</p>
-				<p style={{textAlign: "center"}}>
+				<p className="text-center">
 					<button
 						type="button"
 						onClick={() => navigate("/")}
-						style={{color: "blue", background: "none", border: "none", cursor: "pointer"}}>
+						className="text-simon-blue bg-transparent border-none cursor-pointer">
 						Go back to home
 					</button>
 				</p>

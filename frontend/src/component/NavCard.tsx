@@ -29,7 +29,7 @@ export default function NavCard({
 			</div>
 			<div className="mt-2 pb-4">
 				<div>
-					<h2 className="text-xl font-bold mb-2 text-center">{title}</h2>
+					<h2 className="text-xl font-bold mb-2 text-center text-white">{title}</h2>
 					{/* <p>{description}</p> */}
 				</div>
 				<div className="flex justify-center flex-col items-center">
