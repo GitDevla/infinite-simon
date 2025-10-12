@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AuthContext} from "./AuthContext";
 
 const backendUrl = "http://localhost:3001";
@@ -24,6 +24,8 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			setUsername(username);
 			setUseravatar("https://placehold.co/100"); //todo
 			setToken(data.token);
+			localStorage.setItem("token", data.token);
+			localStorage.setItem("username", username);
 		} else {
 			alert("Login failed");
 		}
@@ -47,7 +49,21 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			return false;
 		}
 		return true;
-	}
+	};
+
+	useEffect(() => {
+		const storedToken = localStorage.getItem("token");
+		const storedUsername = localStorage.getItem("username");
+		if (storedToken && storedUsername) {
+			setToken(storedToken);
+			setUsername(storedUsername);
+			setLoggedIn(true);
+			setUseravatar("https://placehold.co/100"); //todo
+		}
+		return () => {
+			console.log("AuthContextProvider unmounted");
+		};
+	}, []);
 
 	const logout = () => {
 		setLoggedIn(false);
@@ -56,7 +72,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar,register}}>
+		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register}}>
 			{children}
 		</AuthContext.Provider>
 	);
