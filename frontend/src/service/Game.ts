@@ -18,31 +18,28 @@ export class Game {
 		this.generateNextSequance();
 	}
 
+	private readonly partConstructors: Record<string, (rng: () => number) => SequencePart> = {
+	button: (rng) => new ButtonPart(rng),
+	slider: (rng) => new SliderPart(rng),
+	knob: (rng) => new KnobPart(rng),
+	switch: (rng) => new SwitchPart(rng),
+	};
+
 	private generateNextSequance(): void {
 		const parts = this.sequence.getParts();
-		const types = ["button", "switch", "slider", "knob"];
+		const types = Object.keys(this.partConstructors);
 		const difficultyIncrease = 2;
 		const numberOfTypes = Math.min(Math.floor(parts.length / difficultyIncrease) + 1, types.length);
 		console.log("Number of input types: %s", numberOfTypes);
 		const randomType = types[Math.floor(this.rng() * numberOfTypes)];
 		let nextPart: SequencePart;
 		while (true) {
-			switch (randomType) {
-				case "button":
-					nextPart = new ButtonPart(this.rng);
-					break;
-				case "slider":
-					nextPart = new SliderPart(this.rng);
-					break;
-				case "knob":
-					nextPart = new KnobPart(this.rng);
-					break;
-				case "switch":
-					nextPart = new SwitchPart(this.rng);
-					break;
-				default:
-					throw new Error("Unkown seqence part type");
+			const constructor = this.partConstructors[randomType];
+			if (!constructor) {
+				throw new Error(`Unknown sequence part type: ${randomType}`);
 			}
+
+			const nextPart = constructor(this.rng);
 
 			// Always allow parts without expected value (like buttons)
 			if (nextPart.expectedValue === null) {
