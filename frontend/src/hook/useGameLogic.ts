@@ -3,7 +3,7 @@ import {Game} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
 
-const serverUrl = "http://localhost:3001";
+const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 export function useGameLogic() {
 	const [score, setScore] = useState(0);

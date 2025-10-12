@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {AuthContext} from "./AuthContext";
 
-const backendUrl = "http://localhost:3001";
+const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 export default function AuthContextProvider({children}: {children: React.ReactNode}) {
 	const [loggedIn, setLoggedIn] = useState(false);
