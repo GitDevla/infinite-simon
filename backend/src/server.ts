@@ -1,7 +1,6 @@
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
-const cors = require("cors");
+import cors from "cors";
+import express from "express";
+import fs from "fs";
 
 const app = express();
 const PORT = 3001;
@@ -9,18 +8,16 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-isProd = process.env.NODE_ENV === "production";
-
-const scoresFile = path.join(__dirname, isProd ? "build/scores/scores.json" : "public/scores/scores.json");
+const scoresFile = "public/scores.json";
 
 app.post("/save-score", (req, res) => {
-	const {player, score} = req.body;
+	const { player, score } = req.body;
 
 	if (!player || typeof score !== "number") {
 		return res.status(400).json({
 			success: false,
 			error: "Invalid data",
-			details: err.message,
+			details: "Invalid player name or score",
 		});
 	}
 
@@ -32,14 +29,16 @@ app.post("/save-score", (req, res) => {
 				details: err.message,
 			});
 
-		let scoresJSON = {scores: []};
+		let scoresJSON = { scores: [] } as {
+			scores: { player: string; score: number; date: string }[];
+		};
 		try {
 			scoresJSON = JSON.parse(data);
 		} catch (parseErr) {
 			return res.status(500).json({
 				success: false,
 				error: "Invalid JSON",
-				details: parseErr.message,
+				details: (parseErr as SyntaxError).message,
 			});
 		}
 
@@ -49,10 +48,10 @@ app.post("/save-score", (req, res) => {
 			date: new Date().toISOString(),
 		});
 
-		fs.writeFile(scoresFile, JSON.stringify(scoresJSON, null, 2), err => {
-			if (err) return res.status(500).json({error: "Could not write score"});
+		fs.writeFile(scoresFile, JSON.stringify(scoresJSON, null, 2), (err) => {
+			if (err) return res.status(500).json({ error: "Could not write score" });
 
-			res.json({success: true});
+			res.json({ success: true });
 		});
 	});
 });
@@ -60,7 +59,7 @@ app.post("/save-score", (req, res) => {
 app.post("/default-scoreboard", (req, res) => {
 	const defaultScoreJson =
 		'{"scores":[{"player":"Simonfi Sándor né","score":-2,"date":"2025-09-21T14:32:00Z"},{"player":"Simonfi Sándor","score":-1,"date":"2025-09-21T14:40:00Z"}]}';
-	fs.writeFile(scoresFile, JSON.stringify(defaultScoreJson), "utf8", err => {
+	fs.writeFile(scoresFile, JSON.stringify(defaultScoreJson), "utf8", (err) => {
 		if (err) {
 			return res.status(500).json({
 				success: false,
@@ -68,18 +67,10 @@ app.post("/default-scoreboard", (req, res) => {
 			});
 		}
 
-		res.json({success: true});
+		res.json({ success: true });
 	});
 });
 
-if (isProd) {
-	app.use(express.static(path.join(__dirname, "./build")));
-
-	app.use((req, res, next) => {
-		res.sendFile(path.join(__dirname, "./build/index.html"));
-	});
-}
-
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT} (${isProd ? "Production" : "Development"})`);
+	console.log(`Server running on http://localhost:${PORT} (Development)`);
 });
