@@ -3,6 +3,8 @@ import {Game} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
 
+const serverUrl = "http://localhost:3001";
+
 export function useGameLogic() {
 	const [score, setScore] = useState(0);
 	const [gameOngoing, setGameOngoing] = useState(true);
@@ -10,14 +12,32 @@ export function useGameLogic() {
 	const game = useRef<Game | null>(null);
 
 	useEffect(() => {
+		const difficultyId = 1;
+		const modeId = 1;
 		game.current = new Game();
-		game.current.startNewGame(1);
-		game.current.onNewRound(() => {
-			if (game.current === null) return;
-			setScore(game.current.getCurrentRound() - 1);
-			setSequence(game.current.getSequence());
-		});
-		setSequence(game.current.getSequence());
+
+		fetch(`${serverUrl}/start-game`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({modeId, difficultyId}),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log("Game started with seed:", data.game.seed);
+				if (game.current === null) return;
+				game.current.startNewGame(data.game.seed);
+				game.current.onNewRound(() => {
+					if (game.current === null) return;
+					setScore(game.current.getCurrentRound() - 1);
+					setSequence(game.current.getSequence());
+				});
+				setSequence(game.current.getSequence());
+			})
+			.catch(error => {
+				console.error("Error starting game:", error);
+			});
 	}, []);
 
 	const handleUserInput = (id: string, value: any) => {
