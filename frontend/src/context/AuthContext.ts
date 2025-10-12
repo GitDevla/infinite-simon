@@ -5,13 +5,15 @@ export const AuthContext = createContext<{
 	username: string | null;
 	useravatar: string | null;
 	token: string | null;
-	login: (username: string, password: string) => Promise<void>;
+	login: (username: string, password: string) => Promise<boolean>;
+	register: (username: string, email: string, password: string) => Promise<boolean>;
 	logout: () => void;
 }>({
 	loggedIn: false,
 	username: null,
 	useravatar: null,
 	token: null,
-	login: async () => {},
+	login: async (username: string, password: string) => false,
+	register: async (username: string, email: string, password: string) => false,
 	logout: () => {},
 });

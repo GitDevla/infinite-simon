@@ -6,6 +6,7 @@ import App from "./page/App";
 import GameScreen from "./page/GameScreen";
 import ScoreBoard from "./page/ScoreBoard";
 import reportWebVitals from "./reportWebVitals";
+import AuthScreen from "./page/AuthScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -16,6 +17,7 @@ root.render(
 					<Route path="/" element={<App />} />
 					<Route path="/game" element={<GameScreen />} />
 					<Route path="/score" element={<ScoreBoard />} />
+					<Route path="/auth" element={<AuthScreen />} />
 				</Routes>
 			</HashRouter>
 		</div>
