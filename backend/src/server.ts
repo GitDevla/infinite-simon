@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.post("/login", loginController);
 app.post("/register", registerController);
-app.get("/start-game", startNewGameController);
+app.post("/start-game", startNewGameController);
 
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT} (Development)`);
