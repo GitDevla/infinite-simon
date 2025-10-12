@@ -27,7 +27,9 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			localStorage.setItem("token", data.token);
 			localStorage.setItem("username", username);
 		} else {
-			alert("Login failed");
+			const data = await response.json();
+			const errorMessage = data.error || data.errorMessage || "Login failed";
+			alert(errorMessage);
 		}
 		return response.ok;
 	};
@@ -45,7 +47,9 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			const data = await response.json();
 			alert("Registration successful. Please log in.");
 		} else {
-			alert("Registration failed");
+			const data = await response.json();
+			const errorMessage = data.error || data.errorMessage || "Registration failed";
+			alert(errorMessage);
 			return false;
 		}
 		return true;
