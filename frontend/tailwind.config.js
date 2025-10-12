@@ -8,6 +8,7 @@ module.exports = {
 				"simon-green": "rgb(var(--simon-green) / <alpha-value>)",
 				"simon-blue": "rgb(var(--simon-blue) / <alpha-value>)",
 				"simon-yellow": "rgb(var(--simon-yellow) / <alpha-value>)",
+				"bg-secondary": "rgb(var(--bg-secondary) / <alpha-value>)",
 			},
 		},
 	},

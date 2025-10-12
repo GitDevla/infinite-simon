@@ -1,5 +1,6 @@
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import FloatingInput from "../component/FloatingInput";
 import Logo from "../component/Logo";
 import {AuthContext} from "../context/AuthContext";
 
@@ -29,46 +30,24 @@ export default function AuthScreen() {
 
 			<div className="max-w-[500px] mx-auto">
 				<h2 className="text-2xl font-semibold text-center mb-6 mt-2">{isLogin ? "Login" : "Register"}</h2>
-				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
-						<label htmlFor="username">Username</label>
-						<input
-							type="text"
-							className="w-full p-2 mt-1 border border-gray-300 text-black"
-							placeholder="Enter your username"
-							autoComplete="username"
-							value={username}
-							onChange={e => setUsername(e.target.value)}
-						/>
+				<form onSubmit={handleSubmit} className="flex flex-col items-center">
+					<div className="my-4 w-full">
+						<FloatingInput type="text" label="Username" state={username} setState={setUsername} />
 					</div>
 
 					{!isLogin && (
-						<div className="mb-4">
-							<label htmlFor="email">Email</label>
-							<input
-								type="email"
-								className="w-full p-2 mt-1 border border-gray-300 text-black"
-								autoComplete="email"
-								placeholder="Enter your email"
-								value={email}
-								onChange={e => setEmail(e.target.value)}
-							/>
+						<div className="my-4 w-full">
+							<FloatingInput type="email" label="Email" state={email} setState={setEmail} />
 						</div>
 					)}
 
-					<div className="mb-4">
-						<label htmlFor="password">Password</label>
-						<input
-							type="password"
-							autoComplete="current-password"
-							className="w-full p-2 mt-1 border border-gray-300 text-black"
-							placeholder="Enter your password"
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-						/>
+					<div className="my-4 w-full">
+						<FloatingInput type="password" label="Password" state={password} setState={setPassword} />
 					</div>
 
-					<button type="submit" className="w-full p-2.5 bg-simon-blue text-white border-none mb-4">
+					<button
+						type="submit"
+						className="w-[80%] p-2.5 bg-simon-blue text-white border-none mb-4 rounded-lg mx-auto">
 						{isLogin ? "Login" : "Register"}
 					</button>
 				</form>
