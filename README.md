@@ -17,8 +17,13 @@ Az Infinity Simon egy kibővített változata a klasszikus Simon játénak, ahol
 - Node.js
 
 ## Fejlesztési környezet beállítása
-1. Klónozd a repót: `git clone https://github.com/pti-szfm-2025/infinite-simon`
-2. Lépj be a könyvtárba: `cd infinite-simon`
-3. A frontend szerver elindításához futtasd: `cd frontend && npm install && npm run start`
-4. A backend szerver elindításához nyiss egy új terminált, lépj be a könyvtárba és futtasd: `cd backend && npm install && npm run db:setup && npm run dev`
+1. Klónozd a repót: `git clone https://github.com/pti-szfm-2025/infinite-simon`.
+2. Lépj be a könyvtárba: `cd infinite-simon`.
+3. A frontend szerver elindításához futtasd: `cd frontend && npm install`.
+4. Készítsd elő a környezeti változókat a `.env` fájlban a `example.env` alapján.
+5. Indítsd el a frontend szervert: `npm start`.
+6. A backend szerver elindításához nyiss egy új terminált, lépj be a könyvtárba és futtasd: `cd backend && npm install`.
+7. Készítsd elő a környezeti változókat a `.env` fájlban a `example.env` alapján.
+8. Készítsd elő az adatbázist a `npm run db:setup` segítségével.
+8. Indítsd el a backend szervert: `npm run dev`.
 5. Nyisd meg a böngészőt és navigálj a `http://localhost:3000` címre.
