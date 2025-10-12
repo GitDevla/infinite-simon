@@ -20,5 +20,5 @@ Az Infinity Simon egy kibővített változata a klasszikus Simon játénak, ahol
 1. Klónozd a repót: `git clone https://github.com/pti-szfm-2025/infinite-simon`
 2. Lépj be a könyvtárba: `cd infinite-simon`
 3. A frontend szerver elindításához futtasd: `cd frontend && npm install && npm run start`
-4. A backend szerver elindításához nyiss egy új terminált, lépj be a könyvtárba és futtasd: `cd backend && npm install && npm run dev`
+4. A backend szerver elindításához nyiss egy új terminált, lépj be a könyvtárba és futtasd: `cd backend && npm install && npm run db:setup && npm run dev`
 5. Nyisd meg a böngészőt és navigálj a `http://localhost:3000` címre.
