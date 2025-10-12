@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import { loginController, registerController } from "./controller/auth.controller";
+import { startNewGameController } from "./controller/game.controller";
 
 const app = express();
 const PORT = 3001;
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.get("/login", loginController);
 app.post("/register", registerController);
+app.get("/start-game", startNewGameController);
 
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT} (Development)`);
