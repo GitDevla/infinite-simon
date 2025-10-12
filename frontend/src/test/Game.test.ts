@@ -6,7 +6,7 @@ describe("Game class test", () => {
 
 	beforeEach(() => {
 		game = new Game();
-		game.startNewGame();
+		game.startNewGame(1);
 	});
 
 	test("New game start", () => {
@@ -24,7 +24,8 @@ describe("Game class test", () => {
 	});
 
 	test("game over on incorrect input", () => {
-		const incorrectInput = new KnobPart();
+		const rng = () => 0.5;
+		const incorrectInput = new KnobPart(rng);
 		const result = game.checkPlayerInput(incorrectInput);
 
 		expect(game.isGameOver()).toBe(true);

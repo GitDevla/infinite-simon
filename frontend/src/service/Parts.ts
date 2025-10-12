@@ -3,8 +3,8 @@ import {SequencePart} from "./SequencePart";
 export class ButtonPart extends SequencePart {
 	private static AVAILABLE_IDS = ["simon-red", "simon-green", "simon-blue", "simon-yellow"];
 
-	constructor() {
-		super("button", ButtonPart.AVAILABLE_IDS[Math.floor(Math.random() * ButtonPart.AVAILABLE_IDS.length)], null);
+	constructor(rng: () => number) {
+		super("button", ButtonPart.AVAILABLE_IDS[Math.floor(rng() * ButtonPart.AVAILABLE_IDS.length)], null);
 	}
 
 	public isCorrect(input: ButtonPart): boolean {
@@ -15,11 +15,11 @@ export class ButtonPart extends SequencePart {
 export class SliderPart extends SequencePart {
 	private static AVAILABLE_IDS = ["slider-1"];
 
-	constructor() {
+	constructor(rng: () => number) {
 		super(
 			"slider",
-			SliderPart.AVAILABLE_IDS[Math.floor(Math.random() * SliderPart.AVAILABLE_IDS.length)],
-			Math.floor(Math.random() * 5),
+			SliderPart.AVAILABLE_IDS[Math.floor(rng() * SliderPart.AVAILABLE_IDS.length)],
+			Math.floor(rng() * 5),
 		);
 	}
 
@@ -31,11 +31,11 @@ export class SliderPart extends SequencePart {
 export class KnobPart extends SequencePart {
 	private static AVAILABLE_IDS = ["knob-1", "knob-2"];
 
-	constructor() {
+	constructor(rng: () => number) {
 		super(
 			"knob",
-			KnobPart.AVAILABLE_IDS[Math.floor(Math.random() * KnobPart.AVAILABLE_IDS.length)],
-			Math.floor(Math.random() * 8),
+			KnobPart.AVAILABLE_IDS[Math.floor(rng() * KnobPart.AVAILABLE_IDS.length)],
+			Math.floor(rng() * 8),
 		);
 	}
 
@@ -47,11 +47,11 @@ export class KnobPart extends SequencePart {
 export class SwitchPart extends SequencePart {
 	private static AVAILABLE_IDS = ["switch-1", "switch-2"];
 
-	constructor() {
+	constructor(rng: () => number) {
 		super(
 			"switch",
-			SwitchPart.AVAILABLE_IDS[Math.floor(Math.random() * SwitchPart.AVAILABLE_IDS.length)],
-			Math.random() >= 0.5,
+			SwitchPart.AVAILABLE_IDS[Math.floor(rng() * SwitchPart.AVAILABLE_IDS.length)],
+			rng() >= 0.5,
 		);
 	}
 

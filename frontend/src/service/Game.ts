@@ -1,3 +1,4 @@
+import randomFactory from "../util/random";
 import {ButtonPart, KnobPart, SliderPart, SwitchPart} from "./Parts";
 import {Sequence} from "./Sequence";
 import type {SequencePart} from "./SequencePart";
@@ -7,11 +8,13 @@ export class Game {
 	private currentRound: number = 1;
 	private gameOver: boolean = false;
 	private onNewRoundCallbacks: (() => void)[] = [];
+	private rng: () => number = randomFactory(Date.now());
 
-	public startNewGame(): void {
+	public startNewGame(seed:number): void {
 		this.currentRound = 1;
 		this.gameOver = false;
 		this.sequence = new Sequence();
+		this.rng = randomFactory(seed);
 		this.generateNextSequance();
 	}
 
@@ -21,21 +24,21 @@ export class Game {
 		const difficultyIncrease = 2;
 		const numberOfTypes = Math.min(Math.floor(parts.length / difficultyIncrease) + 1, types.length);
 		console.log("Number of input types: %s", numberOfTypes);
-		const randomType = types[Math.floor(Math.random() * numberOfTypes)];
+		const randomType = types[Math.floor(this.rng() * numberOfTypes)];
 		let nextPart: SequencePart;
 		while (true) {
 			switch (randomType) {
 				case "button":
-					nextPart = new ButtonPart();
+					nextPart = new ButtonPart(this.rng);
 					break;
 				case "slider":
-					nextPart = new SliderPart();
+					nextPart = new SliderPart(this.rng);
 					break;
 				case "knob":
-					nextPart = new KnobPart();
+					nextPart = new KnobPart(this.rng);
 					break;
 				case "switch":
-					nextPart = new SwitchPart();
+					nextPart = new SwitchPart(this.rng);
 					break;
 				default:
 					throw new Error("Unkown seqence part type");

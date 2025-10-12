@@ -3,10 +3,12 @@ import {ButtonPart, KnobPart, SliderPart, SwitchPart} from "../service/Parts";
 describe("ButtonPart test", () => {
 	let input: ButtonPart;
 	let part: ButtonPart;
+	
+	const rng = () => 0.5;
 
 	beforeEach(() => {
-		input = new ButtonPart();
-		part = new ButtonPart();
+		input = new ButtonPart(rng);
+		part = new ButtonPart(rng);
 	});
 
 	test("correct input", () => {
@@ -28,9 +30,11 @@ describe("SwitchPart test", () => {
 	let input: SwitchPart;
 	let part: SwitchPart;
 
+	const rng = () => 0.5;
+
 	beforeEach(() => {
-		input = new SwitchPart();
-		part = new SwitchPart();
+		input = new SwitchPart(rng);
+		part = new SwitchPart(rng);
 	});
 
 	test("correct input", () => {
@@ -65,9 +69,11 @@ describe("SliderPart test", () => {
 	let input: SliderPart;
 	let part: SliderPart;
 
+	const rng = () => 0.5;
+
 	beforeEach(() => {
-		input = new SliderPart();
-		part = new SliderPart();
+		input = new SliderPart(rng);
+		part = new SliderPart(rng);
 	});
 
 	test("correct input", () => {
@@ -101,10 +107,11 @@ describe("SliderPart test", () => {
 describe("KnobpartPart test", () => {
 	let input: KnobPart;
 	let part: KnobPart;
+	const rng = () => 0.5;
 
 	beforeEach(() => {
-		input = new KnobPart();
-		part = new KnobPart();
+		input = new KnobPart(rng);
+		part = new KnobPart(rng);
 	});
 
 	test("correct input", () => {

@@ -11,7 +11,7 @@ export function useGameLogic() {
 
 	useEffect(() => {
 		game.current = new Game();
-		game.current.startNewGame();
+		game.current.startNewGame(1);
 		game.current.onNewRound(() => {
 			if (game.current === null) return;
 			setScore(game.current.getCurrentRound() - 1);
