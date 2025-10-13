@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {Game} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
+import { GameType } from '../service/Game';
 
 const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
@@ -27,7 +28,7 @@ export function useGameLogic() {
 			.then(data => {
 				console.log("Game started with seed:", data.game.seed);
 				if (game.current === null) return;
-				game.current.startNewGame(data.game.seed);
+				game.current.startNewGame(data.game.seed,GameType.Extended);
 				game.current.onNewRound(() => {
 					if (game.current === null) return;
 					setScore(game.current.getCurrentRound() - 1);
