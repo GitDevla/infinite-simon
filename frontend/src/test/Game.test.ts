@@ -5,7 +5,7 @@ import { GameType } from '../service/Game';
 const gameConfigs = Object.values(GameType)
   .filter((v) => typeof v === 'number')
   .map((value) => ({
-    label: `${GameType[value]} Game`,
+    label: `${GameType[value as number]} Game`,
     gameType: value as GameType
   }));
 
