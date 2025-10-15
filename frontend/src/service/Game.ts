@@ -4,6 +4,25 @@ import {Sequence} from "./Sequence";
 import type {SequencePart} from "./SequencePart";
 
 export enum GameType {Simple,Extended}
+export enum GameMode {SinglePlayer,MultiPlayer}
+
+const GAME_TYPE_LABELS: Record<GameType, string> = {
+    [GameType.Simple]: "Simple",
+    [GameType.Extended]: "Extended",
+};
+
+const GAME_MODE_LABELS: Record<GameMode, string> = {
+    [GameMode.SinglePlayer]: "Single Player",
+    [GameMode.MultiPlayer]: "Multi Player",
+};
+
+export function gameTypeToString(type: GameType): string {
+    return GAME_TYPE_LABELS[type] ?? "Unknown";
+}
+
+export function gameModeToString(mode: GameMode): string {
+    return GAME_MODE_LABELS[mode] ?? "Unknown";
+}
 
 export class Game {
 	private sequence: Sequence = new Sequence();
