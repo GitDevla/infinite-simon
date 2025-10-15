@@ -1,20 +1,19 @@
 import {useEffect, useRef, useState} from "react";
-import {Game} from "../service/Game";
+import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
-import { GameType } from '../service/Game';
 
 const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
-export function useGameLogic() {
+export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode: GameMode}) {
 	const [score, setScore] = useState(0);
 	const [gameOngoing, setGameOngoing] = useState(true);
 	const [sequence, setSequence] = useState<Sequence | null>(null);
 	const game = useRef<Game | null>(null);
 
 	useEffect(() => {
-		const difficultyId = 1;
-		const modeId = 1;
+		const difficultyId = gameType;
+		const modeId = gameMode;
 		game.current = new Game();
 
 		fetch(`${serverUrl}/start-game`, {
@@ -28,7 +27,7 @@ export function useGameLogic() {
 			.then(data => {
 				console.log("Game started with seed:", data.game.seed);
 				if (game.current === null) return;
-				game.current.startNewGame(data.game.seed,GameType.Extended);
+				game.current.startNewGame(data.game.seed, gameType);
 				game.current.onNewRound(() => {
 					if (game.current === null) return;
 					setScore(game.current.getCurrentRound() - 1);

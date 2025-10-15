@@ -6,12 +6,14 @@ import Knob from "../component/Knob";
 import Slider from "../component/Slider";
 import Switch from "../component/Switch";
 import "../style/GameScreen.css";
+import {useSearchParams} from "react-router-dom";
 import GameStatusBar from "../component/GameStatusBar";
 import InputShelf from "../component/InputShelf";
 import ScoreButton from "../component/ScoreButton";
 import {useGameInputs} from "../hook/useGameInputs";
 import {useGameLogic} from "../hook/useGameLogic";
 import {useSequenceAnimation} from "../hook/useSequenceAnimation";
+import { GameMode, GameType } from "../service/Game";
 
 export type GameInput = {
 	type: string;
@@ -25,7 +27,11 @@ export type GameInput = {
  * The component also displays the current score and manages the layout of various input components like buttons, sliders, switches, and knobs.
  */
 export default function GameScreen() {
-	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic();
+	const [searchParams, _] = useSearchParams();
+	const difficulty = Number(searchParams.get("difficulty")) || GameType.Simple
+	const mode = Number(searchParams.get("mode")) || GameMode.SinglePlayer
+
+	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic({gameType: difficulty as GameType, gameMode: mode as GameMode});
 
 	const {forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs} =
 		useGameInputs(sequence);

@@ -1,6 +1,7 @@
 import {useContext} from "react";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
+import {GameMode, type GameType} from "../service/Game";
 
 export default function NavCard({
 	lvlId,
@@ -8,7 +9,7 @@ export default function NavCard({
 	description,
 	imageUrl,
 }: {
-	lvlId: string;
+	lvlId: GameType;
 	title: string;
 	description: string;
 	imageUrl: string;
@@ -34,13 +35,13 @@ export default function NavCard({
 				</div>
 				<div className="flex justify-center flex-col items-center">
 					<Link
-						to={`/game?diff=${lvlId || "classic"}&mode=single`}
+						to={`/game?difficulty=${lvlId}&mode=${GameMode.SinglePlayer}`}
 						className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-[80%] text-center">
 						Play Alone
 					</Link>
 					{loggedIn && (
 						<Link
-							to={`/game?diff=${lvlId || "classic"}&mode=multi`}
+							to={`/game?difficulty=${lvlId}&mode=${GameMode.MultiPlayer}`}
 							className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-[80%] text-center">
 							Play with Friends
 						</Link>
