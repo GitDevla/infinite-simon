@@ -8,6 +8,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	const [username, setUsername] = useState<string | null>(null);
 	const [useravatar, setUseravatar] = useState<string | null>(null);
 	const [token, setToken] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
 
 	const login = async (username: string, password: string) => {
 		const response = await fetch(`${backendUrl}/login`, {
@@ -31,6 +32,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			const errorMessage = data.error || data.errorMessage || "Login failed";
 			alert(errorMessage);
 		}
+		setLoading(false);
 		return response.ok;
 	};
 
@@ -63,6 +65,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			setUsername(storedUsername);
 			setLoggedIn(true);
 			setUseravatar("https://placehold.co/100"); //todo
+			setLoading(false);
 		}
 		return () => {
 			console.log("AuthContextProvider unmounted");
@@ -76,7 +79,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register}}>
+		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading}}>
 			{children}
 		</AuthContext.Provider>
 	);

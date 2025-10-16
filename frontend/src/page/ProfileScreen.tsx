@@ -61,6 +61,7 @@ export default function ProfileScreen() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: no need
 	useEffect(() => {
+		if (authContext.loading) return;
 		if (!authContext.loggedIn) {
 			navigate("/auth");
 		}
@@ -76,7 +77,7 @@ export default function ProfileScreen() {
 				multiplayerAveragePlacement: fetched.multiplayerStats?.averatePlacement ?? null,
 			});
 		});
-	}, []);
+	}, [authContext.loggedIn, authContext.loading]);
 
 	const filteredScores = scores.filter(score => {
 		return (
