@@ -1,6 +1,7 @@
 import {useContext, useEffect, useId, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Header from "../component/Header";
+import Layout from "../component/Layout";
 import Logo from "../component/Logo";
 import {AuthContext} from "../context/AuthContext";
 import {GameMode, GameType, gameModeToString, gameTypeToString} from "../service/Game";
@@ -87,11 +88,8 @@ export default function ProfileScreen() {
 	});
 
 	return (
-		<div className="mt-16">
-			<Header />
-			<Logo size="large" />
+		<Layout header="Profile">
 			<div className="max-w-[500px] mx-auto">
-				<h2 className="text-2xl font-semibold text-center mb-6 mt-2">Profile</h2>
 				<div className="flex flex-col items-center">
 					{userAvatar ? (
 						<img src={userAvatar} alt="User Avatar" className="w-32 h-32 rounded-full mb-4" />
@@ -234,6 +232,6 @@ export default function ProfileScreen() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Layout>
 	);
 }

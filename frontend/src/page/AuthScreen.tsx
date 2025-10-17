@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import FloatingInput from "../component/FloatingInput";
-import Logo from "../component/Logo";
+import Layout from "../component/Layout";
 import {AuthContext} from "../context/AuthContext";
 
 export default function AuthScreen() {
@@ -25,11 +25,8 @@ export default function AuthScreen() {
 	};
 
 	return (
-		<div className="mt-32">
-			<Logo size="large" />
-
+		<Layout header={isLogin ? "Login" : "Register"} hideNavbar={true}>
 			<div className="max-w-[500px] mx-auto">
-				<h2 className="text-2xl font-semibold text-center mb-6 mt-2">{isLogin ? "Login" : "Register"}</h2>
 				<form onSubmit={handleSubmit} className="flex flex-col items-center">
 					<div className="my-4 w-full">
 						<FloatingInput type="text" label="Username" state={username} setState={setUsername} />
@@ -69,6 +66,6 @@ export default function AuthScreen() {
 					</button>
 				</p>
 			</div>
-		</div>
+		</Layout>
 	);
 }
