@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {use, useEffect, useState} from "react";
 import {AuthContext} from "./AuthContext";
 
 const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
@@ -25,7 +25,6 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			setUsername(username);
 			setUseravatar("https://placehold.co/100"); //todo
 			setToken(data.token);
-			localStorage.setItem("token", data.token);
 			localStorage.setItem("username", username);
 		} else {
 			const data = await response.json();
@@ -71,6 +70,14 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			console.log("AuthContextProvider unmounted");
 		};
 	}, []);
+
+	useEffect(() => {
+		if (token === null) {
+			localStorage.removeItem("token");
+		} else {
+			localStorage.setItem("token", token);
+		}
+	}, [token]);
 
 	const logout = () => {
 		setLoggedIn(false);
