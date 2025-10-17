@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {positionOnScoreboardIfInserted, saveScore} from "../service/ScoreLocal";
+import {positionOnScoreboardIfInserted, saveScore} from "../../service/ScoreLocal";
 
 /**
  * A modal component that appears at the end of the game, allowing the player to enter their name and save their score.

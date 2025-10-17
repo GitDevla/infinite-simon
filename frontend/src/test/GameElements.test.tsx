@@ -1,9 +1,9 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ButtonQuarterRing from "../component/ButtonQuarterRing";
-import Knob from "../component/Knob";
-import Slider from "../component/Slider";
-import Switch from "../component/Switch";
+import ButtonQuarterRing from "../component/Game/ButtonQuarterRing";
+import Knob from "../component/Game/GameKnob";
+import Slider from "../component/Game/GameSlider";
+import Switch from "../component/Game/GameSwitch";
 
 describe("Switch Game Compoent", () => {
 	test("Switch Exists", async () => {

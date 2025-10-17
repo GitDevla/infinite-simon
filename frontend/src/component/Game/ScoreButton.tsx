@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import Logo from "../Logo";
 
 /**
  * A score button component that displays the current round number in the center of a circular button.

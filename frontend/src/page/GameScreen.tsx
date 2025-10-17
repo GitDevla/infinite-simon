@@ -1,19 +1,19 @@
 import {createRef} from "react";
-import AnimatedCursor from "../component/AnimatedCursor";
-import ButtonQuarterRing, {type ButtonQuarterRingHandle} from "../component/ButtonQuarterRing";
-import GameEndModal from "../component/GameEndModal";
-import Knob from "../component/Knob";
-import Slider from "../component/Slider";
-import Switch from "../component/Switch";
+import AnimatedCursor from "../component/Game/AnimatedCursor";
+import ButtonQuarterRing, {type ButtonQuarterRingHandle} from "../component/Game/ButtonQuarterRing";
+import GameEndModal from "../component/Game/GameEndModal";
+import Knob from "../component/Game/GameKnob";
+import Slider from "../component/Game/GameSlider";
+import Switch from "../component/Game/GameSwitch";
 import "../style/GameScreen.css";
 import {useSearchParams} from "react-router-dom";
-import GameStatusBar from "../component/GameStatusBar";
-import InputShelf from "../component/InputShelf";
-import ScoreButton from "../component/ScoreButton";
+import GameStatusBar from "../component/Game/GameStatusBar";
+import InputShelf from "../component/Game/InputShelf";
+import ScoreButton from "../component/Game/ScoreButton";
 import {useGameInputs} from "../hook/useGameInputs";
 import {useGameLogic} from "../hook/useGameLogic";
 import {useSequenceAnimation} from "../hook/useSequenceAnimation";
-import { GameMode, GameType } from "../service/Game";
+import {GameMode, GameType} from "../service/Game";
 
 export type GameInput = {
 	type: string;
@@ -28,10 +28,13 @@ export type GameInput = {
  */
 export default function GameScreen() {
 	const [searchParams, _] = useSearchParams();
-	const difficulty = Number(searchParams.get("difficulty")) || GameType.Simple
-	const mode = Number(searchParams.get("mode")) || GameMode.SinglePlayer
+	const difficulty = Number(searchParams.get("difficulty")) || GameType.Simple;
+	const mode = Number(searchParams.get("mode")) || GameMode.SinglePlayer;
 
-	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic({gameType: difficulty as GameType, gameMode: mode as GameMode});
+	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic({
+		gameType: difficulty as GameType,
+		gameMode: mode as GameMode,
+	});
 
 	const {forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs} =
 		useGameInputs(sequence);

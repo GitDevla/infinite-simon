@@ -1,6 +1,6 @@
 import {render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import GameEndModal from "../component/GameEndModal";
+import GameEndModal from "../component/Game/GameEndModal";
 
 describe("Game End Screen Component", () => {
 	test("Game End Modal Exists", async () => {

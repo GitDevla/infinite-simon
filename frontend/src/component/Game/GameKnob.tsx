@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import {useEffect, useState} from "react";
-import {mod} from "../util/mod";
+import {mod} from "../../util/mod";
 
 /**
  * A knob component that allows users to select a value within a specified range by rotating the knob.
