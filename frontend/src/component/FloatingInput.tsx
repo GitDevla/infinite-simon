@@ -9,7 +9,7 @@ export default function FloatingInput({
 	type: string;
 	label: string;
 	state: string;
-	setState: React.Dispatch<React.SetStateAction<string>>;
+	setState: (value: string) => void;
 }) {
 	const ref = useRef<HTMLInputElement>(null);
 	return (
