@@ -3,11 +3,12 @@ import "./style/index.css";
 import {HashRouter, Route, Routes} from "react-router-dom";
 import AuthContextProvider from "./context/AuthContextProvider";
 import App from "./page/App";
-import GameScreen from "./page/GameScreen";
-import ScoreBoard from "./page/ScoreBoard";
-import reportWebVitals from "./reportWebVitals";
 import AuthScreen from "./page/AuthScreen";
+import GameScreen from "./page/GameScreen";
 import ProfileScreen from "./page/ProfileScreen";
+import ScoreBoard from "./page/ScoreBoard";
+import SettingsScreen from "./page/SettingsScreen";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -20,6 +21,7 @@ root.render(
 					<Route path="/score" element={<ScoreBoard />} />
 					<Route path="/auth" element={<AuthScreen />} />
 					<Route path="/profile" element={<ProfileScreen />} />
+					<Route path="/settings" element={<SettingsScreen />} />
 				</Routes>
 			</HashRouter>
 		</div>

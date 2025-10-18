@@ -1,5 +1,6 @@
 import {useContext} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {ReactComponent as SettingsSvgIcon} from "../asset/settings.svg";
 import {AuthContext} from "../context/AuthContext";
 import UserPill from "./UserPill";
 
@@ -23,7 +24,9 @@ export default function Header() {
 				)}
 			</div>
 			<div className="flex justify-end">
-				<img src="https://placehold.co/50" alt="Settings" />
+				<Link to="/settings" title="Settings">
+					<SettingsSvgIcon className="w-8 h-8 !aspect-square hover:rotate-180 transition-transform" />
+				</Link>
 			</div>
 		</header>
 	);
