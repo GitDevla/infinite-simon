@@ -13,7 +13,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     }
 
     try {
-        const decoded = jwt.verify(token, "your_jwt_secret");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!);
         console.log("Decoded token:", decoded);
         (req as any).username = (decoded as any).username;
         next();
