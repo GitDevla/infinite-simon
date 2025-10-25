@@ -1,15 +1,8 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { GameQuery } from '../model/game.query';
 
 export class GameService {
     static async startNewGame(modeId: number, difficultyId: number) {
-        const game = await prisma.game.create({
-            data: {
-                modeId,
-                difficultyId,
-            },
-        });
+        const game = await GameQuery.createGame(modeId, difficultyId);
         return {
             id: game.id,
             seed: Math.floor(Math.random() * 1000000),
@@ -22,21 +15,11 @@ export class GameService {
         startedAt?: Date;
         endedAt?: Date;
     }) {
-        return prisma.match.create({
-            data: {
-                gameId,
-                seed,
-                startedAt: startedAt || new Date(),
-                endedAt,
-            },
-        });
+        return GameQuery.createMatch({ gameId, seed, startedAt, endedAt });
     }
 
     static async updateMatchEndTime(matchId: number, endTime: Date = new Date()) {
-        return prisma.match.update({
-            where: { id: matchId },
-            data: { endedAt: endTime },
-        });
+        return GameQuery.updateMatchEndTime(matchId, endTime);
     }
 
     static async saveGameResult({ username, matchId, roundEliminated }: {
@@ -44,14 +27,6 @@ export class GameService {
         matchId: number;
         roundEliminated: number;
     }) {
-        const user = await prisma.user.findUnique({ where: { username } });
-        if (!user) throw new Error("User not found");
-        return prisma.participant.create({
-            data: {
-                userId: user.id,
-                matchId,
-                round_eliminated: roundEliminated,
-            },
-        });
+        return GameQuery.createGameResult({ username, matchId, roundEliminated });
     }
 }
