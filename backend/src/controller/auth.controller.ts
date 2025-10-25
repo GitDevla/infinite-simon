@@ -8,6 +8,7 @@ export async function loginController(req: Request, res: Response) {
 	
     const success = await UserService.login(username, password);
     if (success) {
+        await UserService.updateLastLogin(username);
         if (!process.env.JWT_SECRET) {
             throw new Error("JWT_SECRET environment variable is not defined");
         }

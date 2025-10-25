@@ -20,4 +20,8 @@ export class UserService {
         const passwordHash = await bcrypt.hash(password, 10);
         await UserQuery.createUser(username, email, passwordHash);
     }
+
+    static async updateLastLogin(username: string) {
+        await UserQuery.updateUserLastLogin(username, new Date());
+    }
 }

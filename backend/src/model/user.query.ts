@@ -11,7 +11,14 @@ export class UserQuery {
 
 	static async createUser(username: string, email: string, passwordHash: string) {
 		return prisma.user.create({
-			data: { username, email, password_hash: passwordHash, avatar: "" },
+			data: { username, email, password_hash: passwordHash, avatar_uri: "" },
+		});
+	}
+
+	static async updateUserLastLogin(username: string, date: Date) {
+		return prisma.user.update({
+			where: { username },
+			data: { last_login: date },
 		});
 	}
 }

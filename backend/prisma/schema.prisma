@@ -16,7 +16,9 @@ model User {
   username  String   @unique
   email     String   @unique
   password_hash  String
-  avatar String?
+  avatar_uri String?
+  joined_date DateTime @default(now())
+  last_login DateTime @default(now())
 
   Participant Participant[]
 }
@@ -51,7 +53,6 @@ model Match {
   gameId Int
   seed Int
   startedAt DateTime @default(now())
-  endedAt DateTime?
 
   Participant Participant[]
 }
