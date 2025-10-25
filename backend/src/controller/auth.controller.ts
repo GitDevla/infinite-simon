@@ -21,10 +21,10 @@ export async function loginController(req: Request, res: Response) {
 }
 
 function credentialValidation(username: string, password: string, email:string){
-    var specials = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    var uppers = /[A-Z]/;
-    var lowers = /[a-z]/;
-    var numbers = /[0-9]/;
+    const specials = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const uppers = /[A-Z]/;
+    const lowers = /[a-z]/;
+    const numbers = /[0-9]/;
     if(specials.test(username)){
         return [false,"Username may not contain specials"];
     }
