@@ -50,10 +50,12 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	}, []);
 
 	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
+		const token = userContext.token;
 		await fetch(`${serverUrl}/save-game-result`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`,
 			},
 			body: JSON.stringify({ username, matchId, roundEliminated }),
 		});
@@ -65,7 +67,6 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		if (!game.current.checkPlayerInput(action)) {
 			setGameOngoing(false);
 			console.log("Game over! Saving result...");
-			// TODO: implement user authentication
 			// TODO: consider updating each round instead of only at game over
 			if (matchId !== null) {
 				if (userContext.username !== null) {
