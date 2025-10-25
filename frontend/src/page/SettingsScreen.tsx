@@ -1,7 +1,22 @@
-import {use, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import FloatingInput from "../component/FloatingInput";
 import Layout from "../component/Layout";
 import {AuthContext} from "../context/AuthContext";
+
+async function fetchUserEmail(token: string): Promise<string> {
+	const res = await fetch(`${process.env.REACT_APP_SERVER_URL || "http://localhost:3001"}/api/me`, {
+		method: "GET",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": `Bearer ${token}`,
+		},
+	});
+	if (!res.ok) throw new Error("Failed to fetch user email");
+	const data = await res.json();
+	console.log("Fetched user email:", data.email);
+	return data.email;
+}
 
 export default function SettingsScreen() {
 	const userContext = useContext(AuthContext);
@@ -17,18 +32,19 @@ export default function SettingsScreen() {
 	const [message, setMessage] = useState<string | null>(null);
 
 	useEffect(() => {
-		// Mock: TODO
-		if (loggedIn) {
-			setForm({
-				username: userContext.username || "",
-				email: "asd@asd.asd",
-				profilePic: userContext.useravatar || "",
-				currentPassword: "",
-				newPassword: "",
-				confirmPassword: "",
+		if (loggedIn && userContext.token) {
+			fetchUserEmail(userContext.token).then(email => {
+				setForm({
+					username: userContext.username || "",
+					email: email,
+					profilePic: userContext.useravatar || "",
+					currentPassword: "",
+					newPassword: "",
+					confirmPassword: "",
+				});
 			});
 		}
-	}, [loggedIn, userContext.username, userContext.useravatar]);
+	}, [loggedIn, userContext.username, userContext.useravatar, userContext.token]);
 
 	return (
 		<Layout header="Settings">
@@ -45,7 +61,7 @@ export default function SettingsScreen() {
 							className="space-y-4">
 							<div className="flex items-center gap-4">
 								<div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600 flex-shrink-0">
-									<img src={form.profilePic} alt="profile" className="w-full h-full object-cover" />
+									<img src={form.profilePic || "https://placehold.co/100?text=Avatar"} alt="profile" className="w-full h-full object-cover" />
 								</div>
 								<div className="flex-1">
 									{/* TODO */}
