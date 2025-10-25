@@ -21,11 +21,16 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({modeId, difficultyId}),
+			// Enum IDs are 1-based in the backend
+			body: JSON.stringify({modeId: modeId + 1, difficultyId: difficultyId + 1}),
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log("Game started with seed:", data.game.seed);
+				if (!data.game) {
+					console.error("No game object returned from backend");
+					return;
+				}
+				console.log("Game started with id:", data.game.id, "and seed:", data.game.seed);
 				if (game.current === null) return;
 				game.current.startNewGame(data.game.seed, gameType);
 				game.current.onNewRound(() => {
