@@ -18,10 +18,6 @@ export class GameService {
         return GameQuery.createMatch({ gameId, seed, startedAt, endedAt });
     }
 
-    static async updateMatchEndTime(matchId: number, endTime: Date = new Date()) {
-        return GameQuery.updateMatchEndTime(matchId, endTime);
-    }
-
     static async saveGameResult({ username, matchId, roundEliminated }: {
         username: string;
         matchId: number;
