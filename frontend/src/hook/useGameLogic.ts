@@ -1,7 +1,8 @@
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
+import { AuthContext } from "../context/AuthContext";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
@@ -10,6 +11,8 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	const [gameOngoing, setGameOngoing] = useState(true);
 	const [sequence, setSequence] = useState<Sequence | null>(null);
 	const game = useRef<Game | null>(null);
+	const userContext = useContext(AuthContext);
+	const [matchId, setMatchId] = useState<number | null>(null);
 
 	useEffect(() => {
 		const difficultyId = gameType;
@@ -26,11 +29,12 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		})
 			.then(response => response.json())
 			.then(data => {
-				if (!data.game) {
-					console.error("No game object returned from backend");
+				if (!data.game || !data.match) {
+					console.error("No game object or match returned from backend");
 					return;
 				}
-				console.log("Game started with id:", data.game.id, "and seed:", data.game.seed);
+				setMatchId(data.match.id);
+				console.log("Game started with id:", data.game.id, "and seed:", data.game.seed, "and match id:", data.match.id);
 				if (game.current === null) return;
 				game.current.startNewGame(data.game.seed, gameType);
 				game.current.onNewRound(() => {
@@ -63,7 +67,15 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			console.log("Game over! Saving result...");
 			// TODO: implement user authentication
 			// TODO: consider updating each round instead of only at game over
-			saveGameResult("asd1", 1, score); // TODO: remove test call
+			if (matchId !== null) {
+				if (userContext.username !== null) {
+					saveGameResult(userContext.username, matchId, score);
+				} else {
+					console.error("Cannot save game result: username is null");
+				}
+			} else {
+				console.error("Cannot save game result: matchId is null");
+			}
 		}
 	};
 

@@ -11,7 +11,7 @@ export async function startNewGameController(req: Request, res: Response) {
             gameId: game.id,
             seed: game.seed,
         });
-        res.json({ success: true, game });
+        res.json({ success: true, game, match: { id: match.id } });
     } catch (error) {
         res.status(400).json({ success: false, error: (error as Error).message });
     }
