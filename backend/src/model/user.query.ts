@@ -11,7 +11,7 @@ export class UserQuery {
 
 	static async createUser(username: string, email: string, passwordHash: string) {
 		return prisma.user.create({
-			data: { username, email, password_hash: passwordHash}
+			data: { username, email, password_hash: passwordHash, avatar: "" },
 		});
 	}
 }

@@ -49,6 +49,7 @@ model Match {
   id Int @id @default(autoincrement())
   game Game @relation(fields: [gameId], references: [id])
   gameId Int
+  seed Int
   startedAt DateTime @default(now())
   endedAt DateTime?
 
@@ -61,5 +62,6 @@ model Participant {
   matchId Int
   user User @relation(fields: [userId], references: [id])
   userId Int
-  round_eleminated Int
+  round_eliminated Int
+  achieved_at DateTime @default(now())
 }
