@@ -45,10 +45,26 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			});
 	}, []);
 
+	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
+		await fetch(`${serverUrl}/save-game-result`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ username, matchId, roundEliminated }),
+		});
+	};
+
 	const handleUserInput = (id: string, value: any) => {
 		if (game.current === null) return;
 		const action = new ReactPart(id, value);
-		if (!game.current.checkPlayerInput(action)) setGameOngoing(false);
+		if (!game.current.checkPlayerInput(action)) {
+			setGameOngoing(false);
+			console.log("Game over! Saving result...");
+			// TODO: implement user authentication
+			// TODO: consider updating each round instead of only at game over
+			saveGameResult("asd1", 1, score); // TODO: remove test call
+		}
 	};
 
 	const moveSpeedInMs = Math.max(700 - score * 20, 400);
@@ -60,5 +76,6 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		sequence,
 		handleUserInput,
 		moveSpeedInMs,
+		saveGameResult,
 	};
 }

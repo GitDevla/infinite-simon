@@ -1,11 +1,31 @@
 import { GameService } from "../service/game.service";
+import { saveGameResult } from "../service/gameResult.service";
 import type { Request, Response } from "express";
+import { saveMatch } from "../service/match.service";
 
 export async function startNewGameController(req: Request, res: Response) {
     const { modeId, difficultyId } = req.body;
     try {
         const game = await GameService.startNewGame(modeId, difficultyId);
+        const match = await saveMatch({
+            gameId: game.id,
+            seed: game.seed,
+        });
         res.json({ success: true, game });
+    } catch (error) {
+        res.status(400).json({ success: false, error: (error as Error).message });
+    }
+}
+
+export async function saveGameResultController(req: Request, res: Response) {
+    const { username, matchId, roundEliminated } = req.body;
+    try {
+        await saveGameResult({
+            username,
+            matchId,
+            roundEliminated,
+        });
+        res.json({ success: true });
     } catch (error) {
         res.status(400).json({ success: false, error: (error as Error).message });
     }
