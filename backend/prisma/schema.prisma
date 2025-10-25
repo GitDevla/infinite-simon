@@ -16,6 +16,7 @@ model User {
   username  String   @unique
   email     String   @unique
   password_hash  String
+  avatar String?
 
   Participant Participant[]
 }
