@@ -24,4 +24,13 @@ export class UserService {
     static async updateLastLogin(username: string) {
         await UserQuery.updateUserLastLogin(username, new Date());
     }
+
+    static async changePassword(username: string, newPassword: string) {
+        const user = await UserQuery.getUserByUsername(username);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        await UserQuery.updateUser(username, { password_hash: passwordHash });
+    }
 }
