@@ -15,4 +15,43 @@ export class GameService {
             seed: Math.floor(Math.random() * 1000000),
         };
     }
+
+    static async saveMatch({ gameId, seed, startedAt, endedAt }: {
+        gameId: number;
+        seed: number;
+        startedAt?: Date;
+        endedAt?: Date;
+    }) {
+        return prisma.match.create({
+            data: {
+                gameId,
+                seed,
+                startedAt: startedAt || new Date(),
+                endedAt,
+            },
+        });
+    }
+
+    static async updateMatchEndTime(matchId: number, endTime: Date = new Date()) {
+        return prisma.match.update({
+            where: { id: matchId },
+            data: { endedAt: endTime },
+        });
+    }
+
+    static async saveGameResult({ username, matchId, roundEliminated }: {
+        username: string;
+        matchId: number;
+        roundEliminated: number;
+    }) {
+        const user = await prisma.user.findUnique({ where: { username } });
+        if (!user) throw new Error("User not found");
+        return prisma.participant.create({
+            data: {
+                userId: user.id,
+                matchId,
+                round_eliminated: roundEliminated,
+            },
+        });
+    }
 }

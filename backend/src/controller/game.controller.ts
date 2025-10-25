@@ -1,13 +1,11 @@
 import { GameService } from "../service/game.service";
-import { saveGameResult } from "../service/gameResult.service";
 import type { Request, Response } from "express";
-import { saveMatch } from "../service/match.service";
 
 export async function startNewGameController(req: Request, res: Response) {
     const { modeId, difficultyId } = req.body;
     try {
         const game = await GameService.startNewGame(modeId, difficultyId);
-        const match = await saveMatch({
+        const match = await GameService.saveMatch({
             gameId: game.id,
             seed: game.seed,
         });
@@ -20,7 +18,7 @@ export async function startNewGameController(req: Request, res: Response) {
 export async function saveGameResultController(req: Request, res: Response) {
     const { username, matchId, roundEliminated } = req.body;
     try {
-        await saveGameResult({
+        await GameService.saveGameResult({
             username,
             matchId,
             roundEliminated,
