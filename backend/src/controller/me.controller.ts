@@ -14,7 +14,7 @@ export async function getMe(req: Request, res: Response) {
 		res.json({
 			email: user.email,
 			username: user.username,
-			avatar: user.avatar || null
+			avatar: user.avatar_uri || null
 		});
 	} catch (err) {
 		res.status(500).json({error: "Internal server error"});

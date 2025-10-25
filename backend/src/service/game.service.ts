@@ -9,13 +9,12 @@ export class GameService {
         };
     }
 
-    static async saveMatch({ gameId, seed, startedAt, endedAt }: {
+    static async saveMatch({ gameId, seed, startedAt }: {
         gameId: number;
         seed: number;
         startedAt?: Date;
-        endedAt?: Date;
     }) {
-        return GameQuery.createMatch({ gameId, seed, startedAt, endedAt });
+        return GameQuery.createMatch({ gameId, seed, startedAt });
     }
 
     static async saveGameResult({ username, matchId, roundEliminated }: {

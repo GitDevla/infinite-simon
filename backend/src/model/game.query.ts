@@ -22,18 +22,16 @@ export class GameQuery {
         return prisma.game.findMany();
     }
 
-    static async createMatch({ gameId, seed, startedAt, endedAt }: {
+    static async createMatch({ gameId, seed, startedAt }: {
         gameId: number;
         seed: number;
         startedAt?: Date;
-        endedAt?: Date;
     }) {
         return prisma.match.create({
             data: {
                 gameId,
                 seed,
                 startedAt: startedAt || new Date(),
-                endedAt,
             },
         });
     }
