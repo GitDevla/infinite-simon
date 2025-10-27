@@ -170,7 +170,6 @@ erDiagram
         int match_id FK
         int user_id FK
         int round_eliminated
-        int mmr_at_time_of_playing
         datetime achieved_at
     }
 
