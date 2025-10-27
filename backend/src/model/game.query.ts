@@ -74,4 +74,87 @@ export class GameQuery {
             placement: idx + 1,
         }));
     }
+
+    static async getUserScores({
+        username,
+        mode,
+        diff,
+        limit = 5,
+        page = 1,
+        orderBy = "achieved_at"
+    }: {
+        username: string;
+        mode?: string;
+        diff?: string;
+        limit?: number;
+        page?: number;
+        orderBy?: string;
+    }) {
+        const user = await prisma.user.findUnique({ where: { username } });
+        if (!user) throw new Error("User not found");
+
+        // Build filter
+        const where: any = { userId: user.id };
+        if (mode) {
+            where.match = {
+                game: {
+                    mode: {
+                        name: mode
+                    }
+                }
+            };
+        }
+        if (diff) {
+            where.match = {
+                ...where.match,
+                game: {
+                    ...where.match?.game,
+                    difficulty: {
+                        name: diff
+                    }
+                }
+            };
+        }
+
+        // Get page info
+        const participants = await prisma.participant.findMany({
+            where,
+            orderBy: { [orderBy]: "desc" },
+            skip: (page - 1) * limit,
+            take: limit,
+            include: {
+                match: {
+                    include: {
+                        game: {
+                            include: {
+                                mode: true,
+                                difficulty: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Calculate placement
+        const scores = await Promise.all(participants.map(async p => {
+            // Get all participants
+            const matchParticipants = await prisma.participant.findMany({
+                where: { matchId: p.matchId },
+                orderBy: { round_eliminated: "desc" }
+            });
+            const placement = matchParticipants.findIndex(mp => mp.userId === user.id) + 1;
+
+            return {
+                difficulty: p.match.game.difficulty.name,
+                mode: p.match.game.mode.name,
+                score: p.round_eliminated,
+                date: p.achieved_at.toISOString().split("T")[0],
+                placement: matchParticipants.length > 1 ? placement : undefined
+            };
+        }));
+
+        return scores;
+    }
 }
+
