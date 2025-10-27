@@ -6,15 +6,24 @@ import type {SequencePart} from "./SequencePart";
 export enum GameType {Simple,Extended}
 export enum GameMode {SinglePlayer,MultiPlayer}
 
-const GAME_TYPE_LABELS: Record<GameType, string> = {
-    [GameType.Simple]: "Simple",
+export const GAME_TYPE_LABELS: Record<GameType, string> = {
+    [GameType.Simple]: "Classic",
     [GameType.Extended]: "Extended",
 };
 
-const GAME_MODE_LABELS: Record<GameMode, string> = {
-    [GameMode.SinglePlayer]: "Single Player",
-    [GameMode.MultiPlayer]: "Multi Player",
+export const GAME_MODE_LABELS: Record<GameMode, string> = {
+    [GameMode.SinglePlayer]: "Singleplayer",
+    [GameMode.MultiPlayer]: "Multiplayer",
 };
+
+export const LABEL_TO_GAME_TYPE= Object.fromEntries(
+	Object.entries(GAME_TYPE_LABELS).map(([key, value]) => [value, Number(key) as GameType])
+);
+
+export const LABEL_TO_GAME_MODE: Record<string, GameMode> = Object.fromEntries(
+	Object.entries(GAME_MODE_LABELS).map(([key, value]) => [value, Number(key) as GameMode])
+);
+
 
 export function gameTypeToString(type: GameType): string {
     return GAME_TYPE_LABELS[type] ?? "Unknown";
