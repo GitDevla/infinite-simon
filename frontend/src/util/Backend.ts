@@ -1,8 +1,8 @@
 const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
-type BackendResponseOkResponse = {
+type BackendResponseOkResponse<T = any> = {
 	ok: true;
-	data: any;
+	data: T;
 };
 
 type BackendResponseErrorResponse = {
@@ -10,10 +10,13 @@ type BackendResponseErrorResponse = {
 	error: string;
 };
 
-type BackendResponse = BackendResponseOkResponse | BackendResponseErrorResponse;
+type BackendResponse<T = any> = BackendResponseOkResponse<T> | BackendResponseErrorResponse;
 
 export class Backend {
-	static async GET(path: string, queryParams?: URLSearchParams | Record<string, string>): Promise<BackendResponse> {
+	static async GET<T = any>(
+		path: string,
+		queryParams?: URLSearchParams | Record<string, string>,
+	): Promise<BackendResponse<T>> {
 		const token = localStorage.getItem("token") || "";
 		const res = await fetch(
 			`${backendUrl}${path}${queryParams ? `?${new URLSearchParams(queryParams).toString()}` : ""}`,
@@ -37,7 +40,7 @@ export class Backend {
 		};
 	}
 
-	static async POST(path: string, body: any): Promise<BackendResponse> {
+	static async POST<T = any>(path: string, body: any): Promise<BackendResponse<T>> {
 		const token = localStorage.getItem("token") || "";
 		const res = await fetch(`${backendUrl}${path}`, {
 			method: "POST",
@@ -60,7 +63,7 @@ export class Backend {
 		};
 	}
 
-	static async GETPROMISE(path: string, queryParams?: URLSearchParams | Record<string, string>): Promise<any> {
+	static async GETPROMISE<T = any>(path: string, queryParams?: URLSearchParams | Record<string, string>): Promise<T> {
 		const res = await Backend.GET(path, queryParams);
 		if (!res.ok) {
 			throw new Error(res.error);
@@ -68,7 +71,7 @@ export class Backend {
 		return res.data;
 	}
 
-	static async POSTPROMISE(path: string, body: any): Promise<any> {
+	static async POSTPROMISE<T = any>(path: string, body: any): Promise<T> {
 		const res = await Backend.POST(path, body);
 		if (!res.ok) {
 			throw new Error(res.error);
