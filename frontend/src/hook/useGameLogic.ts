@@ -49,7 +49,12 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	}, []);
 
 	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
-		await Backend.POST("/save-game-result", {username, matchId, roundEliminated});
+		const res = await Backend.POST("/save-game-result", {username, matchId, roundEliminated});
+		if (res.ok) {
+			console.log("Game result saved successfully");
+		} else {
+			console.error("Error saving game result:", res.error);
+		}
 	};
 
 	const handleUserInput = (id: string, value: any) => {
