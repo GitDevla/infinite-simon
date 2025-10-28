@@ -1,10 +1,10 @@
-import {useContext, useEffect, useId, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import Header from "../component/Header";
 import Layout from "../component/Layout";
-import Logo from "../component/Logo";
+import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
-import {GameMode, GameType, gameModeToString, gameTypeToString} from "../service/Game";
+
+const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 export default function ProfileScreen() {
 	const authContext = useContext(AuthContext);
@@ -21,43 +21,47 @@ export default function ProfileScreen() {
 		multiplayerWins: number;
 		multiplayerAveragePlacement: number | null;
 	} | null>(null);
-	const [scores, setScores] = useState<
-		{difficulty: GameType; mode: GameMode; score: number; date: string; placement?: number}[]
-	>([]);
-	const [modeFilter, setModeFilter] = useState<GameMode | "all">("all");
-	const [typeFilter, setTypeFilter] = useState<GameType | "all">("all");
+
 	const navigate = useNavigate();
-	const modeSelectId = useId();
-	const typeSelectId = useId();
 
 	const fetchUserData = async () => {
-		// TODO, mock data for now
-		return {
-			totalGames: 42,
-			bestScore: 30,
-			averageScore: 18.4,
-			singlePlayerStats: {
-				totalGames: 24,
-			},
-			multiplayerStats: {
-				totalGames: 18,
-				wins: 10,
-				averatePlacement: 2.3,
-			},
-
-			scores: [
-				{difficulty: GameType.Simple, mode: GameMode.MultiPlayer, score: 10, date: "2025-10-04", placement: 5},
-				{
-					difficulty: GameType.Extended,
-					mode: GameMode.MultiPlayer,
-					score: 15,
-					date: "2025-10-03",
-					placement: 2,
-				},
-				{difficulty: GameType.Simple, mode: GameMode.SinglePlayer, score: 8, date: "2025-10-02"},
-				{difficulty: GameType.Extended, mode: GameMode.SinglePlayer, score: 12, date: "2025-10-01"},
-			],
+		// TODO, replace mock data when backend is ready
+		const multiplayer_stats_mock = {
+			totalGames: 18,
+			wins: 10,
+			averatePlacement: 2.3,
 		};
+
+		const res = await fetch(`${backendUrl}/api/stats`, {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${authContext.token}`,
+			},
+		});
+		const json = await res.json();
+		return {
+			total_games: json.total_games,
+			best_score: json.best_score,
+			average_score: json.average_score,
+			singleplayer_stats: {
+				totalGames: json.singleplayer_stats,
+			},
+			multiplayer_stats: multiplayer_stats_mock,
+		};
+	};
+
+	const updateUserData = async () => {
+		fetchUserData().then(fetched => {
+			setUserStats({
+				totalGames: fetched.total_games,
+				bestScore: fetched.best_score,
+				averageScore: fetched.average_score,
+				singlePlayerGames: fetched.singleplayer_stats?.totalGames ?? 0,
+				multiplayerGames: fetched.multiplayer_stats?.totalGames ?? 0,
+				multiplayerWins: fetched.multiplayer_stats?.wins ?? 0,
+				multiplayerAveragePlacement: fetched.multiplayer_stats?.averatePlacement ?? null,
+			});
+		});
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: no need
@@ -66,26 +70,8 @@ export default function ProfileScreen() {
 		if (!authContext.loggedIn) {
 			navigate("/auth");
 		}
-		fetchUserData().then(fetched => {
-			setScores(fetched.scores);
-			setUserStats({
-				totalGames: fetched.totalGames,
-				bestScore: fetched.bestScore,
-				averageScore: fetched.averageScore,
-				singlePlayerGames: fetched.singlePlayerStats?.totalGames ?? 0,
-				multiplayerGames: fetched.multiplayerStats?.totalGames ?? 0,
-				multiplayerWins: fetched.multiplayerStats?.wins ?? 0,
-				multiplayerAveragePlacement: fetched.multiplayerStats?.averatePlacement ?? null,
-			});
-		});
+		updateUserData();
 	}, [authContext.loggedIn, authContext.loading]);
-
-	const filteredScores = scores.filter(score => {
-		return (
-			(modeFilter === "all" || score.mode === Number(modeFilter)) &&
-			(typeFilter === "all" || score.difficulty === Number(typeFilter))
-		);
-	});
 
 	return (
 		<Layout header="Profile">
@@ -153,83 +139,7 @@ export default function ProfileScreen() {
 							</div>
 						)}
 					</div>
-					<div className="w-full">
-						<h4 className="text-lg font-semibold mb-4">Score History</h4>
-						<div className="flex gap-4 mb-6 p-4 bg-bg-secondary rounded-xl">
-							<div className="flex-1">
-								<label
-									htmlFor={modeSelectId}
-									className="block mb-2 text-xs font-medium text-gray-400 uppercase tracking-wide">
-									Mode
-								</label>
-								<select
-									id={modeSelectId}
-									value={modeFilter}
-									onChange={e => setModeFilter(e.target.value as GameMode | "all")}
-									className="w-full p-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
-									<option value="all">All Modes</option>
-									<option value={GameMode.SinglePlayer}>Single Player</option>
-									<option value={GameMode.MultiPlayer}>Multi Player</option>
-								</select>
-							</div>
-							<div className="flex-1">
-								<label
-									htmlFor={typeSelectId}
-									className="block mb-2 text-xs font-medium text-gray-400 uppercase tracking-wide">
-									Difficulty
-								</label>
-								<select
-									id={typeSelectId}
-									value={typeFilter}
-									onChange={e => setTypeFilter(e.target.value as GameType | "all")}
-									className="w-full p-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
-									<option value="all">All Difficulties</option>
-									<option value={GameType.Simple}>Simple</option>
-									<option value={GameType.Extended}>Extended</option>
-								</select>
-							</div>
-						</div>
-						<ul className="flex flex-col gap-3 w-full">
-							{filteredScores.map((score, index) => (
-								<li
-									key={index}
-									className="flex border border-gray-600 p-4 w-full justify-between bg-bg-secondary rounded-xl bg-opacity-80 hover:scale-105 transition-transform duration-200">
-									<div className="flex flex-col gap-1">
-										<div className="flex items-center gap-2">
-											<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-												Difficulty:
-											</span>
-											<span className="font-semibold text-white">
-												{gameTypeToString(score.difficulty)}
-											</span>
-										</div>
-										<div className="flex items-center gap-2">
-											<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-												Mode:
-											</span>
-											<span className="font-semibold text-white">
-												{gameModeToString(score.mode)}
-											</span>
-										</div>
-										<div className="flex items-center gap-2">
-											<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-												Date:
-											</span>
-											<span className="text-sm text-gray-300">{score.date}</span>
-										</div>
-									</div>
-									<div className="flex flex-col items-end justify-center">
-										<span className="text-3xl font-bold text-white">{score.score}</span>
-										{score.placement && (
-											<span className="text-xs font-medium text-yellow-400 mt-1">
-												🏆 #{score.placement}
-											</span>
-										)}
-									</div>
-								</li>
-							))}
-						</ul>
-					</div>
+					<UserScoresList />
 				</div>
 			</div>
 		</Layout>
