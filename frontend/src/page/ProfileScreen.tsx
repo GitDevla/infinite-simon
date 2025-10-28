@@ -3,8 +3,7 @@ import {useNavigate} from "react-router-dom";
 import Layout from "../component/Layout";
 import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
-
-const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+import {Backend} from "../util/Backend";
 
 export default function ProfileScreen() {
 	const authContext = useContext(AuthContext);
@@ -31,20 +30,26 @@ export default function ProfileScreen() {
 			wins: 10,
 			averatePlacement: 2.3,
 		};
-
-		const res = await fetch(`${backendUrl}/api/stats`, {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${authContext.token}`,
-			},
-		});
-		const json = await res.json();
+		const json = await Backend.GET("/api/stats");
+		if (!json.ok) {
+			alert(`Failed to fetch user stats: ${json.error}`);
+			return {
+				total_games: 0,
+				best_score: null,
+				average_score: null,
+				singleplayer_stats: {
+					totalGames: 0,
+				},
+				multiplayer_stats: multiplayer_stats_mock,
+			};
+		}
+		const data = json.data;
 		return {
-			total_games: json.total_games,
-			best_score: json.best_score,
-			average_score: json.average_score,
+			total_games: data.total_games,
+			best_score: data.best_score,
+			average_score: data.average_score,
 			singleplayer_stats: {
-				totalGames: json.singleplayer_stats,
+				totalGames: data.singleplayer_stats,
 			},
 			multiplayer_stats: multiplayer_stats_mock,
 		};

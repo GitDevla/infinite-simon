@@ -1,10 +1,9 @@
 import {useContext, useEffect, useRef, useState} from "react";
+import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
-import { AuthContext } from "../context/AuthContext";
-
-const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+import {Backend} from "../util/Backend";
 
 export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode: GameMode}) {
 	const [score, setScore] = useState(0);
@@ -19,22 +18,22 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		const modeId = gameMode;
 		game.current = new Game();
 
-		fetch(`${serverUrl}/start-game`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			// Enum IDs are 1-based in the backend
-			body: JSON.stringify({modeId: modeId + 1, difficultyId: difficultyId + 1}),
-		})
-			.then(response => response.json())
+		// Enum IDs are 1-based in the backend
+		Backend.POSTPROMISE("/start-game", {modeId: modeId + 1, difficultyId: difficultyId + 1})
 			.then(data => {
 				if (!data.game || !data.match) {
 					console.error("No game object or match returned from backend");
 					return;
 				}
 				setMatchId(data.match.id);
-				console.log("Game started with id:", data.game.id, "and seed:", data.game.seed, "and match id:", data.match.id);
+				console.log(
+					"Game started with id:",
+					data.game.id,
+					"and seed:",
+					data.game.seed,
+					"and match id:",
+					data.match.id,
+				);
 				if (game.current === null) return;
 				game.current.startNewGame(data.game.seed, gameType);
 				game.current.onNewRound(() => {
@@ -50,15 +49,7 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	}, []);
 
 	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
-		const token = userContext.token;
-		await fetch(`${serverUrl}/save-game-result`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${token}`,
-			},
-			body: JSON.stringify({ username, matchId, roundEliminated }),
-		});
+		await Backend.POST("/save-game-result", {username, matchId, roundEliminated});
 	};
 
 	const handleUserInput = (id: string, value: any) => {
