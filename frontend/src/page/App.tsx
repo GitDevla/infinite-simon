@@ -10,13 +10,13 @@ function App() {
 					lvlId={GameType.Simple}
 					title="Classic Simon"
 					description="Play the classic Simon game."
-					imageUrl="https://placehold.co/600x400"
+					imageUrl={`${process.env.PUBLIC_URL}/simon_default.png`}
 				/>
 				<NavCard
 					lvlId={GameType.Extended}
 					title="Extended Simon"
 					description="Play the extended version of Simon with more features."
-					imageUrl="https://placehold.co/600x400"
+					imageUrl={`${process.env.PUBLIC_URL}/simon_infinite.png`}
 				/>
 			</nav>
 		</Layout>
