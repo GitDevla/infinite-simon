@@ -11,10 +11,28 @@ export class CredentialValidator implements IValidator {
             return { isValid: false, errorMessage: "Username may not contain specials" };
         }
 
-        if (password.length <= 8 || !specials.test(password) || !uppers.test(password) || !lowers.test(password) || !numbers.test(password)) {
-            return { 
-                isValid: false, 
-                errorMessage: "Password must contain upper and lower case letters, a number, and a special character" 
+        if (password.length < 8 || !specials.test(password) || !uppers.test(password) || !lowers.test(password) || !numbers.test(password)) {
+            var message = "Password must";
+            if (password.length < 8) {
+                message += " be at least 8 characters long,";
+            }
+            if (!uppers.test(password)) {
+                message += " contain an uppercase letter,";
+            }
+            if (!lowers.test(password)) {
+                message += " contain a lowercase letter,";
+            }
+            if (!numbers.test(password)) {
+                message += " contain a number,";
+            }
+            if (!specials.test(password)) {
+                message += " contain a special character,";
+            }
+            // Remove trailing comma
+            message = message.replace(/,$/, '');
+            return {
+                isValid: false,
+                errorMessage: message
             };
         }
 
