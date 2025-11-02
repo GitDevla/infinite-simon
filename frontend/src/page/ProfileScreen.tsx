@@ -45,11 +45,11 @@ export default function ProfileScreen() {
 		}
 		const data = json.data;
 		return {
-			total_games: data.total_games,
-			best_score: data.best_score,
-			average_score: data.average_score,
+			total_games: json.totalGames,
+			best_score: json.bestScore,
+			average_score: json.averageScore,
 			singleplayer_stats: {
-				totalGames: data.singleplayer_stats,
+				totalGames: json.singleplayerStats,
 			},
 			multiplayer_stats: multiplayer_stats_mock,
 		};
