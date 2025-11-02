@@ -49,7 +49,7 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			});
 	}, []);
 
-	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
+	const saveGameResult = async (matchId: number, roundEliminated: number) => {
 		const token = userContext.token;
 		await fetch(`${serverUrl}/save-game-result`, {
 			method: "POST",
@@ -57,7 +57,7 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 				"Content-Type": "application/json",
 				"Authorization": `Bearer ${token}`,
 			},
-			body: JSON.stringify({ username, matchId, roundEliminated }),
+			body: JSON.stringify({ matchId, roundEliminated }),
 		});
 	};
 
@@ -75,10 +75,10 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		if (!gameOngoing) {
 			console.log("Game over! Saving result...");
 			if (matchId !== null) {
-				if (userContext.username !== null) {
-					saveGameResult(userContext.username, matchId, score);
+				if (userContext.loggedIn) {
+					saveGameResult(matchId, score);
 				} else {
-					console.error("Cannot save game result: username is null");
+					console.warn("Cannot save game result: user not logged in");
 				}
 			} else {
 				console.error("Cannot save game result: matchId is null");
