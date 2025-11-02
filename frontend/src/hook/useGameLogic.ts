@@ -41,8 +41,8 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			});
 	}, []);
 
-	const saveGameResult = async (username: string, matchId: number, roundEliminated: number) => {
-		const res = await Backend.POST("/save-game-result", {username, matchId, roundEliminated});
+	const saveGameResult = async (matchId: number, roundEliminated: number) => {
+		const res = await Backend.POST("/save-game-result", {matchId, roundEliminated});
 		if (res.ok) {
 			console.log("Game result saved successfully");
 		} else {
@@ -55,21 +55,25 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		const action = new ReactPart(id, value);
 		if (!game.current.checkPlayerInput(action)) {
 			setGameOngoing(false);
+		}
+	};
+
+	const moveSpeedInMs = Math.max(700 - score * 20, 400);
+
+	useEffect(() => {
+		if (!gameOngoing) {
 			console.log("Game over! Saving result...");
-			// TODO: consider updating each round instead of only at game over
 			if (matchId !== null) {
-				if (userContext.username !== null) {
-					saveGameResult(userContext.username, matchId, score);
+				if (userContext.loggedIn) {
+					saveGameResult(matchId, score);
 				} else {
-					console.error("Cannot save game result: username is null");
+					console.warn("Cannot save game result: user not logged in");
 				}
 			} else {
 				console.error("Cannot save game result: matchId is null");
 			}
 		}
-	};
-
-	const moveSpeedInMs = Math.max(700 - score * 20, 400);
+	}, [gameOngoing]);
 
 	return {
 		score,
