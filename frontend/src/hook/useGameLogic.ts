@@ -1,10 +1,9 @@
 import {useContext, useEffect, useRef, useState} from "react";
+import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
-import { AuthContext } from "../context/AuthContext";
-
-const serverUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+import {Backend} from "../util/Backend";
 
 export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode: GameMode}) {
 	const [score, setScore] = useState(0);
@@ -19,15 +18,8 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		const modeId = gameMode;
 		game.current = new Game();
 
-		fetch(`${serverUrl}/start-game`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			// Enum IDs are 1-based in the backend
-			body: JSON.stringify({modeId: modeId + 1, difficultyId: difficultyId + 1}),
-		})
-			.then(response => response.json())
+		// Enum IDs are 1-based in the backend
+		Backend.POSTPROMISE("/start-game", {modeId: modeId + 1, difficultyId: difficultyId + 1})
 			.then(data => {
 				if (!data.game || !data.match) {
 					console.error("No game object or match returned from backend");
@@ -50,15 +42,12 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	}, []);
 
 	const saveGameResult = async (matchId: number, roundEliminated: number) => {
-		const token = userContext.token;
-		await fetch(`${serverUrl}/save-game-result`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${token}`,
-			},
-			body: JSON.stringify({ matchId, roundEliminated }),
-		});
+		const res = await Backend.POST("/save-game-result", {matchId, roundEliminated});
+		if (res.ok) {
+			console.log("Game result saved successfully");
+		} else {
+			console.error("Error saving game result:", res.error);
+		}
 	};
 
 	const handleUserInput = (id: string, value: any) => {

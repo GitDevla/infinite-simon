@@ -2,18 +2,12 @@ import {useContext, useEffect, useState} from "react";
 import FloatingInput from "../component/FloatingInput";
 import Layout from "../component/Layout";
 import {AuthContext} from "../context/AuthContext";
+import {Backend} from "../util/Backend";
 
 async function fetchUserEmail(token: string): Promise<string> {
-	const res = await fetch(`${process.env.REACT_APP_SERVER_URL || "http://localhost:3001"}/api/me`, {
-		method: "GET",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": `Bearer ${token}`,
-		},
-	});
+	const res = await Backend.GET("/api/me");
 	if (!res.ok) throw new Error("Failed to fetch user email");
-	const data = await res.json();
+	const data = res.data;
 	console.log("Fetched user email:", data.email);
 	return data.email;
 }
@@ -61,7 +55,11 @@ export default function SettingsScreen() {
 							className="space-y-4">
 							<div className="flex items-center gap-4">
 								<div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600 flex-shrink-0">
-									<img src={form.profilePic || "https://placehold.co/100?text=Avatar"} alt="profile" className="w-full h-full object-cover" />
+									<img
+										src={form.profilePic || "https://placehold.co/100?text=Avatar"}
+										alt="profile"
+										className="w-full h-full object-cover"
+									/>
 								</div>
 								<div className="flex-1">
 									{/* TODO */}
