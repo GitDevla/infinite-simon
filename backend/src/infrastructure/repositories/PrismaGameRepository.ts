@@ -22,7 +22,7 @@ export class PrismaGameRepository implements IGameRepository {
 
     async createGameResult(data: GameResult): Promise<any> {
         const user = await this.prisma.user.findUnique({
-            where: { username: data.username },
+            where: { id: data.userId },
         });
 
         if (!user) {

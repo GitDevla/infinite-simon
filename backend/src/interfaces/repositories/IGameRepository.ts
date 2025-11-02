@@ -12,7 +12,7 @@ export interface Match {
 }
 
 export interface GameResult {
-    username: string;
+    userId: number;
     matchId: number;
     roundEliminated: number;
 }
