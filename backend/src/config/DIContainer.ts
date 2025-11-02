@@ -1,0 +1,87 @@
+import { PrismaClient } from "@prisma/client";
+
+// Infrastructure
+import { PrismaUserRepository } from "../infrastructure/repositories/PrismaUserRepository";
+import { PrismaGameRepository } from "../infrastructure/repositories/PrismaGameRepository";
+import { BcryptPasswordHasher } from "../infrastructure/security/BcryptPasswordHasher";
+import { JwtTokenGenerator } from "../infrastructure/security/JwtTokenGenerator";
+import { CredentialValidator } from "../infrastructure/validation/CredentialValidator";
+
+// Services
+import { AuthService } from "../application/services/AuthService";
+import { UserService } from "../application/services/UserService";
+import { GameService } from "../application/services/GameService";
+
+// Interfaces
+import { IUserRepository } from "../interfaces/repositories/IUserRepository";
+import { IGameRepository } from "../interfaces/repositories/IGameRepository";
+import { IPasswordHasher, ITokenGenerator, IValidator } from "../interfaces/services/IServices";
+import { IAuthService, IUserService } from "../interfaces/services/IUserService";
+import { IGameService } from "../interfaces/services/IGameService";
+
+export class DIContainer {
+    private readonly prisma: PrismaClient;
+    
+    // Repositories
+    private readonly userRepository: IUserRepository;
+    private readonly gameRepository: IGameRepository;
+    
+    // Infrastructure services
+    private readonly passwordHasher: IPasswordHasher;
+    private readonly tokenGenerator: ITokenGenerator;
+    private readonly validator: IValidator;
+    
+    // Application services
+    private readonly authService: IAuthService;
+    private readonly userService: IUserService;
+    private readonly gameService: IGameService;
+
+    constructor() {
+        // Infrastructure
+        this.prisma = new PrismaClient();
+        this.passwordHasher = new BcryptPasswordHasher();
+        this.tokenGenerator = new JwtTokenGenerator();
+        this.validator = new CredentialValidator();
+        
+        // Repositories
+        this.userRepository = new PrismaUserRepository(this.prisma);
+        this.gameRepository = new PrismaGameRepository(this.prisma);
+        
+        // Application Services
+        this.authService = new AuthService(
+            this.userRepository,
+            this.passwordHasher,
+            this.tokenGenerator,
+            this.validator
+        );
+        
+        this.userService = new UserService(
+            this.userRepository,
+            this.passwordHasher
+        );
+        
+        this.gameService = new GameService(this.gameRepository);
+    }
+
+    // Getters for accessing services
+    getAuthService(): IAuthService {
+        return this.authService;
+    }
+
+    getUserService(): IUserService {
+        return this.userService;
+    }
+
+    getGameService(): IGameService {
+        return this.gameService;
+    }
+
+    getTokenGenerator(): ITokenGenerator {
+        return this.tokenGenerator;
+    }
+
+    // Clean up resources
+    async disconnect(): Promise<void> {
+        await this.prisma.$disconnect();
+    }
+}

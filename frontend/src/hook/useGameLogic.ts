@@ -34,9 +34,9 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 					return;
 				}
 				setMatchId(data.match.id);
-				console.log("Game started with id:", data.game.id, "and seed:", data.game.seed, "and match id:", data.match.id);
+				console.log("Game started with id:", data.game.id, "and seed:", data.match.seed, "and match id:", data.match.id);
 				if (game.current === null) return;
-				game.current.startNewGame(data.game.seed, gameType);
+				game.current.startNewGame(data.match.seed, gameType);
 				game.current.onNewRound(() => {
 					if (game.current === null) return;
 					setScore(game.current.getCurrentRound() - 1);

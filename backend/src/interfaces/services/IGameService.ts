@@ -1,0 +1,6 @@
+import { Game, Match } from '../repositories/IGameRepository';
+
+export interface IGameService {
+    startNewGame(modeId: number, difficultyId: number): Promise<{ game: Game; match: Match }>;
+    saveGameResult(username: string, matchId: number, roundEliminated: number): Promise<void>;
+}
