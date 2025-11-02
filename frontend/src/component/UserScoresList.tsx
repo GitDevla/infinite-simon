@@ -10,8 +10,7 @@ import {
 	LABEL_TO_GAME_MODE,
 	LABEL_TO_GAME_TYPE,
 } from "../service/Game";
-
-const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+import {Backend} from "../util/Backend";
 
 export default function UserScoresList() {
 	const [scores, setScores] = useState<
@@ -39,13 +38,13 @@ export default function UserScoresList() {
 		queryParams.append("page", String(pagenationIDX.current));
 		queryParams.append("limit", "10");
 
-		const res = await fetch(`${backendUrl}/api/stats?${queryParams.toString()}`, {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${authContext.token}`,
-			},
-		});
-		const json = await res.json();
+		const resp = await Backend.GET("/api/stats", queryParams);
+		if (!resp.ok) {
+			alert(`Failed to fetch scores: ${resp.error}`);
+			return {scores: []};
+		}
+		const json = resp.data;
+
 		return {
 			scores: json.scores.map((score: any) => ({
 				diff: LABEL_TO_GAME_TYPE[score.difficulty],
