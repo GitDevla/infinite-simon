@@ -40,11 +40,11 @@ export default function ProfileScreen() {
 		});
 		const json = await res.json();
 		return {
-			total_games: json.total_games,
-			best_score: json.best_score,
-			average_score: json.average_score,
+			total_games: json.totalGames,
+			best_score: json.bestScore,
+			average_score: json.averageScore,
 			singleplayer_stats: {
-				totalGames: json.singleplayer_stats,
+				totalGames: json.singleplayerStats,
 			},
 			multiplayer_stats: multiplayer_stats_mock,
 		};
