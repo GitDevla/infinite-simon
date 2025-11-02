@@ -8,29 +8,33 @@ export class UserService implements IUserService {
         private readonly passwordHasher: IPasswordHasher
     ) {}
 
-    async updateLastLogin(username: string): Promise<void> {
-        await this.userRepository.updateLastLogin(username, new Date());
+    async updateLastLogin(userId: number): Promise<void> {
+        await this.userRepository.updateLastLogin(userId, new Date());
     }
 
-    async changePassword(username: string, newPassword: string): Promise<void> {
-        const user = await this.userRepository.findByUsername(username);
+    async changePassword(userId: number, newPassword: string): Promise<void> {
+        const user = await this.userRepository.getUserById(userId);
         if (!user) {
             throw new Error("User not found");
         }
 
         const passwordHash = await this.passwordHasher.hash(newPassword);
-        await this.userRepository.update(username, { password_hash: passwordHash });
+        await this.userRepository.update(userId, { password_hash: passwordHash });
     }
 
     async getUserByUsername(username: string): Promise<User | null> {
-        return this.userRepository.findByUsername(username);
+        return this.userRepository.getUserByUsername(username);
     }
 
-    async getUserStats(username: string): Promise<UserStats> {
-        const totalGames = await this.userRepository.getTotalGamesPlayed(username);
-        const bestScore = await this.userRepository.getBestScore(username);
-        const averageScore = await this.userRepository.getAverageScore(username);
-        const multiplayerGames = await this.userRepository.getMultiPlayerStats(username);
+    async getUserById(userId: number): Promise<User | null> {
+        return this.userRepository.getUserById(userId);
+    }
+
+    async getUserStats(userId: number): Promise<UserStats> {
+        const totalGames = await this.userRepository.getTotalGamesPlayed(userId);
+        const bestScore = await this.userRepository.getBestScore(userId);
+        const averageScore = await this.userRepository.getAverageScore(userId);
+        const multiplayerGames = await this.userRepository.getMultiPlayerStats(userId);
 
         return {
             totalGames,
@@ -40,15 +44,15 @@ export class UserService implements IUserService {
         };
     }
 
-    async getUserStatsExtended(username: string, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended> {
-        const totalGames = await this.userRepository.getTotalGamesPlayed(username);
-        const bestScore = await this.userRepository.getBestScore(username);
-        const averageScore = await this.userRepository.getAverageScore(username);
-        const multiplayerGames = await this.userRepository.getMultiPlayerStats(username);
-        const singleplayerStats = await this.userRepository.getSinglePlayerStats(username);
-        
+    async getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended> {
+        const totalGames = await this.userRepository.getTotalGamesPlayed(userId);
+        const bestScore = await this.userRepository.getBestScore(userId);
+        const averageScore = await this.userRepository.getAverageScore(userId);
+        const multiplayerGames = await this.userRepository.getMultiPlayerStats(userId);
+        const singleplayerStats = await this.userRepository.getSinglePlayerStats(userId);
+
         const fullScoresQuery: UserScoresQuery = {
-            username,
+            userId,
             mode: scoresQuery?.mode,
             diff: scoresQuery?.diff,
             limit: scoresQuery?.limit || 5,

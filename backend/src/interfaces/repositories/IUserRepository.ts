@@ -29,7 +29,7 @@ export interface UserScores {
 }
 
 export interface UserScoresQuery {
-    username: string;
+    userId: number;
     mode?: string;
     diff?: string;
     limit?: number;
@@ -38,17 +38,18 @@ export interface UserScoresQuery {
 }
 
 export interface IUserRepository {
-    findByUsername(username: string): Promise<User | null>;
+    getUserByUsername(username: string): Promise<User | null>;
+    getUserById(userId: number): Promise<User | null>;
     create(username: string, email: string, passwordHash: string, avatarUri?: string): Promise<User>;
-    update(username: string, data: Partial<User>): Promise<User>;
-    delete(username: string): Promise<void>;
-    updateLastLogin(username: string, date: Date): Promise<User>;
-    getUserScores(username: string): Promise<any[]>;
+    update(userId: number, data: Partial<User>): Promise<User>;
+    delete(userId: number): Promise<void>;
+    updateLastLogin(userId: number, date: Date): Promise<User>;
+    getUserScores(userId: number): Promise<any[]>;
     getUserScoresWithFilters(query: UserScoresQuery): Promise<UserScores[]>;
-    getUserPlacementInMatch(username: string, matchId: number): Promise<UserPlacement>;
-    getTotalGamesPlayed(username: string): Promise<number>;
-    getBestScore(username: string): Promise<number | null>;
-    getAverageScore(username: string): Promise<number | null>;
-    getMultiPlayerStats(username: string): Promise<number>;
-    getSinglePlayerStats(username: string): Promise<number>;
+    getUserPlacementInMatch(userId: number, matchId: number): Promise<UserPlacement>;
+    getTotalGamesPlayed(userId: number): Promise<number>;
+    getBestScore(userId: number): Promise<number | null>;
+    getAverageScore(userId: number): Promise<number | null>;
+    getMultiPlayerStats(userId: number): Promise<number>;
+    getSinglePlayerStats(userId: number): Promise<number>;
 }

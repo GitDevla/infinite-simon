@@ -19,7 +19,7 @@ async function testBackend() {
         // Test user service
         console.log("\nTesting user service...");
         const userService = container.getUserService();
-        const user = await userService.getUserByUsername("testuser");
+        const user = await userService.getUserById(1);
         console.log("User found:", user ? "Yes" : "No");
         
         // Test game service

@@ -16,6 +16,7 @@ export class JwtTokenGenerator implements ITokenGenerator {
     }
 
     verify(token: string): any {
+        console.log("Verifying token:", token);
         return jwt.verify(token, this.secret);
     }
 }

@@ -4,9 +4,15 @@ import { IUserRepository, User, UserPlacement, UserScores, UserScoresQuery } fro
 export class PrismaUserRepository implements IUserRepository {
     constructor(private readonly prisma: PrismaClient) {}
 
-    async findByUsername(username: string): Promise<User | null> {
+    async getUserByUsername(username: string): Promise<User | null> {
         return this.prisma.user.findUnique({
             where: { username },
+        });
+    }
+
+    async getUserById(userId: number): Promise<User | null> {
+        return this.prisma.user.findUnique({
+            where: { id: userId },
         });
     }
 
@@ -21,28 +27,28 @@ export class PrismaUserRepository implements IUserRepository {
         });
     }
 
-    async update(username: string, data: Partial<User>): Promise<User> {
+    async update(userId: number, data: Partial<User>): Promise<User> {
         return this.prisma.user.update({
-            where: { username },
+            where: { id: userId },
             data,
         });
     }
 
-    async delete(username: string): Promise<void> {
+    async delete(userId: number): Promise<void> {
         await this.prisma.user.delete({
-            where: { username },
+            where: { id: userId },
         });
     }
 
-    async updateLastLogin(username: string, date: Date): Promise<User> {
+    async updateLastLogin(userId: number, date: Date): Promise<User> {
         return this.prisma.user.update({
-            where: { username },
+            where: { id: userId },
             data: { last_login: date },
         });
     }
 
-    async getUserScores(username: string): Promise<any[]> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getUserScores(userId: number): Promise<any[]> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         return this.prisma.participant.findMany({
@@ -51,8 +57,8 @@ export class PrismaUserRepository implements IUserRepository {
         });
     }
 
-    async getUserPlacementInMatch(username: string, matchId: number): Promise<UserPlacement> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getUserPlacementInMatch(userId: number, matchId: number): Promise<UserPlacement> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         const participants = await this.prisma.participant.findMany({
@@ -64,8 +70,8 @@ export class PrismaUserRepository implements IUserRepository {
         return { placement, total: participants.length };
     }
 
-    async getTotalGamesPlayed(username: string): Promise<number> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getTotalGamesPlayed(userId: number): Promise<number> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         return this.prisma.participant.count({
@@ -73,8 +79,8 @@ export class PrismaUserRepository implements IUserRepository {
         });
     }
 
-    async getBestScore(username: string): Promise<number | null> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getBestScore(userId: number): Promise<number | null> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         const bestParticipant = await this.prisma.participant.findFirst({
@@ -85,8 +91,8 @@ export class PrismaUserRepository implements IUserRepository {
         return bestParticipant ? bestParticipant.round_eliminated : null;
     }
 
-    async getAverageScore(username: string): Promise<number | null> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getAverageScore(userId: number): Promise<number | null> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         const participants = await this.prisma.participant.findMany({
@@ -99,8 +105,8 @@ export class PrismaUserRepository implements IUserRepository {
         return totalScore / participants.length;
     }
 
-    async getMultiPlayerStats(username: string): Promise<number> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getMultiPlayerStats(userId: number): Promise<number> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
         
         return this.prisma.participant.count({
@@ -116,9 +122,9 @@ export class PrismaUserRepository implements IUserRepository {
     }
 
     async getUserScoresWithFilters(query: UserScoresQuery): Promise<UserScores[]> {
-        const { username, mode, diff, limit = 5, page = 1, orderBy = "achieved_at" } = query;
-        
-        const user = await this.prisma.user.findUnique({ where: { username } });
+        const { userId, mode, diff, limit = 5, page = 1, orderBy = "achieved_at" } = query;
+
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
 
         // Build filter
@@ -185,11 +191,11 @@ export class PrismaUserRepository implements IUserRepository {
         return scores;
     }
 
-    async getSinglePlayerStats(username: string): Promise<number> {
-        const user = await this.prisma.user.findUnique({ where: { username } });
+    async getSinglePlayerStats(userId: number): Promise<number> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw new Error("User not found");
-        
-        const totalGames = await this.getTotalGamesPlayed(username);
+
+        const totalGames = await this.getTotalGamesPlayed(userId);
         return totalGames;
     }
 }

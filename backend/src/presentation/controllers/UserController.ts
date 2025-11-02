@@ -6,15 +6,15 @@ export class UserController {
 
     async getMe(req: Request, res: Response): Promise<void> {
         try {
-            const username = (req as any).username;
-            
-            if (!username) {
+            const userId = (req as any).userId;
+
+            if (!userId) {
                 res.status(401).json({ error: "Authentication required" });
                 return;
             }
 
-            const user = await this.userService.getUserByUsername(username);
-            
+            const user = await this.userService.getUserById(userId);
+
             if (!user) {
                 res.status(404).json({ error: "User not found" });
                 return;
@@ -30,9 +30,9 @@ export class UserController {
 
     async getStats(req: Request, res: Response): Promise<void> {
         try {
-            const username = (req as any).username;
-            
-            if (!username) {
+            const userId = (req as any).userId;
+
+            if (!userId) {
                 res.status(401).json({ error: "Authentication required" });
                 return;
             }
@@ -48,8 +48,8 @@ export class UserController {
                 orderBy: typeof orderBy === "string" ? orderBy : "achieved_at"
             };
 
-            const stats = await this.userService.getUserStatsExtended(username, scoresQuery);
-            
+            const stats = await this.userService.getUserStatsExtended(userId, scoresQuery);
+
             res.json(stats);
         } catch (error) {
             console.error("getStats error:", error);

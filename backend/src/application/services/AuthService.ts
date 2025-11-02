@@ -12,18 +12,20 @@ export class AuthService implements IAuthService {
 
     async login(username: string, password: string): Promise<{ success: boolean; token?: string; error?: string }> {
         try {
-            const user = await this.userRepository.findByUsername(username);
+            const user = await this.userRepository.getUserByUsername(username);
             if (!user) {
+                console.log("User not found");
                 return { success: false, error: "Invalid credentials" };
             }
 
             const passwordMatch = await this.passwordHasher.compare(password, user.password_hash);
             if (!passwordMatch) {
+                console.log("Invalid password");
                 return { success: false, error: "Invalid credentials" };
             }
 
-            await this.userRepository.updateLastLogin(username, new Date());
-            const token = this.tokenGenerator.generate({ username });
+            await this.userRepository.updateLastLogin(user.id, new Date());
+            const token = this.tokenGenerator.generate({ userId: user.id });
 
             return { success: true, token };
         } catch (error) {
@@ -38,7 +40,7 @@ export class AuthService implements IAuthService {
                 return { success: false, error: validationResult.errorMessage };
             }
 
-            const existingUser = await this.userRepository.findByUsername(username);
+            const existingUser = await this.userRepository.getUserByUsername(username);
             if (existingUser) {
                 return { success: false, error: "Username already exists" };
             }
