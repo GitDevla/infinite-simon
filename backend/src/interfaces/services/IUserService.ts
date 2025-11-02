@@ -13,6 +13,7 @@ export interface UserStatsExtended extends UserStats {
 export interface IUserService {
     updateLastLogin(userId: number): Promise<void>;
     changePassword(userId: number, newPassword: string): Promise<void>;
+    getUserByUsername(username: string): Promise<User | null>;
     getUserById(userId: number): Promise<User | null>;
     getUserStats(userId: number): Promise<UserStats>;
     getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended>;
