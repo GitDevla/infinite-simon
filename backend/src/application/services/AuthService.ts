@@ -14,13 +14,13 @@ export class AuthService implements IAuthService {
         try {
             const user = await this.userRepository.getUserByUsername(username);
             if (!user) {
-                console.log("User not found");
+                console.log("Invalid credentials");
                 return { success: false, error: "Invalid credentials" };
             }
 
             const passwordMatch = await this.passwordHasher.compare(password, user.password_hash);
             if (!passwordMatch) {
-                console.log("Invalid password");
+                console.log("Invalid credentials");
                 return { success: false, error: "Invalid credentials" };
             }
 
