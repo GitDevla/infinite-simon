@@ -1,28 +1,36 @@
 import cors from "cors";
 import express from "express";
-import { loginController, registerController } from "./controller/auth.controller";
-import { startNewGameController, saveGameResultController } from "./controller/game.controller";
-import { getMe, mystats } from "./controller/me.controller";
-import { authMiddleware } from "./middleware/auth.middleware";
+import { DIContainer } from "./config/DIContainer";
+import { RouteFactory } from "./presentation/routes/RouteFactory";
 
 const app = express();
 const PORT = 3001;
 
-app.use(cors(
-	{
-		origin: "http://localhost:3000",
-		credentials: true,
-	}
-));
+// Initialize dependency injection container
+const container = new DIContainer();
+
+// Middleware
+app.use(cors({
+	origin: "http://localhost:3000",
+	credentials: true,
+}));
 app.use(express.json());
 
-app.post("/login", loginController);
-app.post("/register", registerController);
-app.post("/start-game", startNewGameController);
-app.post("/save-game-result", authMiddleware, saveGameResultController);
+// Routes
+app.use(RouteFactory.createRoutes(container));
 
-app.get("/api/me", authMiddleware, getMe);
-app.get("/api/stats", authMiddleware, mystats);
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+	console.log('SIGTERM received. Shutting down gracefully...');
+	await container.disconnect();
+	process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+	console.log('SIGINT received. Shutting down gracefully...');
+	await container.disconnect();
+	process.exit(0);
+});
 
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT} (Development)`);
