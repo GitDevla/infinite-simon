@@ -1,9 +1,8 @@
-import clsx from "clsx";
 import {useNavigate} from "react-router-dom";
 
 /**
- * A modal component that appears at the end of the game, allowing the player to enter their name and save their score.
- * @param score - The player's score to be saved. Default is 0.
+  * A modal component that appears at the end of the game, displaying the final score and providing navigation options to retry or return home.
+ * @param score - The player's final score to display. Default is 0.
  */
 export default function GameEndModal({score = 0}: {score?: number}) {
 	const navigate = useNavigate();
