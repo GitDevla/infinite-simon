@@ -170,13 +170,17 @@ export class PrismaUserRepository implements IUserRepository {
             }
         });
 
+        const matchIds = participants.map(p => p.matchId);
+        const allMatchParticipants = await this.prisma.participant.findMany({
+            where: {
+                matchId: { in: matchIds }
+            },
+            orderBy: { round_eliminated: "desc" }
+        });
+
         // Calculate placement
-        const scores = await Promise.all(participants.map(async p => {
-            // Get all participants
-            const matchParticipants = await this.prisma.participant.findMany({
-                where: { matchId: p.matchId },
-                orderBy: { round_eliminated: "desc" }
-            });
+        const scores = participants.map(p => {
+            const matchParticipants = allMatchParticipants.filter(mp => mp.matchId === p.matchId);
             const placement = matchParticipants.findIndex(mp => mp.userId === user.id) + 1;
 
             return {
@@ -186,7 +190,7 @@ export class PrismaUserRepository implements IUserRepository {
                 date: p.achieved_at.toISOString().split("T")[0],
                 placement: matchParticipants.length > 1 ? placement : undefined
             };
-        }));
+        });
 
         return scores;
     }

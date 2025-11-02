@@ -30,26 +30,14 @@ export class UserService implements IUserService {
         return this.userRepository.getUserById(userId);
     }
 
-    async getUserStats(userId: number): Promise<UserStats> {
-        const totalGames = await this.userRepository.getTotalGamesPlayed(userId);
-        const bestScore = await this.userRepository.getBestScore(userId);
-        const averageScore = await this.userRepository.getAverageScore(userId);
-        const multiplayerGames = await this.userRepository.getMultiPlayerStats(userId);
-
-        return {
-            totalGames,
-            bestScore,
-            averageScore,
-            multiplayerGames,
-        };
-    }
-
     async getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended> {
-        const totalGames = await this.userRepository.getTotalGamesPlayed(userId);
-        const bestScore = await this.userRepository.getBestScore(userId);
-        const averageScore = await this.userRepository.getAverageScore(userId);
-        const multiplayerGames = await this.userRepository.getMultiPlayerStats(userId);
-        const singleplayerStats = await this.userRepository.getSinglePlayerStats(userId);
+        const [totalGames, bestScore, averageScore, multiplayerGames, singleplayerStats] = await Promise.all([
+            this.userRepository.getTotalGamesPlayed(userId),
+            this.userRepository.getBestScore(userId),
+            this.userRepository.getAverageScore(userId),
+            this.userRepository.getMultiPlayerStats(userId),
+            this.userRepository.getSinglePlayerStats(userId)
+        ]);
 
         const fullScoresQuery: UserScoresQuery = {
             userId,

@@ -15,6 +15,5 @@ export interface IUserService {
     changePassword(userId: number, newPassword: string): Promise<void>;
     getUserByUsername(username: string): Promise<User | null>;
     getUserById(userId: number): Promise<User | null>;
-    getUserStats(userId: number): Promise<UserStats>;
     getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended>;
 }
