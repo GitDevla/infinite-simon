@@ -66,8 +66,14 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		const action = new ReactPart(id, value);
 		if (!game.current.checkPlayerInput(action)) {
 			setGameOngoing(false);
+		}
+	};
+
+	const moveSpeedInMs = Math.max(700 - score * 20, 400);
+
+	useEffect(() => {
+		if (!gameOngoing) {
 			console.log("Game over! Saving result...");
-			// TODO: consider updating each round instead of only at game over
 			if (matchId !== null) {
 				if (userContext.username !== null) {
 					saveGameResult(userContext.username, matchId, score);
@@ -78,9 +84,7 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 				console.error("Cannot save game result: matchId is null");
 			}
 		}
-	};
-
-	const moveSpeedInMs = Math.max(700 - score * 20, 400);
+	}, [gameOngoing]);
 
 	return {
 		score,
