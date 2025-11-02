@@ -1,5 +1,5 @@
 import { IUserService, UserStatsExtended } from "../../interfaces/services/IUserService";
-import { IUserRepository, User, UserStats, UserScoresQuery } from "../../interfaces/repositories/IUserRepository";
+import { IUserRepository, User, UserScoresQuery } from "../../interfaces/repositories/IUserRepository";
 import { IPasswordHasher } from "../../interfaces/services/IServices";
 
 export class UserService implements IUserService {

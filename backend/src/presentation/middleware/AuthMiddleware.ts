@@ -33,6 +33,7 @@ export class AuthMiddleware {
         } catch (error) {
             console.log("Auth error:", error);
             res.status(401).json({ error: "Invalid token" });
+            return;
         }
     };
 }

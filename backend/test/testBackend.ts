@@ -19,13 +19,16 @@ async function testBackend() {
         // Test user service
         console.log("\nTesting user service...");
         const userService = container.getUserService();
-        const user = await userService.getUserById(1);
-        console.log("User found:", user ? "Yes" : "No");
-        
+        const user = await userService.getUserByUsername("testuser");
+        if (!user) {
+            throw new Error("User not found after registration");
+        }
+        console.log("User found:", user);
+
         // Test game service
         console.log("\nTesting game service...");
         const gameService = container.getGameService();
-        const gameResult = await gameService.startNewGame(1, 1);
+        const gameResult = await gameService.startNewGame(user.id, 1);
         console.log("Game started:", gameResult);
         
         console.log("\nAll tests passed! The backend is working correctly.");

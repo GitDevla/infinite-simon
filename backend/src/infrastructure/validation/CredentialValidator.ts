@@ -12,7 +12,7 @@ export class CredentialValidator implements IValidator {
         }
 
         if (password.length < 8 || !specials.test(password) || !uppers.test(password) || !lowers.test(password) || !numbers.test(password)) {
-            var message = "Password must";
+            let message = "Password must";
             if (password.length < 8) {
                 message += " be at least 8 characters long,";
             }
