@@ -16,6 +16,9 @@ export class RouteFactory {
         
         // Initialize middleware
         const authMiddleware = new AuthMiddleware(container.getTokenGenerator());
+
+        // CDN and static files
+        router.use("/public", Router().use(static_("public")));
         
         // Auth routes
         router.post("/login", (req, res) => authController.login(req, res));
