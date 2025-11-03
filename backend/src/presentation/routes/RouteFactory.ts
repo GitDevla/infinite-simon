@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router,static as static_ } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { GameController } from "../controllers/GameController";
 import { UserController } from "../controllers/UserController";
@@ -31,6 +31,7 @@ export class RouteFactory {
         // User routes
         router.get("/api/me", authMiddleware.authenticate, (req, res) => userController.getMe(req, res));
         router.get("/api/stats", authMiddleware.authenticate, (req, res) => userController.getStats(req, res));
+        router.put("/api/me", authMiddleware.authenticate, (req, res) => userController.updateProfile(req, res));
         
         return router;
     }

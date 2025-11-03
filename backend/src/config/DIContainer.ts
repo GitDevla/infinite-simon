@@ -18,6 +18,8 @@ import { IGameRepository } from "../interfaces/repositories/IGameRepository";
 import { IPasswordHasher, ITokenGenerator, IValidator } from "../interfaces/services/IServices";
 import { IAuthService, IUserService } from "../interfaces/services/IUserService";
 import { IGameService } from "../interfaces/services/IGameService";
+import { ProfilePictureRepository } from "../infrastructure/repositories/ProfilePictureRepository";
+import { IImageRepository } from "../interfaces/repositories/IImageRepository";
 
 export class DIContainer {
     private readonly prisma: PrismaClient;
@@ -25,6 +27,7 @@ export class DIContainer {
     // Repositories
     private readonly userRepository: IUserRepository;
     private readonly gameRepository: IGameRepository;
+    private readonly imageRepository: IImageRepository;
     
     // Infrastructure services
     private readonly passwordHasher: IPasswordHasher;
@@ -46,6 +49,7 @@ export class DIContainer {
         // Repositories
         this.userRepository = new PrismaUserRepository(this.prisma);
         this.gameRepository = new PrismaGameRepository(this.prisma);
+        this.imageRepository = new ProfilePictureRepository("public/profile_pictures");
         
         // Application Services
         this.authService = new AuthService(
@@ -57,7 +61,8 @@ export class DIContainer {
         
         this.userService = new UserService(
             this.userRepository,
-            this.passwordHasher
+            this.passwordHasher,
+            this.imageRepository
         );
         
         this.gameService = new GameService(this.gameRepository);
@@ -78,6 +83,10 @@ export class DIContainer {
 
     getTokenGenerator(): ITokenGenerator {
         return this.tokenGenerator;
+    }
+
+    getFileRepository(): IImageRepository {
+        return this.imageRepository;
     }
 
     // Clean up resources
