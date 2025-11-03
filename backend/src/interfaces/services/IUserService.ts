@@ -10,10 +10,18 @@ export interface UserStatsExtended extends UserStats {
     scores: UserScores[];
 }
 
+export interface UserProfileUpdate {
+    username?: string;
+    email?: string;
+    password?: string;
+    profilePicture?: string;
+}
+
 export interface IUserService {
     updateLastLogin(userId: number): Promise<void>;
     changePassword(userId: number, newPassword: string): Promise<void>;
     getUserByUsername(username: string): Promise<User | null>;
     getUserById(userId: number): Promise<User | null>;
     getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended>;
+    updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User>;
 }
