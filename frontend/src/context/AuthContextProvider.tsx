@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Backend} from "../util/Backend";
+import {Backend, backendUrl} from "../util/Backend";
 import {AuthContext} from "./AuthContext";
 
 export default function AuthContextProvider({children}: {children: React.ReactNode}) {
@@ -15,8 +15,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		if (response.ok) {
 			const data = response.data;
 			setLoggedIn(true);
-			setUsername(username);
-			setUseravatar("https://placehold.co/100"); //todo
+			updateUserProfile();
 			setToken(data.token);
 			localStorage.setItem("username", username);
 		} else {
@@ -43,14 +42,23 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		return true;
 	};
 
-	useEffect(() => {
+	const updateUserProfile = async () => {
+		const serverData = await Backend.GET("/api/me");
+		if (!serverData.ok) {
+			console.error("Failed to fetch user profile data");
+			return;
+		}
+		const data = serverData.data;
+		setUsername(data.username);
+		setUseravatar(`${backendUrl}/${data.avatar_uri}` || "https://placehold.co/100");
+	};
+
+	useEffect(() =>  {
 		const storedToken = localStorage.getItem("token");
-		const storedUsername = localStorage.getItem("username");
-		if (storedToken && storedUsername) {
+		if (storedToken) {
 			setToken(storedToken);
-			setUsername(storedUsername);
+			updateUserProfile();
 			setLoggedIn(true);
-			setUseravatar("https://placehold.co/100"); //todo
 			setLoading(false);
 		}
 		return () => {

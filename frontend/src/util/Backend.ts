@@ -1,4 +1,4 @@
-const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+export const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 type BackendResponseOkResponse<T = any> = {
 	ok: true;
