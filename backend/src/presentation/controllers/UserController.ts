@@ -92,8 +92,9 @@ export class UserController {
                 res.status(404).json({ error: "User not found" });
                 return;
             }
-
-            res.status(200).json(updatedUser);
+            
+            const { password_hash, ...userWithoutPassword } = updatedUser;
+            res.json(userWithoutPassword);
         } catch (error) {
             console.error("updateProfile error:", error);
             res.status(500).json({ error: "Internal server error" });
