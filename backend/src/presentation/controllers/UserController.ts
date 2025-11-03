@@ -56,4 +56,47 @@ export class UserController {
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async updateProfile(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = (req as any).userId;
+
+            if (!userId) {
+                res.status(401).json({ error: "Authentication required" });
+                return;
+            }
+
+            const { username = null, email = null, profilePicture = null, password = null } = req.body ?? {};
+
+            // Validate input
+            if (username && typeof username !== "string") {
+                res.status(400).json({ error: "Invalid username" });
+                return;
+            }
+            if (email && typeof email !== "string") {
+                res.status(400).json({ error: "Invalid email" });
+                return;
+            }
+            if (profilePicture && typeof profilePicture !== "string") {
+                res.status(400).json({ error: "Invalid profile picture URL" });
+                return;
+            }
+            if (password && typeof password !== "string") {
+                res.status(400).json({ error: "Invalid password" });
+                return;
+            }
+
+            const updatedUser = await this.userService.updateUserProfile(userId, { username, email,profilePicture,password });
+
+            if (!updatedUser) {
+                res.status(404).json({ error: "User not found" });
+                return;
+            }
+
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            console.error("updateProfile error:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
