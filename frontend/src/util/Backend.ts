@@ -63,6 +63,29 @@ export class Backend {
 		};
 	}
 
+	static async PUT<T = any>(path: string, body: any): Promise<BackendResponse<T>> {
+		const token = localStorage.getItem("token") || "";
+		const res = await fetch(`${backendUrl}${path}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(body),
+		});
+		const json = await res.json();
+		if (!res.ok) {
+			return {
+				ok: false,
+				error: json.error || json.errorMessage,
+			};
+		}
+		return {
+			ok: true,
+			data: json,
+		};
+	}
+
 	static async GETPROMISE<T = any>(path: string, queryParams?: URLSearchParams | Record<string, string>): Promise<T> {
 		const res = await Backend.GET(path, queryParams);
 		if (!res.ok) {
