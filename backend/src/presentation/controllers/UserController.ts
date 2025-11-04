@@ -66,7 +66,7 @@ export class UserController {
                 return;
             }
 
-            const { username = null, email = null, profilePicture = null, password = null, currentPassword=null } = req.body ?? {};
+            const { username = null, email = null, profilePicture = null, password = null, currentPassword = null } = req.body ?? {};
 
             // Validate input
             if (username && typeof username !== "string") {
@@ -90,7 +90,7 @@ export class UserController {
                 return;
             }
 
-            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password,currentPassword });
+            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password, currentPassword });
 
             if (!updatedUser) {
                 res.status(404).json({ error: "User not found" });

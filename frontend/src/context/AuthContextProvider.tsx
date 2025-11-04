@@ -82,7 +82,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading,updateUserProfile}}>
+		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading, updateUserProfile}}>
 			{children}
 		</AuthContext.Provider>
 	);

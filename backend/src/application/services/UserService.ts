@@ -64,7 +64,7 @@ export class UserService implements IUserService {
     }
 
     async updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User> {
-        if (this.userRepository.getUserById(userId) === null) {
+        if ((await this.userRepository.getUserById(userId)) === null) {
             throw new Error("User not found");
         }
 
@@ -106,7 +106,7 @@ export class UserService implements IUserService {
             if (!currentPasswordHash) {
                 throw new Error("User not found");
             }
-            
+
             const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
             if (!isCurrentPasswordValid) {
                 throw new Error("Current password is incorrect");
