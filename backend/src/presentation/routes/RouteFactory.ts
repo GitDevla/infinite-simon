@@ -10,12 +10,26 @@ export class RouteFactory {
     static createRoutes(container: DIContainer): Router {
         const router = Router();
 
-        // Rate limiting
+        // General rate limiting
         const limiter = rateLimit({
             windowMs: 60 * 1000, // 1 minute
             max: 120, // 120 requests
+            standardHeaders: true,
+            message: "Too many requests from this IP, please try again later.",
+            legacyHeaders: false,
         });
         router.use(limiter);
+
+        // Auth rate limiting
+        const authLimiter = rateLimit({
+            windowMs: 60 * 1000, // 1 minute
+            max: 10, // 10 requests
+            standardHeaders: true,
+            message: "Too many requests from this IP, please try again later.",
+            legacyHeaders: false,
+        });
+        router.use("/login", authLimiter);
+        router.use("/register", authLimiter);
 
         // Initialize controllers
         const authController = new AuthController(container.getAuthService());
