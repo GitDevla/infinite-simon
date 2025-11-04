@@ -66,7 +66,7 @@ export class UserController {
                 return;
             }
 
-            const { username = null, email = null, profilePicture = null, password = null } = req.body ?? {};
+            const { username = null, email = null, profilePicture = null, password = null, currentPassword=null } = req.body ?? {};
 
             // Validate input
             if (username && typeof username !== "string") {
@@ -82,11 +82,15 @@ export class UserController {
                 return;
             }
             if (password && typeof password !== "string") {
+                if (!currentPassword || typeof currentPassword !== "string") {
+                    res.status(400).json({ error: "Current password required to set a new password" });
+                    return;
+                }
                 res.status(400).json({ error: "Invalid password" });
                 return;
             }
 
-            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password });
+            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password,currentPassword });
 
             if (!updatedUser) {
                 res.status(404).json({ error: "User not found" });

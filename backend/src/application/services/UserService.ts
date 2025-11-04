@@ -63,6 +63,10 @@ export class UserService implements IUserService {
     }
 
     async updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User> {
+        if (this.userRepository.getUserById(userId) === null) {
+            throw new Error("User not found");
+        }
+
         const updateData: Partial<User> = {};
 
         if (updates.username) {
@@ -84,6 +88,15 @@ export class UserService implements IUserService {
             updateData.avatar_uri = profilePictureUri;
         }
         if (updates.password) {
+            const currentPasswordHash = await this.userRepository.getUserById(userId).then(user => user?.password_hash);
+            if (!currentPasswordHash) {
+                throw new Error("User not found");
+            }
+            const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
+            if (!isCurrentPasswordValid) {
+                throw new Error("Current password is incorrect");
+            }
+            
             await this.changePassword(userId, updates.password);
         }
 

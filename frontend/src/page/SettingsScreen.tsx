@@ -47,6 +47,7 @@ export default function SettingsScreen() {
 			email?: string;
 			profilePicture?: string;
 			password?: string;
+			currentPassword?: string;
 		} = {};
 		if (form.username) updates.username = form.username;
 		if (form.email) updates.email = form.email;
@@ -58,6 +59,7 @@ export default function SettingsScreen() {
 				alert("New password and confirmation do not match");
 				return;
 			}
+			updates.currentPassword = form.currentPassword;
 			updates.password = form.newPassword;
 		}
 

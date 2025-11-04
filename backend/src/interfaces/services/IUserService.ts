@@ -14,6 +14,7 @@ export interface UserProfileUpdate {
     username?: string;
     email?: string;
     password?: string;
+    currentPassword?: string;
     profilePicture?: string;
 }
 
