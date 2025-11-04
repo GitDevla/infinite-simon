@@ -1,13 +1,14 @@
 import { IUserService, UserProfileUpdate, UserStatsExtended } from "../../interfaces/services/IUserService";
 import { IUserRepository, User, UserScoresQuery } from "../../interfaces/repositories/IUserRepository";
-import { IPasswordHasher } from "../../interfaces/services/IServices";
+import { IPasswordHasher, IValidator } from "../../interfaces/services/IServices";
 import { IImageRepository } from "../../interfaces/repositories/IImageRepository";
 
 export class UserService implements IUserService {
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly passwordHasher: IPasswordHasher,
-        private readonly profilePictureRepository: IImageRepository
+        private readonly profilePictureRepository: IImageRepository,
+        private readonly credentialValidator: IValidator
     ) {}
 
     async updateLastLogin(userId: number): Promise<void> {
@@ -70,9 +71,17 @@ export class UserService implements IUserService {
         const updateData: Partial<User> = {};
 
         if (updates.username) {
+            let res = this.credentialValidator.validateUsername(updates.username);
+            if (!res.isValid) {
+                throw new Error(res.errorMessage);
+            }
             updateData.username = updates.username;
         }
         if (updates.email) {
+            let res = this.credentialValidator.validateEmail(updates.email);
+            if (!res.isValid) {
+                throw new Error(res.errorMessage);
+            }
             updateData.email = updates.email;
         }
         if (updates.profilePicture) {
@@ -88,10 +97,16 @@ export class UserService implements IUserService {
             updateData.avatar_uri = profilePictureUri;
         }
         if (updates.password) {
+            let res = this.credentialValidator.validatePassword(updates.password);
+            if (!res.isValid) {
+                throw new Error(res.errorMessage);
+            }
+
             const currentPasswordHash = await this.userRepository.getUserById(userId).then(user => user?.password_hash);
             if (!currentPasswordHash) {
                 throw new Error("User not found");
             }
+            
             const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
             if (!isCurrentPasswordValid) {
                 throw new Error("Current password is incorrect");

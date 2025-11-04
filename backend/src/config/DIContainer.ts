@@ -62,7 +62,8 @@ export class DIContainer {
         this.userService = new UserService(
             this.userRepository,
             this.passwordHasher,
-            this.imageRepository
+            this.imageRepository,
+            this.validator
         );
         
         this.gameService = new GameService(this.gameRepository);
