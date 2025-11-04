@@ -50,10 +50,10 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		}
 		const data = serverData.data;
 		setUsername(data.username);
-		setUseravatar(`${backendUrl}/${data.avatar_uri}` || "https://placehold.co/100");
+		setUseravatar(data.avatar_uri ? `${backendUrl}/${data.avatar_uri}` : "https://placehold.co/100");
 	};
 
-	useEffect(() =>  {
+	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
 		if (storedToken) {
 			setToken(storedToken);

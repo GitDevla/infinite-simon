@@ -1,4 +1,4 @@
-import { Router,static as static_ } from "express";
+import { Router, static as static_ } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { GameController } from "../controllers/GameController";
 import { UserController } from "../controllers/UserController";

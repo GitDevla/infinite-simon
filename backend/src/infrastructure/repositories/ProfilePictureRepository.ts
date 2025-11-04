@@ -33,7 +33,7 @@ export class ProfilePictureRepository implements IImageRepository {
             await fs.mkdir(this.defaultPath, { recursive: true });
         }
 
-        const sharpResult = await sharp(buffer).resize(256,256)
+        await sharp(buffer).resize(256, 256)
                 .webp()
                 .toFile(fullPath);
 

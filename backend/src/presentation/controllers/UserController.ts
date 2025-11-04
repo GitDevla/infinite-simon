@@ -78,7 +78,7 @@ export class UserController {
                 return;
             }
             if (profilePicture && typeof profilePicture !== "string") {
-                res.status(400).json({ error: "Invalid profile picture URL" });
+                res.status(400).json({ error: "Invalid profile picture data" });
                 return;
             }
             if (password && typeof password !== "string") {
@@ -86,7 +86,7 @@ export class UserController {
                 return;
             }
 
-            const updatedUser = await this.userService.updateUserProfile(userId, { username, email,profilePicture,password });
+            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password });
 
             if (!updatedUser) {
                 res.status(404).json({ error: "User not found" });

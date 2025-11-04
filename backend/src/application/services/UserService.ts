@@ -74,17 +74,17 @@ export class UserService implements IUserService {
         if (updates.profilePicture) {
             const previousUser = await this.userRepository.getUserById(userId);
             if (previousUser?.avatar_uri) {
-                await this.profilePictureRepository?.delete(previousUser.avatar_uri);
+                await this.profilePictureRepository.delete(previousUser.avatar_uri);
             }
         
-            const profilePictureUri = await this.profilePictureRepository?.save(
+            const profilePictureUri = await this.profilePictureRepository.save(
                 updates.profilePicture,
                 `user_${userId}_profile_picture`,
             );
             updateData.avatar_uri = profilePictureUri;
         }
         if (updates.password) {
-            this.changePassword(userId, updates.password);
+            await this.changePassword(userId, updates.password);
         }
 
         return this.userRepository.update(userId, updateData);
