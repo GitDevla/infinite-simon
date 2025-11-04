@@ -64,6 +64,7 @@ export default function SettingsScreen() {
 		const res = await Backend.PUT("/api/me", updates);
 		if (res.ok) {
 			setMessage("Profile updated successfully");
+			userContext.updateUserProfile();
 		} else {
 			alert(`Failed to update profile: ${res.error}`);
 		}

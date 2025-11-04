@@ -8,6 +8,7 @@ export const AuthContext = createContext<{
 	loading: boolean;
 	login: (username: string, password: string) => Promise<boolean>;
 	register: (username: string, email: string, password: string) => Promise<boolean>;
+	updateUserProfile: () => Promise<void>;
 	logout: () => void;
 }>({
 	loggedIn: false,
@@ -17,5 +18,6 @@ export const AuthContext = createContext<{
 	loading: true,
 	login: async (username: string, password: string) => false,
 	register: async (username: string, email: string, password: string) => false,
+	updateUserProfile: async () => {},
 	logout: () => {},
 });
