@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 import { ProfilePictureRepository } from "../infrastructure/repositories/ProfilePictureRepository";
 import { PrismaUserRepository } from "../infrastructure/repositories/PrismaUserRepository";
 import { PrismaGameRepository } from "../infrastructure/repositories/PrismaGameRepository";
-import { IImageRepository } from "../interfaces/repositories/IImageRepository";
 import { BcryptPasswordHasher } from "../infrastructure/security/BcryptPasswordHasher";
 import { JwtTokenGenerator } from "../infrastructure/security/JwtTokenGenerator";
 import { CredentialValidator } from "../infrastructure/validation/CredentialValidator";
@@ -17,6 +16,7 @@ import { GameService } from "../application/services/GameService";
 // Interfaces
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IGameRepository } from "../interfaces/repositories/IGameRepository";
+import { IImageRepository } from "../interfaces/repositories/IImageRepository";
 import { IPasswordHasher, ITokenGenerator, IValidator } from "../interfaces/services/IServices";
 import { IAuthService, IUserService } from "../interfaces/services/IUserService";
 import { IGameService } from "../interfaces/services/IGameService";
