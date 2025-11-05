@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, static as static_ } from "express";
 import { rateLimit } from "express-rate-limit";
 import { AuthController } from "../controllers/AuthController";
 import { GameController } from "../controllers/GameController";
@@ -9,6 +9,10 @@ import { DIContainer } from "../../config/DIContainer";
 export class RouteFactory {
     static createRoutes(container: DIContainer): Router {
         const router = Router();
+
+        // CDN and static files, without rate limiting
+        router.use("/public", Router().use(static_("public")));
+
         const RATE_LIMIT_MESSAGE = "Too many requests from this IP, please try again later.";
 
         // General rate limiting
@@ -51,6 +55,7 @@ export class RouteFactory {
         // User routes
         router.get("/api/me", authMiddleware.authenticate, (req, res) => userController.getMe(req, res));
         router.get("/api/stats", authMiddleware.authenticate, (req, res) => userController.getStats(req, res));
+        router.put("/api/me", authMiddleware.authenticate, (req, res) => userController.updateProfile(req, res));
         
         return router;
     }

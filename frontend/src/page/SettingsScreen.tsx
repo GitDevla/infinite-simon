@@ -4,7 +4,7 @@ import Layout from "../component/Layout";
 import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 
-async function fetchUserEmail(token: string): Promise<string> {
+async function fetchUserEmail(): Promise<string> {
 	const res = await Backend.GET("/api/me");
 	if (!res.ok) throw new Error("Failed to fetch user email");
 	const data = res.data;
@@ -26,8 +26,8 @@ export default function SettingsScreen() {
 	const [message, setMessage] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (loggedIn && userContext.token) {
-			fetchUserEmail(userContext.token).then(email => {
+		if (loggedIn) {
+			fetchUserEmail().then(email => {
 				setForm({
 					username: userContext.username || "",
 					email: email,
@@ -38,7 +38,39 @@ export default function SettingsScreen() {
 				});
 			});
 		}
-	}, [loggedIn, userContext.username, userContext.useravatar, userContext.token]);
+	}, [loggedIn, userContext.username, userContext.useravatar]);
+
+	const onSendChanges = async (e: React.FormEvent) => {
+		e.preventDefault();
+		const updates: {
+			username?: string;
+			email?: string;
+			profilePicture?: string;
+			password?: string;
+			currentPassword?: string;
+		} = {};
+		if (form.username) updates.username = form.username;
+		if (form.email) updates.email = form.email;
+		if (form.profilePic && form.profilePic !== userContext.useravatar) {
+			updates.profilePicture = form.profilePic;
+		}
+		if (form.newPassword) {
+			if (form.newPassword !== form.confirmPassword) {
+				alert("New password and confirmation do not match");
+				return;
+			}
+			updates.currentPassword = form.currentPassword;
+			updates.password = form.newPassword;
+		}
+
+		const res = await Backend.PUT("/api/me", updates);
+		if (res.ok) {
+			setMessage("Profile updated successfully");
+			userContext.updateUserProfile();
+		} else {
+			alert(`Failed to update profile: ${res.error}`);
+		}
+	}
 
 	return (
 		<Layout header="Settings">
@@ -47,11 +79,7 @@ export default function SettingsScreen() {
 					<section className="bg-bg-secondary bg-opacity-80 border border-gray-700 rounded-xl p-6">
 						<h3 className="text-lg font-semibold mb-4">User Settings</h3>
 						<form
-							onSubmit={e => {
-								e.preventDefault();
-								alert("This is a mock. In a real app, changes would be saved.");
-								setMessage("Changes saved (mock).");
-							}}
+							onSubmit={onSendChanges}
 							className="space-y-4">
 							<div className="flex items-center gap-4">
 								<div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600 flex-shrink-0">

@@ -1,4 +1,4 @@
-const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+export const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 type BackendResponseOkResponse<T = any> = {
 	ok: true;
@@ -44,6 +44,29 @@ export class Backend {
 		const token = localStorage.getItem("token") || "";
 		const res = await fetch(`${backendUrl}${path}`, {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(body),
+		});
+		const json = await res.json();
+		if (!res.ok) {
+			return {
+				ok: false,
+				error: json.error || json.errorMessage,
+			};
+		}
+		return {
+			ok: true,
+			data: json,
+		};
+	}
+
+	static async PUT<T = any>(path: string, body: any): Promise<BackendResponse<T>> {
+		const token = localStorage.getItem("token") || "";
+		const res = await fetch(`${backendUrl}${path}`, {
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,

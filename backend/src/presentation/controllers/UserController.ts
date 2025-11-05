@@ -56,4 +56,52 @@ export class UserController {
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async updateProfile(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = (req as any).userId;
+
+            if (!userId) {
+                res.status(401).json({ error: "Authentication required" });
+                return;
+            }
+
+            const { username = null, email = null, profilePicture = null, password = null, currentPassword = null } = req.body ?? {};
+
+            // Validate input
+            if (username && typeof username !== "string") {
+                res.status(400).json({ error: "Invalid username" });
+                return;
+            }
+            if (email && typeof email !== "string") {
+                res.status(400).json({ error: "Invalid email" });
+                return;
+            }
+            if (profilePicture && typeof profilePicture !== "string") {
+                res.status(400).json({ error: "Invalid profile picture data" });
+                return;
+            }
+            if (password && typeof password !== "string") {
+                if (!currentPassword || typeof currentPassword !== "string") {
+                    res.status(400).json({ error: "Current password required to set a new password" });
+                    return;
+                }
+                res.status(400).json({ error: "Invalid password" });
+                return;
+            }
+
+            const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password, currentPassword });
+
+            if (!updatedUser) {
+                res.status(404).json({ error: "User not found" });
+                return;
+            }
+            
+            const { password_hash, ...userWithoutPassword } = updatedUser;
+            res.json(userWithoutPassword);
+        } catch (error) {
+            console.error("updateProfile error:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }

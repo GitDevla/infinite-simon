@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
-import {Backend} from "../util/Backend";
+import {Backend, backendUrl} from "../util/Backend";
 import {AuthContext} from "./AuthContext";
 
 export default function AuthContextProvider({children}: {children: React.ReactNode}) {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [username, setUsername] = useState<string | null>(null);
 	const [useravatar, setUseravatar] = useState<string | null>(null);
-	const [token, setToken] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	const login = async (username: string, password: string) => {
@@ -15,9 +14,8 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		if (response.ok) {
 			const data = response.data;
 			setLoggedIn(true);
-			setUsername(username);
-			setUseravatar("https://placehold.co/100"); //todo
-			setToken(data.token);
+			saveToken(data.token)
+			await updateUserProfile();
 			localStorage.setItem("username", username);
 		} else {
 			const error = response.error;
@@ -43,14 +41,22 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		return true;
 	};
 
+	const updateUserProfile = async () => {
+		const serverData = await Backend.GET("/api/me");
+		if (!serverData.ok) {
+			console.error("Failed to fetch user profile data");
+			return;
+		}
+		const data = serverData.data;
+		setUsername(data.username);
+		setUseravatar(data.avatar_uri ? `${backendUrl}/${data.avatar_uri}` : "https://placehold.co/100");
+	};
+
 	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
-		const storedUsername = localStorage.getItem("username");
-		if (storedToken && storedUsername) {
-			setToken(storedToken);
-			setUsername(storedUsername);
+		if (storedToken) {
+			updateUserProfile();
 			setLoggedIn(true);
-			setUseravatar("https://placehold.co/100"); //todo
 			setLoading(false);
 		}
 		return () => {
@@ -58,23 +64,22 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		};
 	}, []);
 
-	useEffect(() => {
-		if (loading) return;
-		if (token === null) {
+	const saveToken = (newToken: string | null) => {
+		if (newToken === null) {
 			localStorage.removeItem("token");
 		} else {
-			localStorage.setItem("token", token);
+			localStorage.setItem("token", newToken);
 		}
-	}, [token]);
+	}
 
 	const logout = () => {
 		setLoggedIn(false);
 		setUsername(null);
-		setToken(null);
+		saveToken(null);
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading}}>
+		<AuthContext.Provider value={{loggedIn, username, login, logout, useravatar, register, loading, updateUserProfile}}>
 			{children}
 		</AuthContext.Provider>
 	);
