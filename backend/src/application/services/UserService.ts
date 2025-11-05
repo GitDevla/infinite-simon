@@ -64,7 +64,8 @@ export class UserService implements IUserService {
     }
 
     async updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User> {
-        if ((await this.userRepository.getUserById(userId)) === null) {
+        const user = await this.userRepository.getUserById(userId);
+        if (user === null) {
             throw new Error("User not found");
         }
 
@@ -85,9 +86,8 @@ export class UserService implements IUserService {
             updateData.email = updates.email;
         }
         if (updates.profilePicture) {
-            const previousUser = await this.userRepository.getUserById(userId);
-            if (previousUser?.avatar_uri) {
-                await this.profilePictureRepository.delete(previousUser.avatar_uri);
+            if (user.avatar_uri) {
+                await this.profilePictureRepository.delete(user.avatar_uri);
             }
         
             const profilePictureUri = await this.profilePictureRepository.save(
@@ -102,10 +102,7 @@ export class UserService implements IUserService {
                 throw new Error(res.errorMessage);
             }
 
-            const currentPasswordHash = await this.userRepository.getUserById(userId).then(user => user?.password_hash);
-            if (!currentPasswordHash) {
-                throw new Error("User not found");
-            }
+            const currentPasswordHash = user.password_hash;
 
             const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
             if (!isCurrentPasswordValid) {
