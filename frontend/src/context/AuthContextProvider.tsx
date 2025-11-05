@@ -6,7 +6,6 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [username, setUsername] = useState<string | null>(null);
 	const [useravatar, setUseravatar] = useState<string | null>(null);
-	const [token, setToken] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	const login = async (username: string, password: string) => {
@@ -15,8 +14,8 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		if (response.ok) {
 			const data = response.data;
 			setLoggedIn(true);
+			saveToken(data.token)
 			updateUserProfile();
-			setToken(data.token);
 			localStorage.setItem("username", username);
 		} else {
 			const error = response.error;
@@ -56,7 +55,6 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
 		if (storedToken) {
-			setToken(storedToken);
 			updateUserProfile();
 			setLoggedIn(true);
 			setLoading(false);
@@ -66,23 +64,22 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		};
 	}, []);
 
-	useEffect(() => {
-		if (loading) return;
-		if (token === null) {
+	const saveToken = (newToken: string | null) => {
+		if (newToken === null) {
 			localStorage.removeItem("token");
 		} else {
-			localStorage.setItem("token", token);
+			localStorage.setItem("token", newToken);
 		}
-	}, [token]);
+	}
 
 	const logout = () => {
 		setLoggedIn(false);
 		setUsername(null);
-		setToken(null);
+		saveToken(null);
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading, updateUserProfile}}>
+		<AuthContext.Provider value={{loggedIn, username, login, logout, useravatar, register, loading, updateUserProfile}}>
 			{children}
 		</AuthContext.Provider>
 	);

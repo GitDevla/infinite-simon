@@ -4,7 +4,7 @@ import Layout from "../component/Layout";
 import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 
-async function fetchUserEmail(token: string): Promise<string> {
+async function fetchUserEmail(): Promise<string> {
 	const res = await Backend.GET("/api/me");
 	if (!res.ok) throw new Error("Failed to fetch user email");
 	const data = res.data;
@@ -26,8 +26,8 @@ export default function SettingsScreen() {
 	const [message, setMessage] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (loggedIn && userContext.token) {
-			fetchUserEmail(userContext.token).then(email => {
+		if (loggedIn) {
+			fetchUserEmail().then(email => {
 				setForm({
 					username: userContext.username || "",
 					email: email,
@@ -38,7 +38,7 @@ export default function SettingsScreen() {
 				});
 			});
 		}
-	}, [loggedIn, userContext.username, userContext.useravatar, userContext.token]);
+	}, [loggedIn, userContext.username, userContext.useravatar]);
 
 	const onSendChanges = async (e: React.FormEvent) => {
 		e.preventDefault();
