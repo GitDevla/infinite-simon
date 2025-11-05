@@ -11,8 +11,8 @@ export default function Header() {
 	const navigator = useNavigate();
 
 	return (
-		<header className="w-full p-4 grid grid-cols-2 absolute top-0 left-0">
-			<div className="flex justify-start">
+		<header className="w-full p-4 absolute top-0 left-0 flex justify-between pointer-events-none [&>*]:pointer-events-auto z-10">
+			<div className="flex w-fit">
 				{loggedIn && <UserPill />}
 				{!loggedIn && (
 					<button
@@ -23,7 +23,7 @@ export default function Header() {
 					</button>
 				)}
 			</div>
-			<div className="flex justify-end">
+			<div className="flex w-fit">
 				<Link to="/settings" title="Settings">
 					<SettingsSvgIcon className="w-8 h-8 !aspect-square hover:rotate-180 transition-transform" />
 				</Link>
