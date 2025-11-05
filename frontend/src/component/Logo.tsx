@@ -12,7 +12,7 @@ export default function Logo({size = "small"}: {size?: "small" | "large"}) {
 	return (
 		<div
 			className={clsx(
-				"font-bold select-none text-center",
+				"font-bold select-none text-center w-fit",
 				size === "small" ? "text-2xl" : "text-4xl font-extrabold",
 				size === "large" && "cursor-pointer",
 			)}
