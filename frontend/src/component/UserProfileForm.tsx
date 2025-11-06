@@ -3,14 +3,6 @@ import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 import FloatingInput from "./Atom/FloatingInput";
 
-async function fetchUserEmail(): Promise<string> {
-	const res = await Backend.getUserProfile();
-	if (!res.ok) throw new Error("Failed to fetch user email");
-	const data = res.data;
-	console.log("Fetched user email:", data.email);
-	return data.email;
-}
-
 export default function UserProfileForm() {
 	const userContext = useContext(AuthContext);
 	const [form, setForm] = useState({
@@ -24,17 +16,15 @@ export default function UserProfileForm() {
 	const [message, setMessage] = useState<string | null>(null);
 
 	useEffect(() => {
-		fetchUserEmail().then(email => {
-			setForm({
-				username: userContext.username || "",
-				email: email,
-				profilePic: userContext.useravatar || "",
-				currentPassword: "",
-				newPassword: "",
-				confirmPassword: "",
-			});
+		setForm({
+			username: userContext.user?.username || "",
+			email: userContext.user?.email || "",
+			profilePic: userContext.user?.avatar_uri || "",
+			currentPassword: "",
+			newPassword: "",
+			confirmPassword: "",
 		});
-	}, [userContext.username, userContext.useravatar]);
+	}, [userContext.user]);
 
 	const onSendChanges = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -47,7 +37,7 @@ export default function UserProfileForm() {
 		} = {};
 		if (form.username) updates.username = form.username;
 		if (form.email) updates.email = form.email;
-		if (form.profilePic && form.profilePic !== userContext.useravatar) {
+		if (form.profilePic && form.profilePic !== userContext.user?.avatar_uri) {
 			updates.profilePicture = form.profilePic;
 		}
 		if (form.newPassword) {

@@ -8,8 +8,8 @@ import {Backend} from "../util/Backend";
 export default function ProfileScreen() {
 	const authContext = useContext(AuthContext);
 
-	const username = authContext.username;
-	const userAvatar = authContext.useravatar;
+	const username = authContext.user?.username;
+	const userAvatar = authContext.user?.avatar_uri;
 
 	const [userStats, setUserStats] = useState<{
 		totalGames: number;
@@ -82,13 +82,7 @@ export default function ProfileScreen() {
 		<Layout header="Profile">
 			<div className="max-w-[500px] mx-auto">
 				<div className="flex flex-col items-center">
-					{userAvatar ? (
-						<img src={userAvatar} alt="User Avatar" className="w-32 h-32 rounded-full mb-4" />
-					) : (
-						<div className="w-32 h-32 rounded-full mb-4 bg-gray-700 flex items-center justify-center text-xl text-gray-300">
-							{username?.[0] ?? "U"}
-						</div>
-					)}
+					<img src={userAvatar} alt="User Avatar" className="w-32 h-32 rounded-full mb-4" />
 					<h3 className="text-xl font-medium">{username}</h3>
 					<div className="mt-6 w-full">
 						{userStats && (

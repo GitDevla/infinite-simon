@@ -4,8 +4,8 @@ import {AuthContext} from "../../context/AuthContext";
 
 export default function UserPill() {
 	const userContext = useContext(AuthContext);
-	const displayName = userContext.username || "Uh oh";
-	const userImg = userContext.useravatar || "https://placehold.co/100";
+	const displayName = userContext.user?.username || "Uh oh";
+	const userImg = userContext.user?.avatar_uri;
 	const logout = userContext.logout;
 	return (
 		<div className="flex items-center gap-3 hover:cursor-pointer group relative">

@@ -14,7 +14,7 @@ type BackendResponseErrorResponse = {
 
 type BackendResponse<T = any> = BackendResponseOkResponse<T> | BackendResponseErrorResponse;
 
-interface UserProfile {
+export interface UserProfile {
 	id: number;
 	username: string;
 	email: string;

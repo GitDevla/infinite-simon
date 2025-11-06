@@ -1,11 +1,10 @@
 import {useEffect, useState} from "react";
-import {Backend} from "../util/Backend";
+import {Backend, type UserProfile} from "../util/Backend";
 import {AuthContext} from "./AuthContext";
 
 export default function AuthContextProvider({children}: {children: React.ReactNode}) {
 	const [loggedIn, setLoggedIn] = useState(false);
-	const [username, setUsername] = useState<string | null>(null);
-	const [useravatar, setUseravatar] = useState<string | null>(null);
+	const [user, setUser] = useState<UserProfile | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	const login = async (username: string, password: string) => {
@@ -47,8 +46,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 			return;
 		}
 		const data = serverData.data;
-		setUsername(data.username);
-		setUseravatar(data.avatar_uri ? data.avatar_uri : "https://placehold.co/100");
+		setUser(data);
 	};
 
 	useEffect(() => {
@@ -73,13 +71,12 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 
 	const logout = () => {
 		setLoggedIn(false);
-		setUsername(null);
+		setUser(null);
 		saveToken(null);
 	};
 
 	return (
-		<AuthContext.Provider
-			value={{loggedIn, username, login, logout, useravatar, register, loading, updateUserProfile}}>
+		<AuthContext.Provider value={{loggedIn, user, login, logout, register, loading, updateUserProfile}}>
 			{children}
 		</AuthContext.Provider>
 	);
