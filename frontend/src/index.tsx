@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom/client";
 import "./style/index.css";
 import {HashRouter, Route, Routes} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 import AuthContextProvider from "./context/AuthContextProvider";
 import App from "./page/App";
 import AuthScreen from "./page/AuthScreen";
 import GameScreen from "./page/GameScreen";
 import ProfileScreen from "./page/ProfileScreen";
 import SettingsScreen from "./page/SettingsScreen";
-import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -23,10 +23,6 @@ root.render(
 				</Routes>
 			</HashRouter>
 		</div>
+		<ToastContainer position="bottom-right" theme="dark" />
 	</AuthContextProvider>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,4 +1,5 @@
 import {useContext, useEffect, useId, useRef, useState} from "react";
+import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
 import {
 	GAME_MODE_LABELS,
@@ -40,7 +41,7 @@ export default function UserScoresList() {
 
 		const resp = await Backend.getUserStats(params);
 		if (!resp.ok) {
-			alert(`Failed to fetch scores: ${resp.error}`);
+			toast.error(`Failed to fetch scores: ${resp.error}`);
 			return {scores: []};
 		}
 		const json = resp.data;

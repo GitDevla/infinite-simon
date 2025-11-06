@@ -141,7 +141,7 @@ export class Backend {
 		if (!res.ok) {
 			return res;
 		}
-		res.data.avatar_uri = `${backendUrl}/${res.data.avatar_uri}`;
+		res.data.avatar_uri = res.data.avatar_uri ? `${backendUrl}/${res.data.avatar_uri}` : "https://placehold.co/100";
 		return res;
 	}
 

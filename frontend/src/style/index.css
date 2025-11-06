@@ -1,7 +1,9 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind directives **/
+/** biome-ignore-all lint/correctness/noInvalidPositionAtImportRule: <explanation> */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./toast.css";
 
 :root {
 	--bg: linear-gradient(135deg, #1e1e2e 0%, #2a2a40 50%, #1a1a2e 100%);

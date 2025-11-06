@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {toast} from "react-toastify";
 import {Backend, type UserProfile} from "../util/Backend";
 import {AuthContext} from "./AuthContext";
 
@@ -19,7 +20,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		} else {
 			const error = response.error;
 			const errorMessage = error || "Login failed";
-			alert(errorMessage);
+			toast.error(errorMessage);
 		}
 		setLoading(false);
 		return response.ok;
@@ -29,11 +30,11 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		const response = await Backend.register(username, email, password);
 
 		if (response.ok) {
-			alert("Registration successful. Please log in.");
+			toast.success("Registration successful. Please log in.");
 		} else {
 			const error = response.error;
 			const errorMessage = error || "Registration failed";
-			alert(errorMessage);
+			toast.error(errorMessage);
 			return false;
 		}
 		return true;

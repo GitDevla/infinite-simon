@@ -1,4 +1,5 @@
 import {useContext, useEffect, useRef, useState} from "react";
+import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
@@ -51,7 +52,7 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	const saveGameResult = async (matchId: number, roundEliminated: number) => {
 		const res = await Backend.saveGameResult(matchId, roundEliminated);
 		if (res.ok) {
-			console.log("Game result saved successfully");
+			toast.success("Game result saved successfully");
 		} else {
 			console.error("Error saving game result:", res.error);
 		}

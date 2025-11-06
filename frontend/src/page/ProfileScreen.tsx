@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 import Layout from "../component/Layout/Layout";
 import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
@@ -32,7 +33,7 @@ export default function ProfileScreen() {
 		};
 		const json = await Backend.getUserStats({});
 		if (!json.ok) {
-			alert(`Failed to fetch user stats: ${json.error}`);
+			toast.error(`Failed to fetch user stats: ${json.error}`);
 			return {
 				total_games: 0,
 				best_score: null,

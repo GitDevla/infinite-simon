@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from "react";
+import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 import FloatingInput from "./Atom/FloatingInput";
@@ -13,7 +14,6 @@ export default function UserProfileForm() {
 		newPassword: "",
 		confirmPassword: "",
 	});
-	const [message, setMessage] = useState<string | null>(null);
 
 	useEffect(() => {
 		setForm({
@@ -42,7 +42,7 @@ export default function UserProfileForm() {
 		}
 		if (form.newPassword) {
 			if (form.newPassword !== form.confirmPassword) {
-				alert("New password and confirmation do not match");
+				toast.error("New password and confirmation do not match");
 				return;
 			}
 			updates.currentPassword = form.currentPassword;
@@ -51,10 +51,10 @@ export default function UserProfileForm() {
 
 		const res = await Backend.updateUserProfile(updates);
 		if (res.ok) {
-			setMessage("Profile updated successfully");
+			toast.success("Profile updated successfully");
 			userContext.updateUserProfile();
 		} else {
-			alert(`Failed to update profile: ${res.error}`);
+			toast.error(`Failed to update profile: ${res.error}`);
 		}
 	};
 	return (
@@ -149,7 +149,6 @@ export default function UserProfileForm() {
 						className="bg-simon-blue text-white px-4 py-2 rounded-lg shadow-sm hover:opacity-95">
 						Save Changes
 					</button>
-					{message && <p className="text-sm text-emerald-400 ml-2">{message}</p>}
 				</div>
 			</form>
 		</section>
