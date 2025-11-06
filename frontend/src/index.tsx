@@ -6,7 +6,6 @@ import App from "./page/App";
 import AuthScreen from "./page/AuthScreen";
 import GameScreen from "./page/GameScreen";
 import ProfileScreen from "./page/ProfileScreen";
-import ScoreBoard from "./page/ScoreBoard";
 import SettingsScreen from "./page/SettingsScreen";
 import reportWebVitals from "./reportWebVitals";
 
@@ -18,7 +17,6 @@ root.render(
 				<Routes>
 					<Route path="/" element={<App />} />
 					<Route path="/game" element={<GameScreen />} />
-					<Route path="/score" element={<ScoreBoard />} />
 					<Route path="/auth" element={<AuthScreen />} />
 					<Route path="/profile" element={<ProfileScreen />} />
 					<Route path="/settings" element={<SettingsScreen />} />
