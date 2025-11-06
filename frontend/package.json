@@ -21,11 +21,11 @@
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts start",
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d build",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"build": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts build",
+		"test": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts test",
 		"eject": "react-scripts eject",
 		"lint": "biome lint .",
 		"format": "biome format . --write",
@@ -50,6 +50,7 @@
 		]
 	},
 	"devDependencies": {
+		"cross-env": "^10.1.0",
 		"gh-pages": "^6.3.0",
 		"tailwindcss": "^3.4.18"
 	}
