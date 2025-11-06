@@ -30,7 +30,7 @@ export default function ProfileScreen() {
 			wins: 10,
 			averatePlacement: 2.3,
 		};
-		const json = await Backend.GET("/api/stats");
+		const json = await Backend.getUserStats({});
 		if (!json.ok) {
 			alert(`Failed to fetch user stats: ${json.error}`);
 			return {

@@ -5,7 +5,7 @@ import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 
 async function fetchUserEmail(): Promise<string> {
-	const res = await Backend.GET("/api/me");
+	const res = await Backend.getUserProfile();
 	if (!res.ok) throw new Error("Failed to fetch user email");
 	const data = res.data;
 	console.log("Fetched user email:", data.email);
@@ -63,14 +63,14 @@ export default function SettingsScreen() {
 			updates.password = form.newPassword;
 		}
 
-		const res = await Backend.PUT("/api/me", updates);
+		const res = await Backend.updateUserProfile(updates);
 		if (res.ok) {
 			setMessage("Profile updated successfully");
 			userContext.updateUserProfile();
 		} else {
 			alert(`Failed to update profile: ${res.error}`);
 		}
-	}
+	};
 
 	return (
 		<Layout header="Settings">
@@ -78,9 +78,7 @@ export default function SettingsScreen() {
 				{loggedIn && (
 					<section className="bg-bg-secondary bg-opacity-80 border border-gray-700 rounded-xl p-6">
 						<h3 className="text-lg font-semibold mb-4">User Settings</h3>
-						<form
-							onSubmit={onSendChanges}
-							className="space-y-4">
+						<form onSubmit={onSendChanges} className="space-y-4">
 							<div className="flex items-center gap-4">
 								<div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600 flex-shrink-0">
 									<img

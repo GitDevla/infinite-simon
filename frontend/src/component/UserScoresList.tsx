@@ -28,17 +28,17 @@ export default function UserScoresList() {
 	const sentinelRef = useRef<HTMLDivElement | null>(null);
 
 	const fetchUserData = async () => {
-		const queryParams = new URLSearchParams();
+		const params: {mode?: string; diff?: string; page?: number; limit?: number} = {};
 		if (modeFilter !== "all") {
-			queryParams.append("mode", GAME_MODE_LABELS[modeFilter]);
+			params.mode = GAME_MODE_LABELS[modeFilter];
 		}
 		if (typeFilter !== "all") {
-			queryParams.append("diff", GAME_TYPE_LABELS[typeFilter]);
+			params.diff = GAME_TYPE_LABELS[typeFilter];
 		}
-		queryParams.append("page", String(pagenationIDX.current));
-		queryParams.append("limit", "10");
+		params.page = pagenationIDX.current;
+		params.limit = 10;
 
-		const resp = await Backend.GET("/api/stats", queryParams);
+		const resp = await Backend.getUserStats(params);
 		if (!resp.ok) {
 			alert(`Failed to fetch scores: ${resp.error}`);
 			return {scores: []};
@@ -46,7 +46,7 @@ export default function UserScoresList() {
 		const json = resp.data;
 
 		return {
-			scores: json.scores.map((score: any) => ({
+			scores: json.scores.map(score => ({
 				diff: LABEL_TO_GAME_TYPE[score.difficulty],
 				mode: LABEL_TO_GAME_MODE[score.mode],
 				score: score.score,
