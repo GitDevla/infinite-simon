@@ -1,5 +1,5 @@
+import Logo from "../Atom/Logo";
 import Header from "./Header";
-import Logo from "./Logo";
 
 export default function Layout({
 	children,

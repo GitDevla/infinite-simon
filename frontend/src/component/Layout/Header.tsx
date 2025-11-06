@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {ReactComponent as SettingsSvgIcon} from "../asset/settings.svg";
-import {AuthContext} from "../context/AuthContext";
+import {ReactComponent as SettingsSvgIcon} from "../../asset/settings.svg";
+import {AuthContext} from "../../context/AuthContext";
 import UserPill from "./UserPill";
 
 export default function Header() {

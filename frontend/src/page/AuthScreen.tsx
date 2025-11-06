@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import FloatingInput from "../component/FloatingInput";
-import Layout from "../component/Layout";
+import FloatingInput from "../component/Atom/FloatingInput";
+import Layout from "../component/Layout/Layout";
 import {AuthContext} from "../context/AuthContext";
 
 export default function AuthScreen() {

@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
-import FloatingInput from "../component/FloatingInput";
-import Layout from "../component/Layout";
+import FloatingInput from "../component/Atom/FloatingInput";
+import Layout from "../component/Layout/Layout";
 import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
 

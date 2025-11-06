@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {Link} from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
-import {GameMode, type GameType} from "../service/Game";
+import {AuthContext} from "../../context/AuthContext";
+import {GameMode, type GameType} from "../../service/Game";
 
 export default function NavCard({
 	lvlId,

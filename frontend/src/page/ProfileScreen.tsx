@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import Layout from "../component/Layout";
+import Layout from "../component/Layout/Layout";
 import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
 import {Backend} from "../util/Backend";
