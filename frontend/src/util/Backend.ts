@@ -23,13 +23,18 @@ export interface UserProfile {
 	last_login: string;
 }
 
-interface UserStats {
+export interface UserStats {
 	totalGames: number;
 	bestScore: number;
 	averageScore: number;
 	multiplayerGames: number;
 	singleplayerStats: number;
 	scores: Score[];
+	multiplayerStats: {
+		totalGames: number;
+		wins: number;
+		averatePlacement: number | null;
+	};
 }
 
 interface Score {
@@ -165,6 +170,13 @@ export class Backend {
 		if (!res.ok) {
 			return res;
 		}
+		// TODO, replace mock data when backend is ready
+		const multiplayer_stats_mock = {
+			totalGames: 0,
+			wins: 0,
+			averatePlacement: null,
+		};
+		res.data.multiplayerStats = multiplayer_stats_mock;
 		return res;
 	}
 

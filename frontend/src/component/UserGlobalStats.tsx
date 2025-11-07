@@ -1,62 +1,23 @@
-import {use, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
-import {Backend} from "../util/Backend";
+import {Backend, type UserStats} from "../util/Backend";
 
 export default function UserGlobalStats() {
 	const authContext = useContext(AuthContext);
 
-	const [userStats, setUserStats] = useState<{
-		totalGames: number;
-		bestScore: number | null;
-		averageScore: number | null;
-		singlePlayerGames: number;
-		multiplayerGames: number;
-		multiplayerWins: number;
-		multiplayerAveragePlacement: number | null;
-	}>({
-		totalGames: 0,
-		bestScore: null,
-		averageScore: null,
-		singlePlayerGames: 0,
-		multiplayerGames: 0,
-		multiplayerWins: 0,
-		multiplayerAveragePlacement: null,
-	});
+	const [userStats, setUserStats] = useState<UserStats | null>(null);
 
 	const navigate = useNavigate();
 
 	const fetchUserData = async () => {
-		// TODO, replace mock data when backend is ready
-		const multiplayer_stats_mock = {
-			totalGames: 18,
-			wins: 10,
-			averatePlacement: 2.3,
-		};
 		const json = await Backend.getUserStats({});
 		if (!json.ok) {
 			toast.error(`Failed to fetch user stats: ${json.error}`);
-			return {
-				total_games: 0,
-				best_score: null,
-				average_score: null,
-				singleplayer_stats: {
-					totalGames: 0,
-				},
-				multiplayer_stats: multiplayer_stats_mock,
-			};
+			return null;
 		}
-		const data = json.data;
-		return {
-			total_games: data.totalGames,
-			best_score: data.bestScore,
-			average_score: data.averageScore,
-			singleplayer_stats: {
-				totalGames: data.singleplayerStats,
-			},
-			multiplayer_stats: multiplayer_stats_mock,
-		};
+		return json.data;
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: no need
@@ -70,15 +31,7 @@ export default function UserGlobalStats() {
 
 	const updateUserData = async () => {
 		fetchUserData().then(fetched => {
-			setUserStats({
-				totalGames: fetched.total_games,
-				bestScore: fetched.best_score,
-				averageScore: fetched.average_score,
-				singlePlayerGames: fetched.singleplayer_stats?.totalGames ?? 0,
-				multiplayerGames: fetched.multiplayer_stats?.totalGames ?? 0,
-				multiplayerWins: fetched.multiplayer_stats?.wins ?? 0,
-				multiplayerAveragePlacement: fetched.multiplayer_stats?.averatePlacement ?? null,
-			});
+			setUserStats(fetched);
 		});
 	};
 
@@ -90,18 +43,18 @@ export default function UserGlobalStats() {
 					<div>
 						<span className="text-xs text-gray-400">Best Score</span>
 						<br />
-						<span className="text-xl font-bold">{userStats.bestScore ?? "N/A"}</span>
+						<span className="text-xl font-bold">{userStats?.bestScore ?? "N/A"}</span>
 					</div>
 					<div>
 						<span className="text-xs text-gray-400">Total Games</span>
 						<br />
-						<span className="text-xl font-bold">{userStats.totalGames}</span>
+						<span className="text-xl font-bold">{userStats?.totalGames}</span>
 					</div>
 					<div>
 						<span className="text-xs text-gray-400">Average Score</span>
 						<br />
 						<span className="text-xl font-bold">
-							{userStats.averageScore ? userStats.averageScore.toFixed(1) : "N/A"}
+							{userStats?.averageScore ? userStats?.averageScore.toFixed(1) : "N/A"}
 						</span>
 					</div>
 				</div>
@@ -110,24 +63,24 @@ export default function UserGlobalStats() {
 				<h3 className="text-lg font-bold mb-2 text-center">Single Player</h3>
 				<div className="flex justify-between">
 					<span className="text-xs text-gray-400">Games Played</span>
-					<span className="text-xl font-bold">{userStats.singlePlayerGames}</span>
+					<span className="text-xl font-bold">{userStats?.singleplayerStats}</span>
 				</div>
 			</div>
 			<div className="border border-gray-600 p-4 w-full justify-between bg-bg-secondary rounded-xl bg-opacity-80">
 				<h3 className="text-lg font-bold mb-2 text-center">Multiplayer</h3>
 				<div className="flex justify-between">
 					<span className="text-xs text-gray-400">Games Played</span>
-					<span className="text-xl font-bold">{userStats.multiplayerGames}</span>
+					<span className="text-xl font-bold">{userStats?.multiplayerStats.totalGames}</span>
 				</div>
 				<div className="flex justify-between">
 					<span className="text-xs text-gray-400">Wins</span>
-					<span className="text-xl font-bold">{userStats.multiplayerWins}</span>
+					<span className="text-xl font-bold">{userStats?.multiplayerStats.wins}</span>
 				</div>
 				<div className="flex justify-between">
 					<span className="text-xs text-gray-400">Avg. Placement</span>
 					<span className="text-xl font-bold">
-						{userStats.multiplayerAveragePlacement
-							? userStats.multiplayerAveragePlacement.toFixed(1)
+						{userStats?.multiplayerStats.averatePlacement
+							? userStats.multiplayerStats.averatePlacement.toFixed(1)
 							: "N/A"}
 					</span>
 				</div>
