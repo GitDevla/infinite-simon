@@ -1,15 +1,9 @@
 import {useContext, useEffect, useId, useRef, useState} from "react";
 import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
-import {
-	GAME_MODE_LABELS,
-	GAME_TYPE_LABELS,
-	GameMode,
-	GameType,
-	gameModeToString,
-	gameTypeToString,
-} from "../service/Game";
+import {GAME_MODE_LABELS, GAME_TYPE_LABELS, GameMode, GameType} from "../service/Game";
 import {Backend, type Score} from "../util/Backend";
+import ExecuteWhenOnScreen from "./Atom/ExecuteWhenOnScreen";
 
 export default function UserScoresList() {
 	const [scores, setScores] = useState<Score[]>([]);
@@ -22,7 +16,7 @@ export default function UserScoresList() {
 	const modeSelectId = useId();
 	const typeSelectId = useId();
 
-	const sentinelRef = useRef<HTMLDivElement | null>(null);
+	const finishedFetching = useRef(false);
 
 	const fetchUserData = async () => {
 		const params: {mode?: string; diff?: string; page?: number; limit?: number} = {};
@@ -53,37 +47,16 @@ export default function UserScoresList() {
 		});
 	}, [modeFilter, typeFilter, authContext.loading]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: pt 2.
-	useEffect(() => {
-		if (authContext.loading) return;
-		const observer = new IntersectionObserver(
-			entries => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						pagenationIDX.current += 1;
-						fetchUserData().then(fetched => {
-							setScores(prevScores => [...prevScores, ...fetched]);
-						});
-					}
-				});
-			},
-			{
-				root: null,
-				rootMargin: "0px",
-				threshold: 1.0,
-			},
-		);
-
-		if (sentinelRef.current) {
-			observer.observe(sentinelRef.current);
+	const nextPage = async () => {
+		if (finishedFetching.current) return;
+		pagenationIDX.current += 1;
+		const newScores = await fetchUserData();
+		if (newScores.length === 0) {
+			finishedFetching.current = true;
+			return;
 		}
-
-		return () => {
-			if (sentinelRef.current) {
-				observer.unobserve(sentinelRef.current);
-			}
-		};
-	}, [authContext.loading, modeFilter, typeFilter]);
+		setScores(prevScores => [...prevScores, ...newScores]);
+	};
 
 	return (
 		<div className="w-full">
@@ -152,7 +125,7 @@ export default function UserScoresList() {
 					</li>
 				))}
 			</ul>
-			<div ref={sentinelRef} className="h-6" />
+			<ExecuteWhenOnScreen onVisible={nextPage} />
 		</div>
 	);
 }
