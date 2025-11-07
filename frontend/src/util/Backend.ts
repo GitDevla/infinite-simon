@@ -37,7 +37,7 @@ export interface UserStats {
 	};
 }
 
-interface Score {
+export interface Score {
 	difficulty: string;
 	mode: string;
 	score: number;

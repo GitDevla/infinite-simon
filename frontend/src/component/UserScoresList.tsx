@@ -8,15 +8,11 @@ import {
 	GameType,
 	gameModeToString,
 	gameTypeToString,
-	LABEL_TO_GAME_MODE,
-	LABEL_TO_GAME_TYPE,
 } from "../service/Game";
-import {Backend} from "../util/Backend";
+import {Backend, type Score} from "../util/Backend";
 
 export default function UserScoresList() {
-	const [scores, setScores] = useState<
-		{diff: GameType; mode: GameMode; score: number; date: string; placement?: number}[]
-	>([]);
+	const [scores, setScores] = useState<Score[]>([]);
 	const authContext = useContext(AuthContext);
 
 	const [modeFilter, setModeFilter] = useState<GameMode | "all">("all");
@@ -42,19 +38,10 @@ export default function UserScoresList() {
 		const resp = await Backend.getUserStats(params);
 		if (!resp.ok) {
 			toast.error(`Failed to fetch scores: ${resp.error}`);
-			return {scores: []};
+			return [] as Score[];
 		}
-		const json = resp.data;
 
-		return {
-			scores: json.scores.map(score => ({
-				diff: LABEL_TO_GAME_TYPE[score.difficulty],
-				mode: LABEL_TO_GAME_MODE[score.mode],
-				score: score.score,
-				date: score.date,
-				placement: score.placement,
-			})),
-		};
+		return resp.data.scores;
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: pls biome stop
@@ -62,7 +49,7 @@ export default function UserScoresList() {
 		if (authContext.loading) return;
 		pagenationIDX.current = 1;
 		fetchUserData().then(fetched => {
-			setScores(fetched.scores);
+			setScores(fetched);
 		});
 	}, [modeFilter, typeFilter, authContext.loading]);
 
@@ -75,7 +62,7 @@ export default function UserScoresList() {
 					if (entry.isIntersecting) {
 						pagenationIDX.current += 1;
 						fetchUserData().then(fetched => {
-							setScores(prevScores => [...prevScores, ...fetched.scores]);
+							setScores(prevScores => [...prevScores, ...fetched]);
 						});
 					}
 				});
@@ -145,11 +132,11 @@ export default function UserScoresList() {
 								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
 									Difficulty:
 								</span>
-								<span className="font-semibold text-white">{gameTypeToString(score.diff)}</span>
+								<span className="font-semibold text-white">{score.difficulty}</span>
 							</div>
 							<div className="flex items-center gap-2">
 								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Mode:</span>
-								<span className="font-semibold text-white">{gameModeToString(score.mode)}</span>
+								<span className="font-semibold text-white">{score.mode}</span>
 							</div>
 							<div className="flex items-center gap-2">
 								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Date:</span>
