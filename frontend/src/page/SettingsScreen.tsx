@@ -8,7 +8,7 @@ export default function SettingsScreen() {
 	const userContext = useContext(AuthContext);
 	const loggedIn = userContext.loggedIn;
 	return (
-		<Layout header="Settings">
+		<Layout header="Settings" goBack={true}>
 			<div className="max-w-[700px] mx-auto space-y-6">
 				{loggedIn && <UserProfileForm />}
 				<GameSettingsForm />

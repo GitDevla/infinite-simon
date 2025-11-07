@@ -25,7 +25,7 @@ export default function AuthScreen() {
 	};
 
 	return (
-		<Layout header={isLogin ? "Login" : "Register"} hideNavbar={true}>
+		<Layout header={isLogin ? "Login" : "Register"} hideNavbar={true} goBack={true}>
 			<div className="max-w-[500px] mx-auto">
 				<form onSubmit={handleSubmit} className="flex flex-col items-center">
 					<div className="my-4 w-full">

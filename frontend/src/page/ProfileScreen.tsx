@@ -11,7 +11,7 @@ export default function ProfileScreen() {
 	const userAvatar = authContext.user?.avatar_uri;
 
 	return (
-		<Layout header="Profile">
+		<Layout header="Profile" goBack={true}>
 			<div className="max-w-[500px] mx-auto">
 				<div className="flex flex-col items-center">
 					<img src={userAvatar} alt="User Avatar" className="w-32 h-32 rounded-full mb-4" />
