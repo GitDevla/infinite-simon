@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {Theme} from "react-toastify";
 
 const ThemeContext = createContext({
 	theme: null as string | null,
