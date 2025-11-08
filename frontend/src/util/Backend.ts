@@ -2,6 +2,8 @@ import type {GameMode, GameType} from "../service/Game";
 
 const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
+const DEFAULT_PROFILE_PIC_URL = `${process.env.PUBLIC_URL}/default_profile.png`;
+
 type BackendResponseOkResponse<T = any> = {
 	ok: true;
 	data: T;
@@ -146,7 +148,7 @@ export class Backend {
 		if (!res.ok) {
 			return res;
 		}
-		res.data.avatar_uri = res.data.avatar_uri ? `${backendUrl}/${res.data.avatar_uri}` : "https://placehold.co/100";
+		res.data.avatar_uri = res.data.avatar_uri ? `${backendUrl}/${res.data.avatar_uri}` : DEFAULT_PROFILE_PIC_URL;
 		return res;
 	}
 
