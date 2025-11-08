@@ -1,48 +1,34 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../interfaces/services/IUserService";
+import { InvalidParameterError, MissingParameterError, UnauthorizedError } from "../errors/ClientError";
 
 export class AuthController {
     constructor(private readonly authService: IAuthService) {}
 
-    async login(req: Request, res: Response): Promise<void> {
+    async login(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { username, password } = req.body;
-            
-            if (!username || !password) {
-                res.status(400).json({ success: false, error: "Username and password are required" });
-                return;
-            }
-
-            const result = await this.authService.login(username, password);
-            
-            if (result.success) {
-                res.json({ success: true, token: result.token });
-            } else {
-                res.status(401).json({ success: false, error: result.error });
-            }
+            if (!username) return next(new MissingParameterError("username"));
+            if (!password) return next(new MissingParameterError("password"));
+            const token = await this.authService.login(username, password);
+            res.json({ token });
         } catch (error) {
-            res.status(500).json({ success: false, error: "Internal server error" });
+            next(error);
         }
     }
 
-    async register(req: Request, res: Response): Promise<void> {
+    async register(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { username, password, email } = req.body;
-            
-            if (!username || !password || !email) {
-                res.status(400).json({ success: false, error: "Username, password, and email are required" });
-                return;
-            }
 
-            const result = await this.authService.register(username, email, password);
-            
-            if (result.success) {
-                res.json({ success: true });
-            } else {
-                res.status(400).json({ success: false, error: result.error });
-            }
+            if (!username) return next(new MissingParameterError("username"));
+            if (!password) return next(new MissingParameterError("password"));
+            if (!email) return next(new MissingParameterError("email"));
+
+            await this.authService.register(username, email, password);
+            res.json({ success: true });
         } catch (error) {
-            res.status(500).json({ success: false, error: "Internal server error" });
+            next(error);
         }
     }
 }

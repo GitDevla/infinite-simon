@@ -42,18 +42,18 @@ export class RouteFactory {
         const authMiddleware = new AuthMiddleware(container.getTokenGenerator());
         
         // Auth routes
-        router.post("/login", authLimiter, (req, res) => authController.login(req, res));
-        router.post("/register", authLimiter, (req, res) => authController.register(req, res));
+        router.post("/login", authLimiter, (req, res, next) => authController.login(req, res, next));
+        router.post("/register", authLimiter, (req, res, next) => authController.register(req, res, next));
 
         // Game routes
-        router.post("/start-game", limiter, (req, res) => gameController.startNewGame(req, res));
-        router.post("/join-game", limiter, authMiddleware.authenticate, (req, res) => gameController.joinMultiplayerMatch(req, res));
-        router.post("/save-game-result", limiter, authMiddleware.authenticate, (req, res) => gameController.saveGameResult(req, res));
-        
+        router.post("/start-game", limiter, (req, res, next) => gameController.startNewGame(req, res, next));
+        router.post("/join-game", limiter, authMiddleware.authenticate, (req, res, next) => gameController.joinMultiplayerMatch(req, res, next));
+        router.post("/save-game-result", limiter, authMiddleware.authenticate, (req, res, next) => gameController.saveGameResult(req, res, next));
+
         // User routes
-        router.get("/api/me", limiter, authMiddleware.authenticate, (req, res) => userController.getMe(req, res));
-        router.get("/api/stats", limiter, authMiddleware.authenticate, (req, res) => userController.getStats(req, res));
-        router.put("/api/me", limiter, authMiddleware.authenticate, (req, res) => userController.updateProfile(req, res));
+        router.get("/api/me", limiter, authMiddleware.authenticate, (req, res, next) => userController.getMe(req, res, next));
+        router.get("/api/stats", limiter, authMiddleware.authenticate, (req, res, next) => userController.getStats(req, res, next));
+        router.put("/api/me", limiter, authMiddleware.authenticate, (req, res, next) => userController.updateProfile(req, res, next));
 
         return router;
     }

@@ -1,57 +1,54 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { IGameService } from "../../interfaces/services/IGameService";
+import { ClientError, InvalidParameterError, MissingParameterError } from "../errors/ClientError";
 
 export class GameController {
     constructor(private readonly gameService: IGameService) {}
 
-    async startNewGame(req: Request, res: Response): Promise<void> {
+    async startNewGame(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { modeId, difficultyId } = req.body;
-            
-            if (!modeId || !difficultyId) {
-                res.status(400).json({ success: false, error: "Mode ID and Difficulty ID are required" });
-                return;
-            }
+
+            if (!modeId) return next(new MissingParameterError("modeId"));
+            if (!difficultyId) return next(new MissingParameterError("difficultyId"));
 
             const result = await this.gameService.startNewGame(modeId, difficultyId);
-            
-            res.json({ 
-                success: true, 
-                game: result.game, 
-                match: { id: result.match.id, seed: result.match.seed } 
+            if (!result) return next(new InvalidParameterError("modeId or difficultyId"));
+
+            res.json({
+                success: true,
+                game: result.game,
+                match: { id: result.match.id, seed: result.match.seed }
             });
         } catch (error) {
-            res.status(400).json({ success: false, error: (error as Error).message });
+            next(error);
         }
     }
 
-    async saveGameResult(req: Request, res: Response): Promise<void> {
+    async saveGameResult(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { matchId, roundEliminated, status } = req.body;
             const userId = (req as any).userId;
 
-            if (!userId || !matchId || !status || roundEliminated === undefined) {
-                res.status(400).json({ success: false, error: "User ID, match ID, round eliminated, and status are required" });
-                return;
-            }
+            if (!userId) return next(new MissingParameterError("userId"));
+            if (!matchId) return next(new MissingParameterError("matchId"));
+            if (roundEliminated === undefined) return next(new MissingParameterError("roundEliminated"));
 
             await this.gameService.saveGameResult(userId, matchId, roundEliminated, status);
 
             res.json({ success: true });
         } catch (error) {
-            res.status(400).json({ success: false, error: (error as Error).message });
+            next(error);
         }
     }
 
-    async joinMultiplayerMatch(req: Request, res: Response): Promise<void> {
+    async joinMultiplayerMatch(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { matchId } = req.body;
             const userId = (req as any).userId;
 
-            if (!userId || !matchId) {
-                res.status(400).json({ success: false, error: "User ID and Match ID are required" });
-                return;
-            }
+            if (!userId) return next(new MissingParameterError("userId"));
+            if (!matchId) return next(new MissingParameterError("matchId"));
 
             const result = await this.gameService.joinMultiplayerMatch(userId, matchId);
 
@@ -61,7 +58,7 @@ export class GameController {
                 match: { id: result.match.id, seed: result.match.seed },
             });
         } catch (error) {
-            res.status(400).json({ success: false, error: (error as Error).message });
+            next(error);
         }
     }
 }

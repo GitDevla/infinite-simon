@@ -1,41 +1,30 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { IUserService } from "../../interfaces/services/IUserService";
+import { InvalidParameterError, MissingParameterError, NotFoundError } from "../errors/ClientError";
 
 export class UserController {
     constructor(private readonly userService: IUserService) {}
 
-    async getMe(req: Request, res: Response): Promise<void> {
+    async getMe(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-
-            if (!userId) {
-                res.status(401).json({ error: "Authentication required" });
-                return;
-            }
+            if (!userId) return next(new MissingParameterError("userId"));
 
             const user = await this.userService.getUserById(userId);
-
-            if (!user) {
-                res.status(404).json({ error: "User not found" });
-                return;
-            }
+            if (!user) return next(new NotFoundError("user"));
 
             // Don't return sensitive information
             const { password_hash, ...userWithoutPassword } = user;
             res.json(userWithoutPassword);
         } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+            next(error);
         }
     }
 
-    async getStats(req: Request, res: Response): Promise<void> {
+    async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-
-            if (!userId) {
-                res.status(401).json({ error: "Authentication required" });
-                return;
-            }
+            if (!userId) return next(new MissingParameterError("userId"));
 
             // Extract query parameters
             const { mode, diff, limit, page, orderBy } = req.query;
@@ -52,56 +41,41 @@ export class UserController {
 
             res.json(stats);
         } catch (error) {
-            console.error("getStats error:", error);
-            res.status(500).json({ error: "Internal server error" });
+            next(error);
         }
     }
 
-    async updateProfile(req: Request, res: Response): Promise<void> {
+    async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-
-            if (!userId) {
-                res.status(401).json({ error: "Authentication required" });
-                return;
-            }
+            if (!userId) return next(new MissingParameterError("userId"));
 
             const { username = null, email = null, profilePicture = null, password = null, currentPassword = null } = req.body ?? {};
 
             // Validate input
-            if (username && typeof username !== "string") {
-                res.status(400).json({ error: "Invalid username" });
-                return;
-            }
-            if (email && typeof email !== "string") {
-                res.status(400).json({ error: "Invalid email" });
-                return;
-            }
-            if (profilePicture && typeof profilePicture !== "string") {
-                res.status(400).json({ error: "Invalid profile picture data" });
-                return;
-            }
+            if (username && typeof username !== "string")
+                return next(new InvalidParameterError("username"));
+            if (email && typeof email !== "string")
+                return next(new InvalidParameterError("email"));
+            if (profilePicture && typeof profilePicture !== "string")
+                return next(new InvalidParameterError("profilePicture"));
             if (password && typeof password !== "string") {
                 if (!currentPassword || typeof currentPassword !== "string") {
-                    res.status(400).json({ error: "Current password required to set a new password" });
-                    return;
+                    return next(new MissingParameterError("currentPassword"));
                 }
-                res.status(400).json({ error: "Invalid password" });
-                return;
+                return next(new InvalidParameterError("password"));
             }
 
             const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password, currentPassword });
-
             if (!updatedUser) {
-                res.status(404).json({ error: "User not found" });
-                return;
+                return next(new NotFoundError("user"));
             }
             
             const { password_hash, ...userWithoutPassword } = updatedUser;
             res.json(userWithoutPassword);
         } catch (error) {
             console.error("updateProfile error:", error);
-            res.status(500).json({ error: "Internal server error" });
+            next(error);
         }
     }
 }
