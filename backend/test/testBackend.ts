@@ -9,9 +9,8 @@ async function testBackend() {
         const authService = container.getAuthService();
         
         // Test registration
-        const registerResult = await authService.register("testuser", "test@example.com", "TestPassword123!");
-        console.log("Registration result:", registerResult);
-        
+        await authService.register("testuser", "test@example.com", "TestPassword123!");
+
         // Test login
         const loginResult = await authService.login("testuser", "TestPassword123!");
         console.log("Login result:", loginResult);
