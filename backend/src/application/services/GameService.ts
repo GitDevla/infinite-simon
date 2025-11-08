@@ -16,6 +16,28 @@ export class GameService implements IGameService {
         return { game, match };
     }
 
+    async joinMultiplayerMatch(userId: number, matchId: number): Promise<{ game: Game; match: Match }> {
+        const match = await this.gameRepository.getMatchById(matchId);
+
+        if (!match) {
+            throw new Error("Match not found");
+        }
+
+        const game = await this.gameRepository.getGameById(match.gameId);
+
+        if (!game) {
+            throw new Error("Game not found");
+        }
+
+        await this.gameRepository.upsertGameResult({
+            userId,
+            matchId,
+            roundEliminated: 0,
+        });
+
+        return { game, match };
+    }
+
     async saveGameResult(userId: number, matchId: number, roundEliminated: number): Promise<void> {
         await this.gameRepository.upsertGameResult({
             userId,

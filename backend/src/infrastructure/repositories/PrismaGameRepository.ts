@@ -54,4 +54,16 @@ export class PrismaGameRepository implements IGameRepository {
             });
         }
     }
+
+    async getMatchById(matchId: number): Promise<Match | null> {
+        return this.prisma.match.findUnique({
+            where: { id: matchId },
+        });
+    }
+
+    async getGameById(gameId: number): Promise<Game | null> {
+        return this.prisma.game.findUnique({
+            where: { id: gameId },
+        });
+    }
 }

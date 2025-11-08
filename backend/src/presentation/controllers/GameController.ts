@@ -42,4 +42,26 @@ export class GameController {
             res.status(400).json({ success: false, error: (error as Error).message });
         }
     }
+
+    async joinMultiplayerMatch(req: Request, res: Response): Promise<void> {
+        try {
+            const { matchId } = req.body;
+            const userId = (req as any).userId;
+
+            if (!userId || !matchId) {
+                res.status(400).json({ success: false, error: "User ID and Match ID are required" });
+                return;
+            }
+
+            const result = await this.gameService.joinMultiplayerMatch(userId, matchId);
+
+            res.json({ 
+                success: true, 
+                game: result.game, 
+                match: { id: result.match.id, seed: result.match.seed },
+            });
+        } catch (error) {
+            res.status(400).json({ success: false, error: (error as Error).message });
+        }
+    }
 }

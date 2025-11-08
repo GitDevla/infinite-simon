@@ -50,6 +50,7 @@ export class RouteFactory {
 
         // Game routes
         router.post("/start-game", (req, res) => gameController.startNewGame(req, res));
+        router.post("/join-game", (req, res) => gameController.joinMultiplayerMatch(req, res));
         router.post("/save-game-result", authMiddleware.authenticate, (req, res) => gameController.saveGameResult(req, res));
         
         // User routes
