@@ -79,8 +79,8 @@ export default function UserGlobalStats() {
 				<div className="flex justify-between">
 					<span className="text-xs text-fg-secondary">Avg. Placement</span>
 					<span className="text-xl font-bold">
-						{userStats?.multiplayerStats.averatePlacement
-							? userStats.multiplayerStats.averatePlacement.toFixed(1)
+						{userStats?.multiplayerStats.averagePlacement
+							? userStats.multiplayerStats.averagePlacement.toFixed(1)
 							: "N/A"}
 					</span>
 				</div>

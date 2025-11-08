@@ -33,7 +33,7 @@ export interface UserStats {
 	multiplayerStats: {
 		totalGames: number;
 		wins: number;
-		averatePlacement: number | null;
+		averagePlacement: number | null;
 	};
 }
 
@@ -174,7 +174,7 @@ export class Backend {
 		const multiplayer_stats_mock = {
 			totalGames: 0,
 			wins: 0,
-			averatePlacement: null,
+			averagePlacement: null,
 		};
 		res.data.multiplayerStats = multiplayer_stats_mock;
 		return res;
