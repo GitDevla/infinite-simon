@@ -17,7 +17,7 @@ export class GameService implements IGameService {
     }
 
     async saveGameResult(userId: number, matchId: number, roundEliminated: number): Promise<void> {
-        await this.gameRepository.createGameResult({
+        await this.gameRepository.upsertGameResult({
             userId,
             matchId,
             roundEliminated,

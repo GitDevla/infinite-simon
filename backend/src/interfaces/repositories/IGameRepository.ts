@@ -20,5 +20,5 @@ export interface GameResult {
 export interface IGameRepository {
     createGame(modeId: number, difficultyId: number): Promise<Game>;
     createMatch(data: { gameId: number; seed: number; startedAt?: Date }): Promise<Match>;
-    createGameResult(data: GameResult): Promise<any>;
+    upsertGameResult(data: GameResult): Promise<any>;
 }
