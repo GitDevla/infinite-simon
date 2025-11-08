@@ -1,4 +1,5 @@
 import {useContext, useEffect, useRef, useState} from "react";
+import {toast} from "react-toastify";
 import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
@@ -13,38 +14,45 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 	const userContext = useContext(AuthContext);
 	const [matchId, setMatchId] = useState<number | null>(null);
 
-	useEffect(() => {
-		const difficultyId = gameType;
-		const modeId = gameMode;
-		game.current = new Game();
+	const valami = async () => {
+		const res = await Backend.startGame(gameMode, gameType);
+		if (!res.ok) {
+			console.error("Error starting game:", res.error);
+			return;
+		}
+		const data = res.data;
+		if (!data.game || !data.match) {
+			console.error("No game object or match returned from backend");
+			return;
+		}
+		setMatchId(data.match.id);
+		console.log(
+			"Game started with id:",
+			data.game.id,
+			"and seed:",
+			data.match.seed,
+			"and match id:",
+			data.match.id,
+		);
+		if (game.current === null) return;
+		game.current.startNewGame(data.match.seed, gameType);
+		game.current.onNewRound(() => {
+			if (game.current === null) return;
+			setScore(game.current.getCurrentRound() - 1);
+			setSequence(game.current.getSequence());
+		});
+		setSequence(game.current.getSequence());
+	};
 
-		// Enum IDs are 1-based in the backend
-		Backend.POSTPROMISE("/start-game", {modeId: modeId + 1, difficultyId: difficultyId + 1})
-			.then(data => {
-				if (!data.game || !data.match) {
-					console.error("No game object or match returned from backend");
-					return;
-				}
-				setMatchId(data.match.id);
-				console.log("Game started with id:", data.game.id, "and seed:", data.match.seed, "and match id:", data.match.id);
-				if (game.current === null) return;
-				game.current.startNewGame(data.match.seed, gameType);
-				game.current.onNewRound(() => {
-					if (game.current === null) return;
-					setScore(game.current.getCurrentRound() - 1);
-					setSequence(game.current.getSequence());
-				});
-				setSequence(game.current.getSequence());
-			})
-			.catch(error => {
-				console.error("Error starting game:", error);
-			});
+	useEffect(() => {
+		game.current = new Game();
+		valami();
 	}, []);
 
 	const saveGameResult = async (matchId: number, roundEliminated: number) => {
-		const res = await Backend.POST("/save-game-result", {matchId, roundEliminated});
+		const res = await Backend.saveGameResult(matchId, roundEliminated);
 		if (res.ok) {
-			console.log("Game result saved successfully");
+			toast.success("Game result saved successfully");
 		} else {
 			console.error("Error saving game result:", res.error);
 		}

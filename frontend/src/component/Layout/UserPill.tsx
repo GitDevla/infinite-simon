@@ -1,17 +1,17 @@
 import {useContext} from "react";
 import {Link} from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function UserPill() {
 	const userContext = useContext(AuthContext);
-	const displayName = userContext.username || "Uh oh";
-	const userImg = userContext.useravatar || "https://placehold.co/100";
+	const displayName = userContext.user?.username || "Uh oh";
+	const userImg = userContext.user?.avatar_uri;
 	const logout = userContext.logout;
 	return (
 		<div className="flex items-center gap-3 hover:cursor-pointer group relative">
 			<img src={userImg} alt="User Avatar" className="w-16 h-16 rounded-full border-2 border-white" />
-			<span className="text-white font-semibold underline">{displayName}</span>
-			<nav className="absolute top-full left-0 mt-2 bg-bg-secondary text-white p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 w-32 items-center">
+			<span className="font-semibold underline">{displayName}</span>
+			<nav className="absolute top-full left-0 mt-2 bg-bg-secondary p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 w-32 items-center">
 				<div className="flex items-center gap-1">
 					<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
 						<title>User Profile</title>

@@ -1,7 +1,9 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind directives **/
+/** biome-ignore-all lint/correctness/noInvalidPositionAtImportRule: The import for toast.css must come after Tailwind directives to ensure custom styles override Tailwind defaults.  */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./toast.css";
 
 :root {
 	--bg: linear-gradient(135deg, #1e1e2e 0%, #2a2a40 50%, #1a1a2e 100%);
@@ -11,7 +13,56 @@
 	--simon-green: 19 255 124;
 	--simon-blue: 28 140 255;
 	--simon-yellow: 254 217 63;
-	--fg: #f0f0f5;
+	--fg: 240 240 245;
+	--fg-secondary: 207 207 212;
+}
+
+:root[data-theme="light"] {
+	--bg: linear-gradient(135deg, #f0f0f5 0%, #dcdce5 50%, #f5f5fa 100%);
+	--bg-2: rgba(220, 220, 229, 0.85);
+	--bg-secondary: 240 240 245;
+	--simon-red: 200 30 30;
+	--simon-green: 10 200 80;
+	--simon-blue: 20 100 200;
+	--simon-yellow: 200 170 30;
+	--fg: 30 30 46;
+	--fg-secondary: 58 58 78;
+}
+
+:root[data-theme="high-contrast"] {
+	--bg: black;
+	--bg-2: rgba(0, 0, 0, 0.85);
+	--bg-secondary: 0 0 0;
+	--simon-red: 255 0 0;
+	--simon-green: 0 255 0;
+	--simon-blue: 0 0 255;
+	--simon-yellow: 255 255 0;
+	--fg: 255 255 255;
+	--fg-secondary: 200 200 200;
+}
+
+:root[data-theme="solarized"] {
+	--bg: linear-gradient(135deg, #002b36 0%, #073642 50%, #002b36 100%);
+	--bg-2: rgba(7, 54, 66, 0.85);
+	--bg-secondary: 0 43 54;
+	--simon-red: 220 50 47;
+	--simon-green: 133 153 0;
+	--simon-blue: 38 139 210;
+	--simon-yellow: 181 137 0;
+	--fg: 253 246 227;
+	--fg-secondary: 147 161 161;
+}
+
+:root[data-theme="dracula"] {
+	--bg: linear-gradient(135deg, #282a36 0%, #44475a 50%, #282a36 100%);
+	--bg-2: rgba(68, 71, 90, 0.85);
+	--bg-secondary: 40 42 54;
+	--simon-red: 255 85 85;
+	--simon-green: 80 250 123;
+	--simon-blue: 98 114 164;
+	--simon-yellow: 241 250 140;
+	--fg: 248 248 242;
+	--fg-secondary: 189 147 249;
 }
 
 body {
@@ -19,5 +70,5 @@ body {
 		-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
 		"Droid Sans", "Helvetica Neue", sans-serif;
 	background: var(--bg);
-	color: var(--fg);
+	color: rgb(var(--fg));
 }

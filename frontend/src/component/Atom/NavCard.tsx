@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {Link} from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
-import {GameMode, type GameType} from "../service/Game";
+import {AuthContext} from "../../context/AuthContext";
+import {GameMode, type GameType} from "../../service/Game";
 
 export default function NavCard({
 	lvlId,
@@ -18,7 +18,7 @@ export default function NavCard({
 	const loggedIn = authContext.loggedIn;
 
 	return (
-		<div className="bg-[#414141] bg-opacity-70 text-black rounded-xl w-80 aspect-[4/5]">
+		<div className="bg-bg-secondary bg-opacity-70 rounded-xl w-80 aspect-[4/5]">
 			<div>
 				{imageUrl && (
 					<img
@@ -30,13 +30,13 @@ export default function NavCard({
 			</div>
 			<div className="mt-2 pb-4">
 				<div>
-					<h2 className="text-xl font-bold mb-2 text-center text-white">{title}</h2>
-					{/* <p>{description}</p> */}
+					<h2 className="text-xl font-bold mb-2 text-center">{title}</h2>
+					<p className="text-center text-fg-secondary">{description}</p>
 				</div>
 				<div className="flex justify-center flex-col items-center">
 					<Link
 						to={`/game?difficulty=${lvlId}&mode=${GameMode.SinglePlayer}`}
-						className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-[80%] text-center">
+						className="mt-4 inline-block bg-blue-500 text-white  px-4 py-2 rounded hover:bg-blue-600 w-[80%] text-center">
 						Play Alone
 					</Link>
 					{loggedIn && (

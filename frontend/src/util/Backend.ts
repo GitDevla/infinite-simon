@@ -1,4 +1,8 @@
-export const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+import type {GameMode, GameType} from "../service/Game";
+
+const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
+
+const DEFAULT_PROFILE_PIC_URL = `${process.env.PUBLIC_URL}/default_profile.png`;
 
 type BackendResponseOkResponse<T = any> = {
 	ok: true;
@@ -12,21 +16,80 @@ type BackendResponseErrorResponse = {
 
 type BackendResponse<T = any> = BackendResponseOkResponse<T> | BackendResponseErrorResponse;
 
+export interface UserProfile {
+	id: number;
+	username: string;
+	email: string;
+	avatar_uri: string;
+	joined_date: string;
+	last_login: string;
+}
+
+export interface UserStats {
+	totalGames: number;
+	bestScore: number;
+	averageScore: number;
+	multiplayerGames: number;
+	singleplayerStats: number;
+	scores: Score[];
+	multiplayerStats: {
+		totalGames: number;
+		wins: number;
+		averagePlacement: number | null;
+	};
+}
+
+export interface Score {
+	difficulty: string;
+	mode: string;
+	score: number;
+	date: string;
+	placement?: number;
+}
+
+interface GameStartResponse {
+	success: boolean;
+	game: Game;
+	match: Match;
+}
+
+export interface Game {
+	id: number;
+	modeId: number;
+	difficultyId: number;
+}
+
+export interface Match {
+	id: number;
+	seed: number;
+}
+
 export class Backend {
-	static async GET<T = any>(
-		path: string,
-		queryParams?: URLSearchParams | Record<string, string>,
+	private static async request<T = any>(
+		method: "GET" | "POST" | "PUT",
+		queryParamsOrBody?: Record<string, any> | any,
+		path?: string,
 	): Promise<BackendResponse<T>> {
 		const token = localStorage.getItem("token") || "";
-		const res = await fetch(
-			`${backendUrl}${path}${queryParams ? `?${new URLSearchParams(queryParams).toString()}` : ""}`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+		let url = `${backendUrl}${path}`;
+		const options: RequestInit = {
+			method,
+			headers: {
+				Authorization: `Bearer ${token}`,
 			},
-		);
+		};
+
+		if (method === "GET" && queryParamsOrBody) {
+			url += `?${new URLSearchParams(queryParamsOrBody as Record<string, string>).toString()}`;
+		} else if (method === "POST" || method === "PUT") {
+			options.headers = {
+				...options.headers,
+				"Content-Type": "application/json",
+			};
+			options.body = JSON.stringify(queryParamsOrBody);
+		}
+
+		const res = await fetch(url, options);
 		const json = await res.json();
 		if (!res.ok) {
 			return {
@@ -38,55 +101,21 @@ export class Backend {
 			ok: true,
 			data: json,
 		};
+	}
+
+	static async GET<T = any>(path: string, queryParams?: Record<string, any>): Promise<BackendResponse<T>> {
+		return Backend.request<T>("GET", queryParams, path);
 	}
 
 	static async POST<T = any>(path: string, body: any): Promise<BackendResponse<T>> {
-		const token = localStorage.getItem("token") || "";
-		const res = await fetch(`${backendUrl}${path}`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify(body),
-		});
-		const json = await res.json();
-		if (!res.ok) {
-			return {
-				ok: false,
-				error: json.error || json.errorMessage,
-			};
-		}
-		return {
-			ok: true,
-			data: json,
-		};
+		return Backend.request<T>("POST", body, path);
 	}
 
 	static async PUT<T = any>(path: string, body: any): Promise<BackendResponse<T>> {
-		const token = localStorage.getItem("token") || "";
-		const res = await fetch(`${backendUrl}${path}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify(body),
-		});
-		const json = await res.json();
-		if (!res.ok) {
-			return {
-				ok: false,
-				error: json.error || json.errorMessage,
-			};
-		}
-		return {
-			ok: true,
-			data: json,
-		};
+		return Backend.request<T>("PUT", body, path);
 	}
 
-	static async GETPROMISE<T = any>(path: string, queryParams?: URLSearchParams | Record<string, string>): Promise<T> {
+	static async GETPROMISE<T = any>(path: string, queryParams?: Record<string, any>): Promise<T> {
 		const res = await Backend.GET(path, queryParams);
 		if (!res.ok) {
 			throw new Error(res.error);
@@ -100,5 +129,79 @@ export class Backend {
 			throw new Error(res.error);
 		}
 		return res.data;
+	}
+
+	static async PUTPROMISE<T = any>(path: string, body: any): Promise<T> {
+		const res = await Backend.PUT(path, body);
+		if (!res.ok) {
+			throw new Error(res.error);
+		}
+		return res.data;
+	}
+
+	static async getBackendUrl(): Promise<string> {
+		return backendUrl;
+	}
+
+	static async getUserProfile(): Promise<BackendResponse<UserProfile>> {
+		const res = await Backend.GET<UserProfile>("/api/me");
+		if (!res.ok) {
+			return res;
+		}
+		res.data.avatar_uri = res.data.avatar_uri ? `${backendUrl}/${res.data.avatar_uri}` : DEFAULT_PROFILE_PIC_URL;
+		return res;
+	}
+
+	static async updateUserProfile(updates: {
+		username?: string;
+		email?: string;
+		profilePicture?: string;
+		password?: string;
+		currentPassword?: string;
+	}): Promise<BackendResponse> {
+		return Backend.PUT("/api/me", updates);
+	}
+
+	static async getUserStats(params: {
+		mode?: string;
+		diff?: string;
+		page?: number;
+		limit?: number;
+	}): Promise<BackendResponse<UserStats>> {
+		const res = await Backend.GET<UserStats>("/api/stats", params);
+		if (!res.ok) {
+			return res;
+		}
+		// TODO, replace mock data when backend is ready
+		const multiplayer_stats_mock = {
+			totalGames: 0,
+			wins: 0,
+			averagePlacement: null,
+		};
+		res.data.multiplayerStats = multiplayer_stats_mock;
+		return res;
+	}
+
+	static async login(username: string, password: string): Promise<BackendResponse<{token: string}>> {
+		return Backend.POST<{token: string}>("/login", {username, password});
+	}
+
+	static async register(
+		username: string,
+		email: string,
+		password: string,
+	): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/register", {username, email, password});
+	}
+
+	static async saveGameResult(matchId: number, roundEliminated: number): Promise<BackendResponse> {
+		return Backend.POST("/save-game-result", {matchId, roundEliminated});
+	}
+
+	static async startGame(modeID: GameMode, difficultyID: GameType): Promise<BackendResponse<GameStartResponse>> {
+		return Backend.POST<GameStartResponse>("/start-game", {
+			modeId: modeID + 1,
+			difficultyId: difficultyID + 1,
+		});
 	}
 }
