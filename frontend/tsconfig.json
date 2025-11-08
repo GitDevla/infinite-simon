@@ -22,6 +22,7 @@
   },
   "include": [
     "src",
-    "src/component/SaveScore.tsx"
-, "jest.config.js"  ]
+    "src/component/SaveScore.tsx",
+    "jest.config.js"
+  ]
 }
