@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind directives **/
-/** biome-ignore-all lint/correctness/noInvalidPositionAtImportRule: <explanation> */
+/** biome-ignore-all lint/correctness/noInvalidPositionAtImportRule: The import for toast.css must come after Tailwind directives to ensure custom styles override Tailwind defaults.  */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
