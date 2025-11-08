@@ -70,13 +70,13 @@ export default function UserProfileForm() {
 						/>
 					</div>
 					<div className="flex-1">
-						<label htmlFor="stoppls" className="block text-xs text-gray-400 mb-1">
+						<label htmlFor="stoppls" className="block text-xs text-fg-secondary mb-1">
 							Profile picture (upload)
 						</label>
 						<input
 							type="file"
 							accept="image/*"
-							className="block text-sm text-gray-200"
+							className="block text-sm text-fg-secondary"
 							onChange={ev => {
 								const f = ev.target.files?.[0];
 								if (!f) return;
@@ -146,7 +146,7 @@ export default function UserProfileForm() {
 				<div className="flex items-center gap-3">
 					<button
 						type="submit"
-						className="bg-simon-blue text-white px-4 py-2 rounded-lg shadow-sm hover:opacity-95">
+						className="bg-simon-blue text-fg-secondary px-4 py-2 rounded-lg shadow-sm hover:opacity-95">
 						Save Changes
 					</button>
 				</div>

@@ -41,17 +41,17 @@ export default function UserGlobalStats() {
 				<h3 className="text-xl font-bold">Global Stats</h3>
 				<div className="grid grid-cols-3 justify-between mt-2">
 					<div>
-						<span className="text-xs text-gray-400">Best Score</span>
+						<span className="text-xs text-fg-secondary">Best Score</span>
 						<br />
 						<span className="text-xl font-bold">{userStats?.bestScore ?? "N/A"}</span>
 					</div>
 					<div>
-						<span className="text-xs text-gray-400">Total Games</span>
+						<span className="text-xs text-fg-secondary">Total Games</span>
 						<br />
 						<span className="text-xl font-bold">{userStats?.totalGames}</span>
 					</div>
 					<div>
-						<span className="text-xs text-gray-400">Average Score</span>
+						<span className="text-xs text-fg-secondary">Average Score</span>
 						<br />
 						<span className="text-xl font-bold">
 							{userStats?.averageScore ? userStats?.averageScore.toFixed(1) : "N/A"}
@@ -62,22 +62,22 @@ export default function UserGlobalStats() {
 			<div className="border border-gray-600 p-4 w-full justify-between bg-bg-secondary rounded-xl bg-opacity-80">
 				<h3 className="text-lg font-bold mb-2 text-center">Single Player</h3>
 				<div className="flex justify-between">
-					<span className="text-xs text-gray-400">Games Played</span>
+					<span className="text-xs text-fg-secondary">Games Played</span>
 					<span className="text-xl font-bold">{userStats?.singleplayerStats}</span>
 				</div>
 			</div>
 			<div className="border border-gray-600 p-4 w-full justify-between bg-bg-secondary rounded-xl bg-opacity-80">
 				<h3 className="text-lg font-bold mb-2 text-center">Multiplayer</h3>
 				<div className="flex justify-between">
-					<span className="text-xs text-gray-400">Games Played</span>
+					<span className="text-xs text-fg-secondary">Games Played</span>
 					<span className="text-xl font-bold">{userStats?.multiplayerStats.totalGames}</span>
 				</div>
 				<div className="flex justify-between">
-					<span className="text-xs text-gray-400">Wins</span>
+					<span className="text-xs text-fg-secondary">Wins</span>
 					<span className="text-xl font-bold">{userStats?.multiplayerStats.wins}</span>
 				</div>
 				<div className="flex justify-between">
-					<span className="text-xs text-gray-400">Avg. Placement</span>
+					<span className="text-xs text-fg-secondary">Avg. Placement</span>
 					<span className="text-xl font-bold">
 						{userStats?.multiplayerStats.averatePlacement
 							? userStats.multiplayerStats.averatePlacement.toFixed(1)

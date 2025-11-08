@@ -27,14 +27,14 @@
 	--toastify-toast-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 	--toastify-font-family: sans-serif;
 	--toastify-z-index: 9999;
-	--toastify-text-color-light: #757575;
-	--toastify-text-color-dark: #fff;
+	--toastify-text-color-light: rgb(var(--fg));
+	--toastify-text-color-dark: rgb(var(--fg));
 
 	/* Used only for colored theme */
-	--toastify-text-color-info: #fff;
-	--toastify-text-color-success: #fff;
-	--toastify-text-color-warning: #fff;
-	--toastify-text-color-error: #fff;
+	--toastify-text-color-info: rgb(var(--fg));
+	--toastify-text-color-success: rgb(var(--fg));
+	--toastify-text-color-warning: rgb(var(--fg));
+	--toastify-text-color-error: rgb(var(--fg));
 
 	--toastify-spinner-color: #616161;
 	--toastify-spinner-color-empty-area: #e0e0e0;

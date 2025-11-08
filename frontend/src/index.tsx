@@ -3,6 +3,7 @@ import "./style/index.css";
 import {HashRouter, Route, Routes} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import AuthContextProvider from "./context/AuthContextProvider";
+import {ThemeProvider} from "./context/ThemeContextProvider";
 import App from "./page/App";
 import AuthScreen from "./page/AuthScreen";
 import GameScreen from "./page/GameScreen";
@@ -11,18 +12,20 @@ import SettingsScreen from "./page/SettingsScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-	<AuthContextProvider>
-		<div className="w-full min-h-screen overflow-x-hidden md:overflow-y-hidden">
-			<HashRouter>
-				<Routes>
-					<Route path="/" element={<App />} />
-					<Route path="/game" element={<GameScreen />} />
-					<Route path="/auth" element={<AuthScreen />} />
-					<Route path="/profile" element={<ProfileScreen />} />
-					<Route path="/settings" element={<SettingsScreen />} />
-				</Routes>
-			</HashRouter>
-		</div>
-		<ToastContainer position="bottom-right" theme="dark" />
-	</AuthContextProvider>,
+	<ThemeProvider>
+		<AuthContextProvider>
+			<div className="w-full min-h-screen overflow-x-hidden md:overflow-y-hidden">
+				<HashRouter>
+					<Routes>
+						<Route path="/" element={<App />} />
+						<Route path="/game" element={<GameScreen />} />
+						<Route path="/auth" element={<AuthScreen />} />
+						<Route path="/profile" element={<ProfileScreen />} />
+						<Route path="/settings" element={<SettingsScreen />} />
+					</Routes>
+				</HashRouter>
+			</div>
+			<ToastContainer position="bottom-right" theme="dark" />
+		</AuthContextProvider>
+	</ThemeProvider>,
 );

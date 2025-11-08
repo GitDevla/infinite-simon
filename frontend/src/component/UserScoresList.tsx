@@ -65,14 +65,14 @@ export default function UserScoresList() {
 				<div className="flex-1">
 					<label
 						htmlFor={modeSelectId}
-						className="block mb-2 text-xs font-medium text-gray-400 uppercase tracking-wide">
+						className="block mb-2 text-xs font-medium text-fg-secondary uppercase tracking-wide">
 						Mode
 					</label>
 					<select
 						id={modeSelectId}
 						value={modeFilter}
 						onChange={e => setModeFilter(e.target.value as GameMode | "all")}
-						className="w-full p-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
+						className="w-full p-2.5 bg-bg-secondary border border-gray-600 rounded-lg font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
 						<option value="all">All Modes</option>
 						<option value={GameMode.SinglePlayer}>Singleplayer</option>
 						<option value={GameMode.MultiPlayer}>Multiplayer</option>
@@ -81,14 +81,14 @@ export default function UserScoresList() {
 				<div className="flex-1">
 					<label
 						htmlFor={typeSelectId}
-						className="block mb-2 text-xs font-medium text-gray-400 uppercase tracking-wide">
+						className="block mb-2 text-xs font-medium text-fg-secondary uppercase tracking-wide">
 						Difficulty
 					</label>
 					<select
 						id={typeSelectId}
 						value={typeFilter}
 						onChange={e => setTypeFilter(e.target.value as GameType | "all")}
-						className="w-full p-2.5 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
+						className="w-full p-2.5 bg-bg-secondary border border-gray-600 rounded-lg  font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700">
 						<option value="all">All Difficulties</option>
 						<option value={GameType.Simple}>Classic</option>
 						<option value={GameType.Extended}>Extended</option>
@@ -102,22 +102,26 @@ export default function UserScoresList() {
 						className="flex border border-gray-600 p-4 w-full justify-between bg-bg-secondary rounded-xl bg-opacity-80 hover:scale-105 transition-transform duration-200">
 						<div className="flex flex-col gap-1">
 							<div className="flex items-center gap-2">
-								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+								<span className="text-xs font-medium text-fg-secondary uppercase tracking-wide">
 									Difficulty:
 								</span>
-								<span className="font-semibold text-white">{score.difficulty}</span>
+								<span className="font-semibold">{score.difficulty}</span>
 							</div>
 							<div className="flex items-center gap-2">
-								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Mode:</span>
-								<span className="font-semibold text-white">{score.mode}</span>
+								<span className="text-xs font-medium text-fg-secondary uppercase tracking-wide">
+									Mode:
+								</span>
+								<span className="font-semibold">{score.mode}</span>
 							</div>
 							<div className="flex items-center gap-2">
-								<span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Date:</span>
-								<span className="text-sm text-gray-300">{score.date}</span>
+								<span className="text-xs font-medium text-fg-secondary uppercase tracking-wide">
+									Date:
+								</span>
+								<span className="text-sm text-fg-secondary">{score.date}</span>
 							</div>
 						</div>
 						<div className="flex flex-col items-end justify-center">
-							<span className="text-3xl font-bold text-white">{score.score}</span>
+							<span className="text-3xl font-bold text-fg-secondary">{score.score}</span>
 							{score.placement && (
 								<span className="text-xs font-medium text-yellow-400 mt-1">🏆 #{score.placement}</span>
 							)}

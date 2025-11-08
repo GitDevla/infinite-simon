@@ -1,12 +1,11 @@
 import {useNavigate} from "react-router-dom";
 
 /**
-  * A modal component that appears at the end of the game, displaying the final score and providing navigation options to retry or return home.
+ * A modal component that appears at the end of the game, displaying the final score and providing navigation options to retry or return home.
  * @param score - The player's final score to display. Default is 0.
  */
 export default function GameEndModal({score = 0}: {score?: number}) {
 	const navigate = useNavigate();
-
 
 	function handleKeyPress() {
 		window.location.reload();
@@ -24,7 +23,9 @@ export default function GameEndModal({score = 0}: {score?: number}) {
 				</p>
 				<button
 					type="button"
-					className={"rounded-xl cursor-pointer mt-4 px-4 py-3 text-xl min-w-[250px] bg-simon-green text-black"}
+					className={
+						"rounded-xl cursor-pointer mt-4 px-4 py-3 text-xl min-w-[250px] bg-simon-green text-black"
+					}
 					onClick={handleKeyPress}>
 					Give it one more try
 				</button>
