@@ -20,7 +20,7 @@ export class PrismaGameRepository implements IGameRepository {
         });
     }
 
-    async createGameResult(data: GameResult): Promise<any> {
+    async upsertGameResult(data: GameResult): Promise<any> {
         const user = await this.prisma.user.findUnique({
             where: { id: data.userId },
         });
@@ -29,12 +29,43 @@ export class PrismaGameRepository implements IGameRepository {
             throw new Error("User not found");
         }
 
-        return this.prisma.participant.create({
-            data: {
+        const existingParticipant = await this.prisma.participant.findFirst({
+            where: {
                 matchId: data.matchId,
-                userId: user.id,
-                round_eliminated: data.roundEliminated,
+                userId: data.userId,
             },
+        });
+
+        if (existingParticipant) {
+            return this.prisma.participant.update({
+                where: { id: existingParticipant.id },
+                data: {
+                    round_eliminated: data.roundEliminated,
+                    achieved_at: new Date(),
+                    status: data.status,
+                },
+            });
+        } else {
+            return this.prisma.participant.create({
+                data: {
+                    matchId: data.matchId,
+                    userId: user.id,
+                    round_eliminated: data.roundEliminated,
+                    status: data.status,
+                },
+            });
+        }
+    }
+
+    async getMatchById(matchId: number): Promise<Match | null> {
+        return this.prisma.match.findUnique({
+            where: { id: matchId },
+        });
+    }
+
+    async getGameById(gameId: number): Promise<Game | null> {
+        return this.prisma.game.findUnique({
+            where: { id: gameId },
         });
     }
 }
