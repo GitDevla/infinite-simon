@@ -1,5 +1,6 @@
 import { IGameService } from "../../interfaces/services/IGameService";
 import { IGameRepository, Game, Match } from "../../interfaces/repositories/IGameRepository";
+import { ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
 
 export class GameService implements IGameService {
     constructor(private readonly gameRepository: IGameRepository) {}
@@ -33,16 +34,18 @@ export class GameService implements IGameService {
             userId,
             matchId,
             roundEliminated: 0,
+            status: ParticipantStatus.waiting,
         });
 
         return { game, match };
     }
 
-    async saveGameResult(userId: number, matchId: number, roundEliminated: number): Promise<void> {
+    async saveGameResult(userId: number, matchId: number, roundEliminated: number, status?: ParticipantStatus): Promise<void> {
         await this.gameRepository.upsertGameResult({
             userId,
             matchId,
             roundEliminated,
+            status: status,
         });
     }
 }

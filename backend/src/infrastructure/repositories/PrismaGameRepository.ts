@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { IGameRepository, Game, Match, GameResult } from "../../interfaces/repositories/IGameRepository";
+import { ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
 
 export class PrismaGameRepository implements IGameRepository {
     constructor(private readonly prisma: PrismaClient) {}
@@ -42,6 +43,7 @@ export class PrismaGameRepository implements IGameRepository {
                 data: {
                     round_eliminated: data.roundEliminated,
                     achieved_at: new Date(),
+                    status: data.status ?? ParticipantStatus.playing,
                 },
             });
         } else {
@@ -50,6 +52,7 @@ export class PrismaGameRepository implements IGameRepository {
                     matchId: data.matchId,
                     userId: user.id,
                     round_eliminated: data.roundEliminated,
+                    status: data.status ?? ParticipantStatus.waiting,
                 },
             });
         }

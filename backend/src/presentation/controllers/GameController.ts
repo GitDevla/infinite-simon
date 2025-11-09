@@ -27,7 +27,7 @@ export class GameController {
 
     async saveGameResult(req: Request, res: Response): Promise<void> {
         try {
-            const { matchId, roundEliminated } = req.body;
+            const { matchId, roundEliminated, status } = req.body;
             const userId = (req as any).userId;
 
             if (!userId || !matchId || roundEliminated === undefined) {
@@ -35,7 +35,7 @@ export class GameController {
                 return;
             }
 
-            await this.gameService.saveGameResult(userId, matchId, roundEliminated);
+            await this.gameService.saveGameResult(userId, matchId, roundEliminated, status);
 
             res.json({ success: true });
         } catch (error) {
