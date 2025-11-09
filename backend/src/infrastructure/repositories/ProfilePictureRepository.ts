@@ -2,6 +2,7 @@ import { IImageRepository } from "../../interfaces/repositories/IImageRepository
 import * as fs from "fs/promises";
 import * as path from "path";
 import sharp from "sharp";
+import { InvalidParameterError } from "../../presentation/errors/ClientError";
 
 export class ProfilePictureRepository implements IImageRepository {
     private readonly defaultPath: string;
@@ -20,7 +21,7 @@ export class ProfilePictureRepository implements IImageRepository {
             rawBase64Data = dataUrlMatch[2];
         }
         if (!/^image\/[a-zA-Z+.-]+$/.test(contentType)) {
-            throw new Error("Invalid image content type");
+            throw new InvalidParameterError("Invalid image content type");
         }
 
         const buffer = Buffer.from(rawBase64Data, 'base64');
