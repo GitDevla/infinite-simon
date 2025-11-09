@@ -35,8 +35,8 @@ export default function UserProfileForm() {
 			password?: string;
 			currentPassword?: string;
 		} = {};
-		if (form.username) updates.username = form.username;
-		if (form.email) updates.email = form.email;
+		if (form.username && form.username !== userContext.user?.username) updates.username = form.username;
+		if (form.email && form.email !== userContext.user?.email) updates.email = form.email;
 		if (form.profilePic && form.profilePic !== userContext.user?.avatar_uri) {
 			updates.profilePicture = form.profilePic;
 		}

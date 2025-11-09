@@ -14,7 +14,7 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		if (response.ok) {
 			const data = response.data;
 			setLoggedIn(true);
-			saveToken(data.token);
+			saveToken(data.token.token);
 			await updateUserProfile();
 			localStorage.setItem("username", username);
 		} else {
