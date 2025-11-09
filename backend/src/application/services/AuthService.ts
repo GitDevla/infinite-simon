@@ -1,6 +1,7 @@
 import { IAuthService } from "../../interfaces/services/IUserService";
 import { IUserRepository } from "../../interfaces/repositories/IUserRepository";
 import { IPasswordHasher, ITokenGenerator, IValidator } from "../../interfaces/services/IServices";
+import { InvalidParameterError, UnauthorizedError } from "../../presentation/errors/ClientError";
 
 export class AuthService implements IAuthService {
     constructor(
@@ -10,47 +11,29 @@ export class AuthService implements IAuthService {
         private readonly validator: IValidator
     ) {}
 
-    async login(username: string, password: string): Promise<{ success: boolean; token?: string; error?: string }> {
-        try {
-            const user = await this.userRepository.getUserByUsername(username);
-            if (!user) {
-                console.log("Invalid credentials");
-                return { success: false, error: "Invalid credentials" };
-            }
+    async login(username: string, password: string): Promise<{ token: string }> {
+        const user = await this.userRepository.getUserByUsername(username);
+        if (!user) throw new UnauthorizedError("Invalid credentials");
 
-            const passwordMatch = await this.passwordHasher.compare(password, user.password_hash);
-            if (!passwordMatch) {
-                console.log("Invalid credentials");
-                return { success: false, error: "Invalid credentials" };
-            }
+        const passwordMatch = await this.passwordHasher.compare(password, user.password_hash);
+        if (!passwordMatch) throw new UnauthorizedError("Invalid credentials");
 
-            await this.userRepository.updateLastLogin(user.id, new Date());
-            const token = this.tokenGenerator.generate({ userId: user.id });
+        await this.userRepository.updateLastLogin(user.id, new Date());
+        const token = this.tokenGenerator.generate({ userId: user.id });
 
-            return { success: true, token };
-        } catch (error) {
-            return { success: false, error: (error as Error).message };
-        }
+        return { token };
     }
 
-    async register(username: string, email: string, password: string): Promise<{ success: boolean; error?: string }> {
-        try {
-            const validationResult = this.validator.validateCredentials(username, password, email);
-            if (!validationResult.isValid) {
-                return { success: false, error: validationResult.errorMessage };
-            }
+    async register(username: string, email: string, password: string): Promise<void> {
+        this.validator.validateCredentials(username, password, email);
 
-            const existingUser = await this.userRepository.getUserByUsername(username);
-            if (existingUser) {
-                return { success: false, error: "Username already exists" };
-            }
+        const existingUser = await this.userRepository.getUserByUsername(username);
+        if (existingUser) throw new InvalidParameterError("Username is already taken");
 
-            const passwordHash = await this.passwordHasher.hash(password);
-            await this.userRepository.create(username, email, passwordHash);
+        const existingEmail = await this.userRepository.getUserByEmail(email);
+        if (existingEmail) throw new InvalidParameterError("Email is already in use");
 
-            return { success: true };
-        } catch (error) {
-            return { success: false, error: (error as Error).message };
-        }
+        const passwordHash = await this.passwordHasher.hash(password);
+        await this.userRepository.create(username, email, passwordHash);
     }
 }

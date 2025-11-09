@@ -1,71 +1,52 @@
-import { IValidator, ValidationResult } from "../../interfaces/services/IServices";
+import { IValidator } from "../../interfaces/services/IServices";
+import { InvalidParameterError } from "../../presentation/errors/ClientError";
 
 export class CredentialValidator implements IValidator {
-    validateCredentials(username: string, password: string, email: string): ValidationResult {
-        const emailValidation = this.validateEmail(email);
-        if (!emailValidation.isValid) {
-            return emailValidation;
-        }
-
-        const passwordValidation = this.validatePassword(password);
-        if (!passwordValidation.isValid) {
-            return passwordValidation;
-        }
-
-        const usernameValidation = this.validateUsername(username);
-        if (!usernameValidation.isValid) {
-            return usernameValidation;
-        }
-        
-        return { isValid: true };
+    validateCredentials(username: string, password: string, email: string): void {
+        this.validateEmail(email);
+        this.validatePassword(password);
+        this.validateUsername(username);
     }
 
-    validateEmail(email: string): ValidationResult {
+    validateEmail(email: string): void {
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!String(email).toLowerCase().match(emailRegex)) {
-            return { isValid: false, errorMessage: "Email does not match requirements" };
+            throw new InvalidParameterError("email");
         }
-        return { isValid: true };
     }
 
-    validatePassword(password: string): ValidationResult {
+    validatePassword(password: string): void {
         const specials = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         const uppers = /[A-Z]/;
         const lowers = /[a-z]/;
         const numbers = /[0-9]/;
-        
-        if (password.length < 8 || !specials.test(password) || !uppers.test(password) || !lowers.test(password) || !numbers.test(password)) {
-            let message = "Password must";
-            if (password.length < 8) {
-                message += " be at least 8 characters long,";
-            }
-            if (!uppers.test(password)) {
-                message += " contain an uppercase letter,";
-            }
-            if (!lowers.test(password)) {
-                message += " contain a lowercase letter,";
-            }
-            if (!numbers.test(password)) {
-                message += " contain a number,";
-            }
-            if (!specials.test(password)) {
-                message += " contain a special character,";
-            }
-            // Remove trailing comma
-            message = message.replace(/,$/, '');
-            return {
-                isValid: false,
-                errorMessage: message
-            };
+        let message = "Password must";
+        const errors = [];
+        if (password.length < 8) {
+            errors.push(" be at least 8 characters long");
         }
-        return { isValid: true };
+        if (!uppers.test(password)) {
+            errors.push(" contain an uppercase letter");
+        }
+        if (!lowers.test(password)) {
+            errors.push(" contain a lowercase letter");
+        }
+        if (!numbers.test(password)) {
+            errors.push(" contain a number");
+        }
+        if (!specials.test(password)) {
+            errors.push(" contain a special character");
+        }
+        if (errors.length) {
+            message += errors.join(",");
+            throw new InvalidParameterError(message);
+        }
     }
 
-    validateUsername(username: string): ValidationResult {
+    validateUsername(username: string): void {
         const specials = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         if (specials.test(username)) {
-            return { isValid: false, errorMessage: "Username may not contain specials" };
+            throw new InvalidParameterError("Username cannot contain special characters");
         }
-        return { isValid: true };
     }
 }

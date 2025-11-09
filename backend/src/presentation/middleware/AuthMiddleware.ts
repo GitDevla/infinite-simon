@@ -1,39 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import { ITokenGenerator } from "../../interfaces/services/IServices";
+import { MissingParameterError, UnauthorizedError } from "../errors/ClientError";
 
 export class AuthMiddleware {
     constructor(private readonly tokenGenerator: ITokenGenerator) {}
 
-    authenticate = (req: Request, res: Response, next: NextFunction): void => {
+    authenticate = (req: Request, _res: Response, next: NextFunction): void => {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return next(new MissingParameterError("authorization header"));
+
+        const token = authHeader.split(" ")[1]?.trim();
+        if (!token) return next(new MissingParameterError("token"));
+
         try {
-            const authHeader = req.headers.authorization;
-            
-            if (!authHeader) {
-                console.log("No token provided");
-                res.status(401).json({ error: "No token provided" });
-                return;
-            }
-
-            const token = authHeader.split(" ")[1]?.trim();
-            if (!token) {
-                console.log("Malformed token");
-                res.status(401).json({ error: "Malformed token" });
-                return;
-            }
-
-            let decoded;
-            try {
-                decoded = this.tokenGenerator.verify(token);
-            } catch (verifyError) {
-                console.log("Token verification error:", verifyError);
-                throw verifyError;
-            }
+            const decoded = this.tokenGenerator.verify(token);
             (req as any).userId = decoded.userId;
             next();
-        } catch (error) {
-            console.log("Auth error:", error);
-            res.status(401).json({ error: "Invalid token" });
-            return;
+        } catch (verifyError) {
+            return next(new UnauthorizedError("Invalid or expired token"));
         }
     };
 }

@@ -202,4 +202,10 @@ export class PrismaUserRepository implements IUserRepository {
         const totalGames = await this.getTotalGamesPlayed(userId);
         return totalGames;
     }
+
+    async getUserByEmail(email: string): Promise<User | null> {
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
+    }
 }

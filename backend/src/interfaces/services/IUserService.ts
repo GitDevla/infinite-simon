@@ -1,8 +1,8 @@
 import { User, UserStats, UserScores, UserScoresQuery } from '../repositories/IUserRepository';
 
 export interface IAuthService {
-    login(username: string, password: string): Promise<{ success: boolean; token?: string; error?: string }>;
-    register(username: string, email: string, password: string): Promise<{ success: boolean; error?: string }>;
+    login(username: string, password: string): Promise<{ token: string }>;
+    register(username: string, email: string, password: string): Promise<void>;
 }
 
 export interface UserStatsExtended extends UserStats {

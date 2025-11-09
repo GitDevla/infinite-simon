@@ -2,6 +2,7 @@ import { IUserService, UserProfileUpdate, UserStatsExtended } from "../../interf
 import { IUserRepository, User, UserScoresQuery } from "../../interfaces/repositories/IUserRepository";
 import { IPasswordHasher, IValidator } from "../../interfaces/services/IServices";
 import { IImageRepository } from "../../interfaces/repositories/IImageRepository";
+import { InvalidParameterError, NotFoundError, UnauthorizedError } from "../../presentation/errors/ClientError";
 
 export class UserService implements IUserService {
     constructor(
@@ -17,9 +18,7 @@ export class UserService implements IUserService {
 
     async changePassword(userId: number, newPassword: string): Promise<void> {
         const user = await this.userRepository.getUserById(userId);
-        if (!user) {
-            throw new Error("User not found");
-        }
+        if (!user) throw new NotFoundError("User not found");
 
         const passwordHash = await this.passwordHasher.hash(newPassword);
         await this.userRepository.update(userId, { password_hash: passwordHash });
@@ -65,24 +64,20 @@ export class UserService implements IUserService {
 
     async updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User> {
         const user = await this.userRepository.getUserById(userId);
-        if (user === null) {
-            throw new Error("User not found");
-        }
+        if (user === null) throw new NotFoundError("User");
 
         const updateData: Partial<User> = {};
 
         if (updates.username) {
-            let res = this.credentialValidator.validateUsername(updates.username);
-            if (!res.isValid) {
-                throw new Error(res.errorMessage);
-            }
+            this.credentialValidator.validateUsername(updates.username);
+            const existingUser = await this.userRepository.getUserByUsername(updates.username);
+            if (existingUser) throw new InvalidParameterError("Username is already taken");
             updateData.username = updates.username;
         }
         if (updates.email) {
-            let res = this.credentialValidator.validateEmail(updates.email);
-            if (!res.isValid) {
-                throw new Error(res.errorMessage);
-            }
+            this.credentialValidator.validateEmail(updates.email);
+            const existingEmail = await this.userRepository.getUserByEmail(updates.email);
+            if (existingEmail) throw new InvalidParameterError("Email is already taken");
             updateData.email = updates.email;
         }
         if (updates.profilePicture) {
@@ -97,18 +92,13 @@ export class UserService implements IUserService {
             updateData.avatar_uri = profilePictureUri;
         }
         if (updates.password) {
-            let res = this.credentialValidator.validatePassword(updates.password);
-            if (!res.isValid) {
-                throw new Error(res.errorMessage);
-            }
+            this.credentialValidator.validatePassword(updates.password);
 
             const currentPasswordHash = user.password_hash;
 
             const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
-            if (!isCurrentPasswordValid) {
-                throw new Error("Current password is incorrect");
-            }
-            
+            if (!isCurrentPasswordValid) throw new UnauthorizedError("Current password is incorrect");
+
             await this.changePassword(userId, updates.password);
         }
 

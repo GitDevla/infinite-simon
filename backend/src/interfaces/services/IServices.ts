@@ -9,13 +9,8 @@ export interface ITokenGenerator {
 }
 
 export interface IValidator {
-    validateCredentials(username: string, password: string, email: string): ValidationResult;
-    validateEmail(email: string): ValidationResult;
-    validatePassword(password: string): ValidationResult;
-    validateUsername(username: string): ValidationResult;
-}
-
-export interface ValidationResult {
-    isValid: boolean;
-    errorMessage?: string;
+    validateCredentials(username: string, password: string, email: string): void;
+    validateEmail(email: string): void;
+    validatePassword(password: string): void;
+    validateUsername(username: string): void;
 }
