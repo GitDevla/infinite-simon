@@ -24,6 +24,7 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
 		if (currentWindow === Windows.CREATE) {
 			createGame();

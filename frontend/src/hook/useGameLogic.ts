@@ -75,6 +75,7 @@ export function useGameLogic({
 		setSequence(game.current.getSequence());
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
 		game.current = new Game();
 		if (initialMatchId) {
