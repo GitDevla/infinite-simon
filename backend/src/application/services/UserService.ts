@@ -74,6 +74,9 @@ export class UserService implements IUserService {
         }
         if (updates.email) {
             this.credentialValidator.validateEmail(updates.email);
+            this.userRepository.getUserByEmail(updates.email).then(user => {
+                if (user) throw new InvalidParameterError("Email is already in use");
+            });
             updateData.email = updates.email;
         }
         if (updates.profilePicture) {

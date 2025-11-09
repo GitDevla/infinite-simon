@@ -52,4 +52,5 @@ export interface IUserRepository {
     getAverageScore(userId: number): Promise<number | null>;
     getMultiPlayerStats(userId: number): Promise<number>;
     getSinglePlayerStats(userId: number): Promise<number>;
+    getUserByEmail(email: string): Promise<User | null>;
 }
