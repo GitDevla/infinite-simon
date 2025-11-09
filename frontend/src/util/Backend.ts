@@ -195,7 +195,7 @@ export class Backend {
 	}
 
 	static async saveGameResult(matchId: number, roundEliminated: number): Promise<BackendResponse> {
-		return Backend.POST("/save-game-result", {matchId, roundEliminated});
+		return Backend.POST("/save-game-result", {matchId, roundEliminated, status: "finished"}); //TODO: status when backend supports it
 	}
 
 	static async startGame(modeID: GameMode, difficultyID: GameType): Promise<BackendResponse<GameStartResponse>> {
