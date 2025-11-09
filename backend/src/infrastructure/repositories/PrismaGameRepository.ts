@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { IGameRepository, Game, Match, GameResult } from "../../interfaces/repositories/IGameRepository";
-import { ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
 
 export class PrismaGameRepository implements IGameRepository {
     constructor(private readonly prisma: PrismaClient) {}

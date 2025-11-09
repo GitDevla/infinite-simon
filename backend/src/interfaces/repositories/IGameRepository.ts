@@ -15,13 +15,13 @@ export interface GameResult {
     userId: number;
     matchId: number;
     roundEliminated: number;
-    status?: ParticipantStatus;
+    status: ParticipantStatus;
 }
 
 export enum ParticipantStatus {
-  waiting = "waiting",
-  playing = "playing",
-  finished = "finished"
+  waiting,
+  playing,
+  finished
 }
 
 export interface IGameRepository {

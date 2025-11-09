@@ -30,8 +30,8 @@ export class GameController {
             const { matchId, roundEliminated, status } = req.body;
             const userId = (req as any).userId;
 
-            if (!userId || !matchId || roundEliminated === undefined) {
-                res.status(400).json({ success: false, error: "User ID, match ID, and round eliminated are required" });
+            if (!userId || !matchId || !status || roundEliminated === undefined) {
+                res.status(400).json({ success: false, error: "User ID, match ID, round eliminated, and status are required" });
                 return;
             }
 
