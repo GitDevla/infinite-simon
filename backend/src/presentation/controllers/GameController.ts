@@ -32,6 +32,7 @@ export class GameController {
             if (!userId) throw new MissingParameterError("userId");
             if (!matchId) throw new MissingParameterError("matchId");
             if (roundEliminated === undefined) throw new MissingParameterError("roundEliminated");
+            if (!status) throw new MissingParameterError("status");
 
             await this.gameService.saveGameResult(userId, matchId, roundEliminated, status);
 
@@ -46,8 +47,8 @@ export class GameController {
             const { matchId } = req.body;
             const userId = (req as any).userId;
 
-            if (!userId) return next(new MissingParameterError("userId"));
-            if (!matchId) return next(new MissingParameterError("matchId"));
+            if (!userId) throw new MissingParameterError("userId");
+            if (!matchId) throw new MissingParameterError("matchId");
 
             const result = await this.gameService.joinMultiplayerMatch(userId, matchId);
 

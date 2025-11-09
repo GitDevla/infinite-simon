@@ -18,7 +18,7 @@ export class UserService implements IUserService {
 
     async changePassword(userId: number, newPassword: string): Promise<void> {
         const user = await this.userRepository.getUserById(userId);
-        if (!user) throw new InvalidParameterError("User not found");
+        if (!user) throw new NotFoundError("User not found");
 
         const passwordHash = await this.passwordHasher.hash(newPassword);
         await this.userRepository.update(userId, { password_hash: passwordHash });

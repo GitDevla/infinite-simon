@@ -11,7 +11,7 @@ export class CredentialValidator implements IValidator {
     validateEmail(email: string): void {
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!String(email).toLowerCase().match(emailRegex)) {
-            throw new InvalidParameterError("Invalid email format");
+            throw new InvalidParameterError("email");
         }
     }
 

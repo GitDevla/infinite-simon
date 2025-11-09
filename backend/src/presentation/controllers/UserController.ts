@@ -59,11 +59,13 @@ export class UserController {
                 throw new InvalidParameterError("email");
             if (profilePicture && typeof profilePicture !== "string")
                 throw new InvalidParameterError("profilePicture");
-            if (password && typeof password !== "string") {
+            if (password) {
+                if (typeof password !== "string") {
+                    throw new InvalidParameterError("password");
+                }
                 if (!currentPassword || typeof currentPassword !== "string") {
                     throw new MissingParameterError("currentPassword");
                 }
-                throw new InvalidParameterError("password");
             }
 
             const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password, currentPassword });
