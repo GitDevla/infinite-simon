@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { IGameService } from "../../interfaces/services/IGameService";
-import { ClientError, InvalidParameterError, MissingParameterError } from "../errors/ClientError";
+import { InvalidParameterError, MissingParameterError } from "../errors/ClientError";
 
 export class GameController {
     constructor(private readonly gameService: IGameService) {}
@@ -13,7 +13,6 @@ export class GameController {
             if (!difficultyId) return next(new MissingParameterError("difficultyId"));
 
             const result = await this.gameService.startNewGame(modeId, difficultyId);
-            if (!result) return next(new InvalidParameterError("modeId or difficultyId"));
 
             res.json({
                 success: true,

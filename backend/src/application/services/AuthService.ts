@@ -28,7 +28,7 @@ export class AuthService implements IAuthService {
         this.validator.validateCredentials(username, password, email);
 
         const existingUser = await this.userRepository.getUserByUsername(username);
-        if (existingUser) throw new InvalidParameterError("username already taken");
+        if (existingUser) throw new InvalidParameterError("Username is already taken");
 
         await this.userRepository.getUserByEmail(email).then(user => {
             if (user) throw new InvalidParameterError("Email is already in use");

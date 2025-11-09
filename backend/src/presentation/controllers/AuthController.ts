@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../interfaces/services/IUserService";
-import { InvalidParameterError, MissingParameterError, UnauthorizedError } from "../errors/ClientError";
+import { MissingParameterError } from "../errors/ClientError";
 
 export class AuthController {
     constructor(private readonly authService: IAuthService) {}
