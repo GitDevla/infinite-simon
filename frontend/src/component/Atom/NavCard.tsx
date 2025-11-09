@@ -52,7 +52,7 @@ export default function NavCard({
 					)}
 				</div>
 			</div>
-			{showModal && <SimpleLobbyModal lvlId={lvlId} />}
+			{showModal && <SimpleLobbyModal lvlId={lvlId} modalClose={() => setShowModal(false)} />}
 		</div>
 	);
 }
