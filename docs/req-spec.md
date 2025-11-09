@@ -11,7 +11,7 @@
 - A létező Infinity-Simon[^7] játék továbbfejlesztése új többjátékos funkciókkal.
 - A játékosok közötti versengés lehetősége.
 - Pontszámok szerveren való tárolása.
-- Többjátékos mód, ahol a játékosok valós időben versenyezhetnek egymás ellen.
+- Többjátékos mód, ahol a játékosok látszólag valós időben versenyezhetnek egymás ellen.
 - Részletes statisztikák és elemzések a játékos teljesítményéről.
 - Különböző játékmódok bevezetése (pl. eredeti Simon says, Kibővített mód, etc.).
 
@@ -30,8 +30,8 @@ A jövőbeni rendszer a következő új funkciókat és üzleti folyamatokat val
 - Többjátékos mód bevezetése, ahol a játékosok versenyezhetnek egymás ellen seed-alapú sorozatok használatával.
 - Seed generálás a szerveren, amely biztosítja hogy minden játékos ugyanazt a sorozatot kapja egy adott versenyben.
 - Játék logika futtatása a kliens oldalon a szerver által generált seed alapján.
-- Pontszámok szerveren való tárolása és validálása, hogy a játékosok bármilyen eszközről elérhessék a pontszámaikat.
-- Részletes statisztikák és elemzések a játékos teljesítményéről, beleértve a legjobb köröket, átlagos pontszámokat, és fejlődési trendeket.
+- Pontszámok szerveren való tárolása, hogy a játékosok bármilyen eszközről elérhessék a pontszámaikat.
+- Részletes statisztikák és elemzések a játékos teljesítményéről, beleértve a legjobb köröket és átlagos pontszámokat.
 - Különböző játékmódok bevezetése, mint például az eredeti Simon says mód és egyéb kihívásokkal teli módok.
 - Felhasználói fiókok létrehozása.
 - Hangjelzések és vizuális effektek a játékélmény fokozására.

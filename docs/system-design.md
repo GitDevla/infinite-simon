@@ -7,10 +7,11 @@
 - Designer: Pataki Dávid
 - Implementáció
     - Frontend: Pataki Dávid
-        - Backend
+    - Backend
         - Adatbázis: Kerekes Bence
         - Játék Logika: Kerekes Bence
-        - API: Csendes Dávid- Tesztelő: Csendes Dávid
+        - API: Csendes Dávid
+    - Tesztelő: Csendes Dávid
 
 ## Üzleti folyamatok modellje
 [![](https://img.plantuml.biz/plantuml/dsvg/ZLJ1Rjim3BqRy3yGkUoKeNBQBXsAeCNG0XiQO5ZNtbM7SJJBaY4f1wVOH-mJSkmvm7v0s7zDikKuAheX5vlaUwGUATfNsb1brXLF4uvB0qQ2OiNAm88fp0sJ8atIXEP6AhYpMoCBQkmEg0RUXs-HhwZU2Blb7LBto1UNO5zAgTiewSDpkzLxI9OjcFbZQfgNj40OVHPB9fXfxbabnGYUqmHWhJ6dse7NQuF2iD9kSsPt8v_-y8b4b9kY-R4_UsvtYy3A8jPt-_lfwKtU9E9zLNB9EConC5WouUWQ0_4q8iunppMKg50xJg2SfSdFgBdusDVTXS70KlA6LjJGKEOyOjrBfL0i03b7yUUNsXne-X0n7r5lpA1c6iz9uQAoBwA12gE-BbwBFfpeiPB9oT6Q2VcVQ98TfvfCWkntC1wFuTflc_QcMsxtcdKRq9kaRN1mwe7IcvF1FFLi1xQktsLtitkx9e5rVc3xzkji05ovu9mDsItI2_w6dFfFJhjHAgZMtB2QqmPLruFZmljPTyFkqTbJ-0YNbolaZK4trzdCOzCEk_XNQSr4mJ6kJKww9DBsHaZmihVgksY7JY1DhjobjZ-Glm00)](https://editor.plantuml.com/uml/ZLJ1Rjim3BqRy3yGkUoKeNBQBXsAeCNG0XiQO5ZNtbM7SJJBaY4f1wVOH-mJSkmvm7v0s7zDikKuAheX5vlaUwGUATfNsb1brXLF4uvB0qQ2OiNAm88fp0sJ8atIXEP6AhYpMoCBQkmEg0RUXs-HhwZU2Blb7LBto1UNO5zAgTiewSDpkzLxI9OjcFbZQfgNj40OVHPB9fXfxbabnGYUqmHWhJ6dse7NQuF2iD9kSsPt8v_-y8b4b9kY-R4_UsvtYy3A8jPt-_lfwKtU9E9zLNB9EConC5WouUWQ0_4q8iunppMKg50xJg2SfSdFgBdusDVTXS70KlA6LjJGKEOyOjrBfL0i03b7yUUNsXne-X0n7r5lpA1c6iz9uQAoBwA12gE-BbwBFfpeiPB9oT6Q2VcVQ98TfvfCWkntC1wFuTflc_QcMsxtcdKRq9kaRN1mwe7IcvF1FFLi1xQktsLtitkx9e5rVc3xzkji05ovu9mDsItI2_w6dFfFJhjHAgZMtB2QqmPLruFZmljPTyFkqTbJ-0YNbolaZK4trzdCOzCEk_XNQSr4mJ6kJKww9DBsHaZmihVgksY7JY1DhjobjZ-Glm00)
@@ -49,13 +50,12 @@
 - A rendszer legyen biztonságos, különösen a felhasználói adatok és jelszavak kezelése során.
 - A rendszer legyen megbízható, minimalizálva a leállások és hibák előfordulását.
 - A rendszer legyen könnyen karbantartható és bővíthető a jövőbeni funkciók hozzáadásához.
-- A rendszer legyen gyors, minimalizálva a késleltetést a játékos bemenet és a rendszer válasza között.
 
 ## Fizikai környezet
 - A rendszer webes környezetben fusson, elérhető legyen modern böngészőkben (Chrome, Firefox, Edge).
 - A rendszer frontendje React alapú legyen.
-- A rendszer backendje #todo alapú legyen, #todo keretrendszerrel.
-- Az adatbázis #todo legyen.
+- A rendszer backendje Node.js alapú legyen, Express keretrendszerrel.
+- Az adatbázis SQLite relációs adatbázis legyen, Prisma ORM-mel kezelve.
 
 ## Absztrakt domain modell
 ```mermaid
@@ -112,7 +112,7 @@ graph TD
 
 ### Kommunikációs folyamatok
 - REST API: 
-  - Felhasználókezelés: Regisztráció, bejelentkezés, profil lekérdezés
+  - Felhasználókezelés: Regisztráció, bejelentkezés, profil lekérdezés, profil frissítés
   - Verseny kezelés: Verseny létrehozás, seed lekérése, csatlakozás, állapot lekérdezés, eredmények beküldése
   - Pontszámok: Pontszámok lekérdezése, ranglisták megtekintése
   - Seed generálás: Minden versenyhez egyedi seed generálása, amely biztosítja hogy minden játékos ugyanazt a sorozatot kapja
@@ -140,7 +140,7 @@ erDiagram
         int id PK
         string username
         string email
-        string passwordhash
+        string password_hash
         string avatar_uri
         datetime joined_date
         datetime last_login
@@ -163,7 +163,6 @@ erDiagram
         int game_id FK
         string seed
         datetime started_at
-        datetime ended_at
     }
     PARTICIPANT {
         int id PK
@@ -181,39 +180,43 @@ erDiagram
 ```
 ## Implementációs terv
 ### Perszistencia réteg
-+ A perszisztencia réteg #todo adatbázisra épül.
-+ Az adatbázis kapcsolódást #todo biztosítja.
++ A perszisztencia réteg SQLite adatbázisra épül.
++ Az adatbázis kapcsolódást Prisma biztosítja.
 + Az adatok lekérdezése és mentése aszinkron módon történik.
 ```mermaid
 classDiagram
     class UserRepository {
-        +createUser(user: User): Promise~User~
-        +getUserById(id: int): Promise~User~
-        +getUserByUsername(username: String): Promise~User~
-        +updateUser(user: User): Promise~User~
-        +deleteUser(id: int): Promise~void~
+        +getUserByUsername(username: string): Promise<User | null>;
+        +getUserById(userId: number): Promise<User | null>;
+        +create(username: string, email: string, passwordHash: string, avatarUri?: string): +Promise<User>;
+        +update(userId: number, data: Partial<User>): Promise<User>;
+        +delete(userId: number): Promise<void>;
+        +updateLastLogin(userId: number, date: Date): Promise<User>;
+        +getUserScores(userId: number): Promise<any[]>;
+        +getUserScoresWithFilters(query: UserScoresQuery): Promise<UserScores[]>;
+        +getUserPlacementInMatch(userId: number, matchId: number): Promise<UserPlacement>;
+        +getTotalGamesPlayed(userId: number): Promise<number>;
+        +getBestScore(userId: number): Promise<number | null>;
+        +getAverageScore(userId: number): Promise<number | null>;
+        +getMultiPlayerStats(userId: number): Promise<number>;
+        +getSinglePlayerStats(userId: number): Promise<number>;
     }
 
     class GameRepository {
-        +getAllGames(): Promise~List~Game~~
+        +createGame(modeId: number, difficultyId: number): Promise<Game>;
+        +createMatch(data: GameSettings): Promise<Match>;
+        +createGameResult(data: GameResult): Promise<any>;
     }
 
-    class MatchRepository {
-        +createMatch(match: Match): Promise~Match~
-        +getMatchById(id: int): Promise~Match~
-        +updateMatch(match: Match): Promise~Match~
-    }
-
-    class ScoreRepository {
-        +createScore(score: Score): Promise~Score~
-        +getScoresByUserId(userId: int): Promise~List~Score~~
-        +getScoresByGameId(gameId: int): Promise~List~Score~~
+    class ImageRepository {
+        +save(base64: string, name: string): Promise<string>;
+        +delete(uri: string): Promise<void>;
+        +exists(uri: string): Promise<boolean>;
     }
 ```
-+ A UserRepository a felhasználói adatok kezeléséért felelős.
-+ A GameRepository a játékmódok és beállítások tárolását végzi.
-+ A MatchRepository a játék meneteket kezeli.
-+ A ScoreRepository a pontszámok mentését és lekérdezését valósítja meg.
++ A UserRepository a felhasználói adatok tárolását és lekérdezését, eredmények lekérdezését végzi.
++ A GameRepository a játékok, játékmenetek és eredmények mentését végzi.
++ Az ImageRepository az avatar képek mentését és törlését végzi.
 
 ### Üzleti logika réteg
 + Az üzleti logika réteg a verseny koordinációt és seed generálást kezeli.
@@ -222,37 +225,60 @@ classDiagram
 ```mermaid
 classDiagram
     class GameService {
-        +startNewGame(userId: int, modeId: int, difficultyId: int): Promise~Game~
-        +generateSeed(): String
-        +joinGame(userId: int, gameId: int): Promise~GameWithSeed~
-        +submitScore(userId: int, gameId: int, score: int, seed: String): Promise~Score~
-        +validateScore(seed: String, score: int): Boolean
+        +startNewGame(modeId: number, difficultyId: number): Promise<MatchResult>;
+        +saveGameResult(userId: number, matchId: number, roundEliminated: number): Promise<void>;
     }   
 
     class UserService {
-        +registerUser(username: String, email: String, password: String): Promise~User~
-        +loginUser(username: String, password: String): Promise~String~ // returns JWT token
-        +getUserProfile(userId: int): Promise~User~
-        +updateUserProfile(userId: int, userData: User): Promise~User~
+        +updateLastLogin(userId: number): Promise<void>;
+        +changePassword(userId: number, newPassword: string): Promise<void>;
+        +getUserByUsername(username: string): Promise<User | null>;
+        +getUserById(userId: number): Promise<User | null>;
+        +getUserStatsExtended(userId: number, scoresQuery?: Partial<UserScoresQuery>): Promise<UserStatsExtended>;
+        +updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User>;
     }   
 
     class AuthService {
-        +hashPassword(password: String): Promise~String~
-        +verifyPassword(password: String, hash: String): Promise~Boolean~
-        +generateToken(userId: int): String
-        +verifyToken(token: String): Promise~int~
+        +validateCredentials(username: string, password: string, email: string): ValidationResult;
+        +validateEmail(email: string): ValidationResult;
+        +validatePassword(password: string): ValidationResult;
+        +validateUsername(username: string): ValidationResult;
     }
 
+    class CredentialValidator {
+        +validateCredentials(username: string, password: string, email: string): ValidationResult;
+        +validateEmail(email: string): ValidationResult;
+        +validatePassword(password: string): ValidationResult;
+        +validateUsername(username: string): ValidationResult;
+    }
+
+    class JwtTokenGenerator{
+        +generate(payload: any, expiresIn?: string): string;
+        +verify(token: string): any;
+    }
+
+    class BcryptPasswordHasher {
+        +hash(password: string): Promise<string>;
+        +compare(password: string, hash: string): Promise<boolean>;
+    }
+    
+
     GameService --> GameRepository
-    GameService --> MatchRepository
-    GameService --> ScoreRepository
     UserService --> UserRepository
+    UserService --> ImageRepository
+    UserService --> BcryptPasswordHasher
+    UserService --> CredentialValidator
     AuthService --> UserRepository
+    AuthService --> CredentialValidator
+    AuthService --> BcryptPasswordHasher
+    AuthService --> JwtTokenGenerator
 ```
 + A GameService kezeli a játék menetek létrehozását, seed generálását, csatlakozást és eredmények validálását.
 + A játék logika a kliens oldalon fut a szerver által generált seed alapján.
 + A UserService a felhasználói regisztrációt, bejelentkezést és profilkezelést végzi.
-+ Az AuthService a jelszavak hash-eléséért, ellenőrzéséért és a JWT tokenek kezeléséért felelős.
++ Az CredentialValidator a JWT tokenek kezeléséért felelős.
++ A JwtTokenGenerator a JWT tokenek generálását és ellenőrzését végzi.
++ A BcryptPasswordHasher a jelszavak biztonságos hash-elését és ellenőrzését végzi.
 + Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.    
 
 
@@ -261,26 +287,34 @@ classDiagram
 + A REST API végpontok itt kerülnek definiálásra.
 ```mermaid
 classDiagram
-    class ApiController {
-        +register(req: Request, res: Response): Promise~void~
-        +login(req: Request, res: Response): Promise~void~
-        +getUserProfile(req: Request, res: Response): Promise~void~
-        +updateUserProfile(req: Request, res: Response): Promise~void~
-        +getGameModes(req: Request, res: Response): Promise~void~
-        +createCompetition(req: Request, res: Response): Promise~void~
-        +joinCompetition(req: Request, res: Response): Promise~void~
-        +getSeed(req: Request, res: Response): Promise~void~
-        +getCompetitionStatus(req: Request, res: Response): Promise~void~
-        +submitScore(req: Request, res: Response): Promise~void~
-        +getLeaderboard(req: Request, res: Response): Promise~void~
+    class AuthController {
+        +register(req: Request, res: Response): Promise<void>;
+        +login(req: Request, res: Response): Promise<void>;
     }
-    ApiController --> UserService
-    ApiController --> GameService
+
+    class UserController {
+        +getMe(req: Request, res: Response): Promise<void>;
+        +getStats(req: Request, res: Response): Promise<void>;
+        +updateProfile(req: Request, res: Response): Promise<void>;
+    }
+
+    class GameController {
+        +startNewGame(req: Request, res: Response): Promise<void>;
+        +saveGameResult(req: Request, res: Response): Promise<void>;
+    }
+
+    AuthController --> AuthService
+    UserController --> UserService
+    GameController --> GameService
+    DIContainer --> AuthController
+    DIContainer --> UserController
+    DIContainer --> GameController
 ```
-+ Az ApiController kezeli a REST API végpontokat, és a megfelelő szolgáltatásokat hívja meg.
-+ A játékmenet a kliens oldalon fut egy szerver által generált seed alapján.
-+ A szerver csak a seed generálást, versenyek koordinálását és eredmények tárolását/validálását végzi.
-+ Minden játékos ugyanazt a seed-et kapja egy adott versenyben, így biztosítva a fair versenyt.    
++ A AuthController kezeli a regisztrációt és bejelentkezést.
++ A UserController kezeli a felhasználói profil lekérdezését és frissítését.
++ A GameController kezeli a játék indítását és eredmények mentését.
++ Minden kontroller a megfelelő szolgáltatásokat használja az üzleti logika végrehajtására.
++ A DIContainer kezeli a függőség injektálást a kontrollerek és szolgáltatások között.
 
 ## Tesztterv
 ### 1. Egységtesztek

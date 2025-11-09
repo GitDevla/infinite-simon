@@ -13,20 +13,76 @@
 
 ## Használati esetek
 
-### 1. Egyjátékos mód
-**Cél:** Memóriajáték kipróbálása és saját rekord megdöntése  
-**Leírás:**  
-Simonfi Sándor felkeresi az Infinite-Simon weboldalt, hogy tesztelje a memóriáját. Bejelentkezés után elindítja az egyjátékos módot. A játék az első körökben egyszerűbb mintákat mutat, amelyeket Sándor könnyedén követ. Az 5. kör után a játék nehézségi szintje növekszik, új minták és kihívások jelennek meg. A 7. körben Sándor hibázik és véget ér a játék. A rendszer elmenti az eredményt, és Sándor látja, hogy új személyes rekordot ért el. Motiváltan zárja be az alkalmazást, elhatározva, hogy legközelebb még jobb eredményt fog elérni.
+### EPIK: Infinite-Simon webalkalmazás fejlesztése
+#### FEATURE: Egyjátékos mód fejlesztése
+Mint játékos, szeretném játszani az egyjátékos módot, hogy teszteljem a memóriámat és javítsam a rekordjaimat.
+**Background:**:
+Given A felhasználó megnyitotta az Infinite-Simon webalkalmazást
+##### SCENARIO: Játék indítása egyjátékos módban
+**When** A felhasználó elindítja az egyjátékos módot  
+**Then** A játék elindul, és a felhasználó látja az első mintát 
+##### SCENARIO: Játék folyamata egyjátékos módban
+**Given** A játék elindult egyjátékos módban
+**When** A felhasználó helyesen követi a mintát  
+**Then** A játék újabb, hosszabb mintát mutat
+##### SCENARIO: Játék vége egyjátékos módban
+**Given** A felhasználó hibázik a mintakövetés során  
+**When** A játék véget ér  
+**Then** A felhasználó látja az elért körszámot, és az eredmény elmentésre kerül
+#### FEATURE: Felhasználói hitelesítés és regisztráció
+Mint új felhasználó, szeretnék regisztrálni és bejelentkezni az alkalmazásba, hogy elmenthessem a játékom eredményeit és statisztikáimat.
+**Background:**:
+Given A felhasználó megnyitotta az Infinite-Simon webalkalmazást
+##### SCENARIO: Felhasználó regisztrációja
+**When** A felhasználó kitölti a regisztrációs űrlapot és elküldi azt  
+**Then** A felhasználó fiókja létrejön, és bejelentkezik az alkalmazásba
+##### SCENARIO: Felhasználó bejelentkezése
+**Given** A felhasználó rendelkezik érvényes fiókkal  
+**When** A felhasználó megadja a hitelesítési adatait és bejelentkezik  
+**Then** A felhasználó sikeresen bejelentkezik az alkalmazásba
+#### FEATURE: Felhasználói profil és statisztikák megjelenítése
+Mint regisztrált felhasználó, szeretném megtekinteni a profilomat és a játékom statisztikáit, hogy nyomon követhessem a fejlődésemet.
+**Background:**:
+Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
+##### SCENARIO: Profil megtekintése
+**When** A felhasználó navigál a profil oldalára  
+**Then** A felhasználó látja a profil adatait és a játékmenet statisztikáit
+##### SCENARIO: Statisztikák elemzése
+**Given** A felhasználó a profil oldalán van  
+**When** A felhasználó megtekinti a részletes statisztikákat  
+**Then** A felhasználó látja az átlagos körszámokat, legjobb eredményeket és a játékai történetét
+#### FEATURE: Többjátékos mód fejlesztése
+Mint játékos, szeretnék többjátékos módban játszani más játékosok ellen, hogy versenyezhessek és javíthassam a készségeimet.
+**Background:**:
+Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
+##### SCENARIO: Játék indítása többjátékos módban
+#todo
+#### FEATURE: Különböző játékmód (alap, kibővített)
+Mint játékos, szeretnék különböző játékmódok közül választani (alap és kibővített), hogy változatosabb játékélményt kapjak.
+**Background:**:
+Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
+##### SCENARIO: Játékmód kiválasztása
+**When** A felhasználó kiválasztja a kívánt játékmódot a főképernyőn  
+**Then** A játék a kiválasztott játékmódban indul el
+##### SCENARIO: Játék menete különböző játékmódokban
+**Given** A játék elindult a kiválasztott játékmódban  
+**When** A felhasználó játszik a játékkal  
+**Then** A játék a kiválasztott játékmód szabályai szerint működik
+#### FEATURE: Profil beállítások és testreszabás
+Mint felhasználó, szeretném testreszabni a profilomat és beállításaimat, hogy személyre szabottabb élményt kapjak.
+**Background:**:
+Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
+##### SCENARIO: Profil beállítások módosítása
+**When** A felhasználó navigál a profil beállítások oldalára és módosítja az adatokat  
+**Then** A módosítások elmentésre kerülnek, és a profil frissül
+#### FEATURE: Játékbeállítások
+Mint felhasználó, szeretném testreszabni a játékbeállításokat, hogy a saját preferenciáim szerint játszhassak.
+**Background:**:
+Given A felhasználó megnyitotta az Infinite-Simon webalkalmazást
+##### SCENARIO: Játékbeállítások módosítása
+**When** A felhasználó navigál a játékbeállítások oldalára és módosítja a beállításokat  
+**Then** A módosítások elmentésre kerülnek, és a játék a frissített beállításokkal indul el
 
-### 2. Többjátékos mód
-**Cél:** Más játékosok elleni verseny  
-**Leírás:**  
-Simonfi Sándor a főmenüből kiválasztja a többjátékos módot, ahol a rendszer automatikusan ellenfeleket keres. Csatlakozás után minden játékos ugyanazt a seed-alapú sorozatot kapja, így mindenki ugyanazt a kihívást oldja meg. A játékosok egymástól függetlenül játszanak a saját eszközükön, és a verseny végén beküldik az elért körszámukat. Aki tovább jut hibázás nélkül, az nyer. A játék végén a pontszámok frissülnek, és a felhasználó láthatja helyezését a ranglistán.
-
-### 3. Statisztikák megtekintése
-**Cél:** Saját teljesítmény elemzése  
-**Leírás:**  
-Simonfi Sándor a profil oldalára navigál, ahol részletes statisztikákat talál az eddigi játékairól. Megtekintheti átlagos körszámait, legjobb eredményeit különböző játékmódokban, valamint fejlődési grafikonját az idő függvényében.
 
 ## Határ osztályok
 | Határ osztály | Leírás |
@@ -35,7 +91,8 @@ Simonfi Sándor a profil oldalára navigál, ahol részletes statisztikákat tal
 | AuthScreen | A felhasználói bejelentkezést és regisztrációt kezeli. |
 | UserContext | A felhasználói állapot és adatok kezeléséért felelős osztály. |
 | MainScreen | A kezdőképernyő, ahol a játékos navigálhat a különböző funkciók között. |
-| QueueScreen | A többjátékos játékokhoz való csatlakozást és várakozást kezeli. |
+| LobbyModal | A többjátékos játékokhoz való csatlakozást és várakozást kezeli. |
+| SettingsScreen | A játék és alkalmazás beállításainak módosítását teszi lehetővé. |
 | UserProfileScreen | A felhasználói profil megtekintését és szerkesztését teszi lehetővé valamit a felhasználói statisztikák megjelenítését. |
 | GameScreen | A játék fő képernyője, ahol a játékos játszik |
 | GameOverModal | A játék vége képernyő, ahol a játékos megtekintheti az eredményét és a pontszáma elmentésre kerül. |
@@ -47,7 +104,8 @@ graph LR
     A --> B[AuthScreen]
     A --> C[UserProfileScreen]
     A --> D[GameScreen]
-    A --> E[QueueScreen]
+    A --> G[SettingsScreen]
+    A --> E[LobbyModal]
     E --> D
     D --> F[GameOverModal]
 ```
