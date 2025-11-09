@@ -9,8 +9,8 @@ export class GameController {
         try {
             const { modeId, difficultyId } = req.body;
 
-            if (!modeId) return next(new MissingParameterError("modeId"));
-            if (!difficultyId) return next(new MissingParameterError("difficultyId"));
+            if (!modeId) throw new MissingParameterError("modeId");
+            if (!difficultyId) throw new MissingParameterError("difficultyId");
 
             const result = await this.gameService.startNewGame(modeId, difficultyId);
 
@@ -29,9 +29,9 @@ export class GameController {
             const { matchId, roundEliminated, status } = req.body;
             const userId = (req as any).userId;
 
-            if (!userId) return next(new MissingParameterError("userId"));
-            if (!matchId) return next(new MissingParameterError("matchId"));
-            if (roundEliminated === undefined) return next(new MissingParameterError("roundEliminated"));
+            if (!userId) throw new MissingParameterError("userId");
+            if (!matchId) throw new MissingParameterError("matchId");
+            if (roundEliminated === undefined) throw new MissingParameterError("roundEliminated");
 
             await this.gameService.saveGameResult(userId, matchId, roundEliminated, status);
 

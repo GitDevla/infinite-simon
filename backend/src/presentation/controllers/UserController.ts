@@ -8,10 +8,10 @@ export class UserController {
     async getMe(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-            if (!userId) return next(new MissingParameterError("userId"));
+            if (!userId) throw new MissingParameterError("userId");
 
             const user = await this.userService.getUserById(userId);
-            if (!user) return next(new NotFoundError("user"));
+            if (!user) throw new NotFoundError("user");
 
             // Don't return sensitive information
             const { password_hash, ...userWithoutPassword } = user;
@@ -24,7 +24,7 @@ export class UserController {
     async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-            if (!userId) return next(new MissingParameterError("userId"));
+            if (!userId) throw new MissingParameterError("userId");
 
             // Extract query parameters
             const { mode, diff, limit, page, orderBy } = req.query;
@@ -48,27 +48,27 @@ export class UserController {
     async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const userId = (req as any).userId;
-            if (!userId) return next(new MissingParameterError("userId"));
+            if (!userId) throw new MissingParameterError("userId");
 
             const { username = null, email = null, profilePicture = null, password = null, currentPassword = null } = req.body ?? {};
 
             // Validate input
             if (username && typeof username !== "string")
-                return next(new InvalidParameterError("username"));
+                throw new InvalidParameterError("username");
             if (email && typeof email !== "string")
-                return next(new InvalidParameterError("email"));
+                throw new InvalidParameterError("email");
             if (profilePicture && typeof profilePicture !== "string")
-                return next(new InvalidParameterError("profilePicture"));
+                throw new InvalidParameterError("profilePicture");
             if (password && typeof password !== "string") {
                 if (!currentPassword || typeof currentPassword !== "string") {
-                    return next(new MissingParameterError("currentPassword"));
+                    throw new MissingParameterError("currentPassword");
                 }
-                return next(new InvalidParameterError("password"));
+                throw new InvalidParameterError("password");
             }
 
             const updatedUser = await this.userService.updateUserProfile(userId, { username, email, profilePicture, password, currentPassword });
             if (!updatedUser) {
-                return next(new NotFoundError("user"));
+                throw new NotFoundError("user");
             }
             
             const { password_hash, ...userWithoutPassword } = updatedUser;
