@@ -2,7 +2,7 @@ import { IUserService, UserProfileUpdate, UserStatsExtended } from "../../interf
 import { IUserRepository, User, UserScoresQuery } from "../../interfaces/repositories/IUserRepository";
 import { IPasswordHasher, IValidator } from "../../interfaces/services/IServices";
 import { IImageRepository } from "../../interfaces/repositories/IImageRepository";
-import { InvalidParameterError, UnauthorizedError } from "../../presentation/errors/ClientError";
+import { InvalidParameterError, NotFoundError, UnauthorizedError } from "../../presentation/errors/ClientError";
 
 export class UserService implements IUserService {
     constructor(
@@ -64,19 +64,20 @@ export class UserService implements IUserService {
 
     async updateUserProfile(userId: number, updates: Partial<UserProfileUpdate>): Promise<User> {
         const user = await this.userRepository.getUserById(userId);
-        if (user === null) throw new InvalidParameterError("User not found");
+        if (user === null) throw new NotFoundError("User");
 
         const updateData: Partial<User> = {};
 
         if (updates.username) {
             this.credentialValidator.validateUsername(updates.username);
+            const existingUser = await this.userRepository.getUserByUsername(updates.username);
+            if (existingUser) throw new InvalidParameterError("Username is already taken");
             updateData.username = updates.username;
         }
         if (updates.email) {
             this.credentialValidator.validateEmail(updates.email);
-            this.userRepository.getUserByEmail(updates.email).then(user => {
-                if (user) throw new InvalidParameterError("Email is already in use");
-            });
+            const existingEmail = await this.userRepository.getUserByEmail(updates.email);
+            if (existingEmail) throw new InvalidParameterError("Email is already taken");
             updateData.email = updates.email;
         }
         if (updates.profilePicture) {
@@ -96,10 +97,8 @@ export class UserService implements IUserService {
             const currentPasswordHash = user.password_hash;
 
             const isCurrentPasswordValid = await this.passwordHasher.compare(updates.currentPassword || "", currentPasswordHash);
-            if (!isCurrentPasswordValid) {
-                throw new UnauthorizedError("Current password is incorrect");
-            }
-            
+            if (!isCurrentPasswordValid) throw new UnauthorizedError("Current password is incorrect");
+
             await this.changePassword(userId, updates.password);
         }
 
