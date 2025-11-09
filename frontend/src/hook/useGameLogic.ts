@@ -4,17 +4,25 @@ import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
-import {Backend} from "../util/Backend";
+import {Backend, type GameStartResponse} from "../util/Backend";
 
-export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode: GameMode}) {
+export function useGameLogic({
+	gameType,
+	gameMode,
+	initialMatchId,
+}: {
+	gameType: GameType;
+	gameMode: GameMode;
+	initialMatchId?: number;
+}) {
 	const [score, setScore] = useState(0);
 	const [gameOngoing, setGameOngoing] = useState(true);
 	const [sequence, setSequence] = useState<Sequence | null>(null);
 	const game = useRef<Game | null>(null);
 	const userContext = useContext(AuthContext);
-	const [matchId, setMatchId] = useState<number | null>(null);
+	const [matchId, setMatchId] = useState<number | null>(initialMatchId ?? null);
 
-	const valami = async () => {
+	const startNewGame = async () => {
 		const res = await Backend.startGame(gameMode, gameType);
 		if (!res.ok) {
 			console.error("Error starting game:", res.error);
@@ -34,8 +42,28 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 			"and match id:",
 			data.match.id,
 		);
+		setupGameFromResponse(data);
+	};
+
+	const joinMatch = async (matchId: number) => {
+		const res = await Backend.joinMatch(matchId);
+		if (!res.ok) {
+			console.error("Error joining match:", res.error);
+			return;
+		}
+		const data = res.data;
+		if (!data.game || !data.match) {
+			console.error("No game object or match returned from backend");
+			return;
+		}
+		setMatchId(data.match.id);
+		console.log("Joined match with id:", data.match.id);
+		setupGameFromResponse(data);
+	};
+
+	const setupGameFromResponse = (gameStartResponse: GameStartResponse) => {
 		if (game.current === null) return;
-		game.current.startNewGame(data.match.seed, gameType);
+		game.current.startNewGame(gameStartResponse.match.seed, gameType);
 		game.current.onNewRound(() => {
 			if (game.current === null) return;
 			setScore(game.current.getCurrentRound() - 1);
@@ -44,9 +72,14 @@ export function useGameLogic({gameType, gameMode}: {gameType: GameType; gameMode
 		setSequence(game.current.getSequence());
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
 		game.current = new Game();
-		valami();
+		if (initialMatchId) {
+			joinMatch(initialMatchId);
+		} else {
+			startNewGame();
+		}
 	}, []);
 
 	const saveGameResult = async (matchId: number, roundEliminated: number) => {

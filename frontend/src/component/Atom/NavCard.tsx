@@ -1,7 +1,8 @@
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
 import {GameMode, type GameType} from "../../service/Game";
+import SimpleLobbyModal from "../Game/SimpleLobbyModal";
 
 export default function NavCard({
 	lvlId,
@@ -16,6 +17,8 @@ export default function NavCard({
 }) {
 	const authContext = useContext(AuthContext);
 	const loggedIn = authContext.loggedIn;
+
+	const [showModal, setShowModal] = useState(false);
 
 	return (
 		<div className="bg-bg-secondary bg-opacity-70 rounded-xl w-80 aspect-[4/5]">
@@ -40,14 +43,16 @@ export default function NavCard({
 						Play Alone
 					</Link>
 					{loggedIn && (
-						<Link
-							to={`/game?difficulty=${lvlId}&mode=${GameMode.MultiPlayer}`}
+						<button
+							type="button"
+							onClick={() => setShowModal(true)}
 							className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-[80%] text-center">
 							Play with Friends
-						</Link>
+						</button>
 					)}
 				</div>
 			</div>
+			{showModal && <SimpleLobbyModal lvlId={lvlId} modalClose={() => setShowModal(false)} />}
 		</div>
 	);
 }

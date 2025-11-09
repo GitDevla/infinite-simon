@@ -30,10 +30,12 @@ export default function GameScreen() {
 	const [searchParams, _] = useSearchParams();
 	const difficulty = Number(searchParams.get("difficulty")) || GameType.Simple;
 	const mode = Number(searchParams.get("mode")) || GameMode.SinglePlayer;
+	const matchID = searchParams.get("matchID") === null ? undefined : Number(searchParams.get("matchID"));
 
 	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic({
 		gameType: difficulty as GameType,
 		gameMode: mode as GameMode,
+		initialMatchId: matchID,
 	});
 
 	const {forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs} =

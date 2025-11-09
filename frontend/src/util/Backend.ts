@@ -47,7 +47,7 @@ export interface Score {
 	placement?: number;
 }
 
-interface GameStartResponse {
+export interface GameStartResponse {
 	success: boolean;
 	game: Game;
 	match: Match;
@@ -195,7 +195,7 @@ export class Backend {
 	}
 
 	static async saveGameResult(matchId: number, roundEliminated: number): Promise<BackendResponse> {
-		return Backend.POST("/save-game-result", {matchId, roundEliminated});
+		return Backend.POST("/save-game-result", {matchId, roundEliminated, status: "finished"}); //TODO: status when backend supports it
 	}
 
 	static async startGame(modeID: GameMode, difficultyID: GameType): Promise<BackendResponse<GameStartResponse>> {
@@ -203,5 +203,9 @@ export class Backend {
 			modeId: modeID + 1,
 			difficultyId: difficultyID + 1,
 		});
+	}
+
+	static async joinMatch(matchId: number): Promise<BackendResponse<GameStartResponse>> {
+		return Backend.POST<GameStartResponse>("/join-game", {matchId});
 	}
 }
