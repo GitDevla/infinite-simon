@@ -19,9 +19,9 @@ export interface GameResult {
 }
 
 export enum ParticipantStatus {
-  waiting,
-  playing,
-  finished
+  waiting = "waiting",
+  playing = "playing",
+  finished = "finished",
 }
 
 export interface IGameRepository {
