@@ -47,7 +47,7 @@ export interface Score {
 	placement?: number;
 }
 
-interface GameStartResponse {
+export interface GameStartResponse {
 	success: boolean;
 	game: Game;
 	match: Match;
@@ -203,5 +203,9 @@ export class Backend {
 			modeId: modeID + 1,
 			difficultyId: difficultyID + 1,
 		});
+	}
+
+	static async joinMatch(matchId: number): Promise<BackendResponse<GameStartResponse>> {
+		return Backend.POST<GameStartResponse>("/join-game", {matchId});
 	}
 }
