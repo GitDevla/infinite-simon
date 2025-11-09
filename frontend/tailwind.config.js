@@ -9,6 +9,8 @@ module.exports = {
 				"simon-blue": "rgb(var(--simon-blue) / <alpha-value>)",
 				"simon-yellow": "rgb(var(--simon-yellow) / <alpha-value>)",
 				"bg-secondary": "rgb(var(--bg-secondary) / <alpha-value>)",
+				"fg": "rgb(var(--fg) / <alpha-value>)",
+				"fg-secondary": "rgb(var(--fg-secondary) / <alpha-value>)",
 			},
 		},
 	},

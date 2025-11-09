@@ -12,7 +12,8 @@
 		"db:setup": "npx prisma db push && npm run seed",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
-		"seed": "tsx prisma/seed.ts"
+		"seed": "tsx prisma/seed.ts",
+		"test": "tsx ./test/testBackend.ts"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
@@ -29,6 +30,8 @@
 		"cors": "^2.8.5",
 		"express": "^5.1.0",
 		"jsonwebtoken": "^9.0.2",
-		"prisma": "^6.17.1"
+		"prisma": "^6.17.1",
+		"sharp": "^0.34.4",
+		"express-rate-limit": "^8.2.1"
 	}
 }

@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import FloatingInput from "../component/FloatingInput";
-import Layout from "../component/Layout";
+import FloatingInput from "../component/Atom/FloatingInput";
+import Layout from "../component/Layout/Layout";
 import {AuthContext} from "../context/AuthContext";
 
 export default function AuthScreen() {
@@ -25,7 +25,7 @@ export default function AuthScreen() {
 	};
 
 	return (
-		<Layout header={isLogin ? "Login" : "Register"} hideNavbar={true}>
+		<Layout header={isLogin ? "Login" : "Register"} hideNavbar={true} goBack={true}>
 			<div className="max-w-[500px] mx-auto">
 				<form onSubmit={handleSubmit} className="flex flex-col items-center">
 					<div className="my-4 w-full">

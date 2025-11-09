@@ -57,6 +57,12 @@ model Match {
   Participant Participant[]
 }
 
+enum ParticipantStatus {
+  waiting
+  playing
+  finished
+}
+
 model Participant {
   id Int @id @default(autoincrement())
   match Match @relation(fields: [matchId], references: [id])
@@ -65,4 +71,5 @@ model Participant {
   userId Int
   round_eliminated Int
   achieved_at DateTime @default(now())
+  status ParticipantStatus @default(waiting)
 }

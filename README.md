@@ -19,7 +19,7 @@ Az Infinity Simon egy kibővített változata a klasszikus Simon játénak, ahol
 ## Fejlesztési környezet beállítása
 1. Klónozd a repót: `git clone https://github.com/pti-szfm-2025/infinite-simon`.
 2. Lépj be a könyvtárba: `cd infinite-simon`.
-3. A frontend szerver elindításához futtasd: `cd frontend && npm install`.
+3. A frontend szerver elindításához futtasd: `cd frontend && npm install && npm i use-sound`.
 4. Készítsd elő a környezeti változókat a `.env` fájlban a `example.env` alapján.
 5. Indítsd el a frontend szervert: `npm start`.
 6. A backend szerver elindításához nyiss egy új terminált, lépj be a könyvtárba és futtasd: `cd backend && npm install`.

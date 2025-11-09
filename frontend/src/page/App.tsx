@@ -1,5 +1,5 @@
-import Layout from "../component/Layout";
-import NavCard from "../component/NavCard";
+import NavCard from "../component/Atom/NavCard";
+import Layout from "../component/Layout/Layout";
 import {GameType} from "../service/Game";
 
 function App() {

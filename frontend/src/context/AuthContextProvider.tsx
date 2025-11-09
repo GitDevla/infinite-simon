@@ -1,69 +1,60 @@
-import {use, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+import {toast} from "react-toastify";
+import {Backend, type UserProfile} from "../util/Backend";
 import {AuthContext} from "./AuthContext";
-
-const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
 export default function AuthContextProvider({children}: {children: React.ReactNode}) {
 	const [loggedIn, setLoggedIn] = useState(false);
-	const [username, setUsername] = useState<string | null>(null);
-	const [useravatar, setUseravatar] = useState<string | null>(null);
-	const [token, setToken] = useState<string | null>(null);
+	const [user, setUser] = useState<UserProfile | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	const login = async (username: string, password: string) => {
-		const response = await fetch(`${backendUrl}/login`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({username, password}),
-		});
+		const response = await Backend.login(username, password);
 
 		if (response.ok) {
-			const data = await response.json();
+			const data = response.data;
 			setLoggedIn(true);
-			setUsername(username);
-			setUseravatar("https://placehold.co/100"); //todo
-			setToken(data.token);
+			saveToken(data.token);
+			await updateUserProfile();
 			localStorage.setItem("username", username);
 		} else {
-			const data = await response.json();
-			const errorMessage = data.error || data.errorMessage || "Login failed";
-			alert(errorMessage);
+			const error = response.error;
+			const errorMessage = error || "Login failed";
+			toast.error(errorMessage);
 		}
 		setLoading(false);
 		return response.ok;
 	};
 
 	const register = async (username: string, email: string, password: string) => {
-		const response = await fetch(`${backendUrl}/register`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({username, email, password}),
-		});
+		const response = await Backend.register(username, email, password);
 
 		if (response.ok) {
-			const data = await response.json();
-			alert("Registration successful. Please log in.");
+			toast.success("Registration successful. Please log in.");
 		} else {
-			const data = await response.json();
-			const errorMessage = data.error || data.errorMessage || "Registration failed";
-			alert(errorMessage);
+			const error = response.error;
+			const errorMessage = error || "Registration failed";
+			toast.error(errorMessage);
 			return false;
 		}
 		return true;
 	};
 
+	const updateUserProfile = async () => {
+		const serverData = await Backend.getUserProfile();
+		if (!serverData.ok) {
+			console.error("Failed to fetch user profile data");
+			return;
+		}
+		const data = serverData.data;
+		setUser(data);
+	};
+
 	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
-		const storedUsername = localStorage.getItem("username");
-		if (storedToken && storedUsername) {
-			setToken(storedToken);
-			setUsername(storedUsername);
+		if (storedToken) {
+			updateUserProfile();
 			setLoggedIn(true);
-			setUseravatar("https://placehold.co/100"); //todo
 			setLoading(false);
 		}
 		return () => {
@@ -71,22 +62,22 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 		};
 	}, []);
 
-	useEffect(() => {
-		if (token === null) {
+	const saveToken = (newToken: string | null) => {
+		if (newToken === null) {
 			localStorage.removeItem("token");
 		} else {
-			localStorage.setItem("token", token);
+			localStorage.setItem("token", newToken);
 		}
-	}, [token]);
+	};
 
 	const logout = () => {
 		setLoggedIn(false);
-		setUsername(null);
-		setToken(null);
+		setUser(null);
+		saveToken(null);
 	};
 
 	return (
-		<AuthContext.Provider value={{loggedIn, username, token, login, logout, useravatar, register, loading}}>
+		<AuthContext.Provider value={{loggedIn, user, login, logout, register, loading, updateUserProfile}}>
 			{children}
 		</AuthContext.Provider>
 	);
