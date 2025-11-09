@@ -12,6 +12,8 @@ export class RouteFactory {
 
         const RATE_LIMIT_MESSAGE = "Too many requests from this IP, please try again later.";
 
+        router.use("/public", Router().use(static_("public")));
+
         // General rate limiting
         const limiter = rateLimit({
             windowMs: 60 * 1000, // 1 minute
