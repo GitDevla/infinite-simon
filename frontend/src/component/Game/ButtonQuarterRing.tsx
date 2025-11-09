@@ -1,4 +1,8 @@
+import { builtinModules } from "module";
 import {forwardRef, useImperativeHandle, useRef} from "react";
+import useSound from "use-sound";
+
+
 
 /**
  * Handle for ButtonQuarterRing component
@@ -22,14 +26,37 @@ const ButtonQuarterRing = forwardRef<
 		id?: string;
 	}
 >(({color, onPress, id}, ref) => {
+	let playBackSpeed=1.0;
+
+	const [buttonSound] = useSound(`${process.env.PUBLIC_URL}/button.mp3` , {playbackRate: playBackSpeed});
 	const svgRef = useRef<SVGSVGElement>(null);
 
 	function onClickAnimation() {
+
+		switch (color){
+			case "red":
+				playBackSpeed = 0.8
+				break;
+			case "green":
+				playBackSpeed = 1.0
+				break;
+			case "blue":
+				playBackSpeed = 1.2
+				break;
+			case "yellow":
+				playBackSpeed = 1.4
+				break;
+			default:
+				playBackSpeed=1.0
+		}
+
 		if (!svgRef.current) return;
 		svgRef.current.classList.add("animate");
+		buttonSound({playbackRate: playBackSpeed});
 		setTimeout(() => {
 			svgRef.current?.classList.remove("animate");
 		}, 200);
+		
 	}
 
 	// Expose methods to parent components
@@ -38,6 +65,7 @@ const ButtonQuarterRing = forwardRef<
 	}));
 
 	return (
+		
 		<button
 			className="size-full"
 			type="button"

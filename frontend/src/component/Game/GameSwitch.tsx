@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import useSound from "use-sound";
 
 /**
  * A switch component that toggles between on and off states.
@@ -23,11 +24,15 @@ export default function Switch({
 		}
 	}, [value]);
 
+	const [switchSound] = useSound(`${process.env.PUBLIC_URL}/switch.mp3`);
+
 	function handleToggleChange(newState: boolean) {
+		switchSound()
+		
 		setIsOn(newState);
 		onToggle?.(newState);
 	}
-
+	
 	return (
 		<div
 			id={id}

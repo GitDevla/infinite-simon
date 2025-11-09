@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {useEffect, useState} from "react";
 import {mod} from "../../util/mod";
+import useSound from "use-sound";
 
 /**
  * A knob component that allows users to select a value within a specified range by rotating the knob.
@@ -51,6 +52,7 @@ export default function Knob({
 			e.preventDefault();
 		}
 	};
+	const [knobSound] = useSound(`${process.env.PUBLIC_URL}/knob.mp3` , {playbackRate: 1.5});
 
 	const handleMouseDown = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -65,6 +67,7 @@ export default function Knob({
 			setInnerValue(newValue);
 		};
 		const onMouseUp = () => {
+			knobSound()
 			setInnerValue(v => {
 				v = Math.round(v);
 				onChange?.(clamp(v));

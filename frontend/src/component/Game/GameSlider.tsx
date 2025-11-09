@@ -1,5 +1,7 @@
 import type React from "react";
 import {useEffect, useRef, useState} from "react";
+import useSound from "use-sound";
+
 
 /**
  * A vertical slider component that allows users to select a value within a specified range by dragging a ball along a track.
@@ -64,9 +66,11 @@ export default function Slider({
 		}
 	};
 
+	const [sliderSound] = useSound(`${process.env.PUBLIC_URL}/slider.mp3`);
+
 	const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
 		e.preventDefault();
-
+		
 		const parentRect = ref.current?.getBoundingClientRect();
 		if (!parentRect) return;
 
@@ -80,11 +84,13 @@ export default function Slider({
 		};
 
 		const onMouseUp = () => {
+			sliderSound();
 			updateValueAndNotify();
 			window.removeEventListener("mousemove", onMouseMove);
 			window.removeEventListener("mouseup", onMouseUp);
 		};
 		const onTouchEnd = () => {
+			sliderSound();
 			updateValueAndNotify();
 			window.removeEventListener("touchmove", onTouchMove);
 			window.removeEventListener("touchend", onTouchEnd);
