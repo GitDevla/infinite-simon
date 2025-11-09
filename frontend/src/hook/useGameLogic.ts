@@ -4,7 +4,7 @@ import {AuthContext} from "../context/AuthContext";
 import {Game, type GameMode, type GameType} from "../service/Game";
 import {ReactPart} from "../service/Parts";
 import type {Sequence} from "../service/Sequence";
-import {Backend} from "../util/Backend";
+import {Backend, type GameStartResponse} from "../util/Backend";
 
 export function useGameLogic({
 	gameType,
@@ -42,14 +42,7 @@ export function useGameLogic({
 			"and match id:",
 			data.match.id,
 		);
-		if (game.current === null) return;
-		game.current.startNewGame(data.match.seed, gameType);
-		game.current.onNewRound(() => {
-			if (game.current === null) return;
-			setScore(game.current.getCurrentRound() - 1);
-			setSequence(game.current.getSequence());
-		});
-		setSequence(game.current.getSequence());
+		setupGameFromResponse(data);
 	};
 
 	const joinMatch = async (matchId: number) => {
@@ -65,8 +58,12 @@ export function useGameLogic({
 		}
 		setMatchId(data.match.id);
 		console.log("Joined match with id:", data.match.id);
+		setupGameFromResponse(data);
+	};
+
+	const setupGameFromResponse = (gameStartResponse: GameStartResponse) => {
 		if (game.current === null) return;
-		game.current.startNewGame(data.match.seed, gameType);
+		game.current.startNewGame(gameStartResponse.match.seed, gameType);
 		game.current.onNewRound(() => {
 			if (game.current === null) return;
 			setScore(game.current.getCurrentRound() - 1);
