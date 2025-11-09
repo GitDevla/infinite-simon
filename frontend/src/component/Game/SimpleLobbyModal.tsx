@@ -45,7 +45,7 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 		navigate(`/game?difficulty=${lvlId}&mode=${GameMode.MultiPlayer}&matchID=${id}`);
 	};
 
-	const [inputedCode, setInputedCode] = useState<string>("");
+	const [inputtedCode, setInputtedCode] = useState<string>("");
 
 	return (
 		<div>
@@ -106,9 +106,9 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 						<div className="mb-4">
 							<FloatingInput
 								label="Lobby Code"
-								setState={setInputedCode}
-								state={inputedCode}
-								type="string"
+								setState={setInputtedCode}
+								state={inputtedCode}
+								type="text"
 							/>
 						</div>
 						<div className="flex justify-between">
@@ -121,7 +121,7 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 							<button
 								type="button"
 								onClick={() => {
-									validateCode(Number(inputedCode)).then(id => {
+									validateCode(Number(inputtedCode)).then(id => {
 										if (id) goToGameScreen(id);
 									});
 								}}
