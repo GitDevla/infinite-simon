@@ -43,7 +43,7 @@ export class PrismaGameRepository implements IGameRepository {
                 data: {
                     round_eliminated: data.roundEliminated,
                     achieved_at: new Date(),
-                    status: data.status ?? ParticipantStatus.playing,
+                    status: data.status,
                 },
             });
         } else {
@@ -52,7 +52,7 @@ export class PrismaGameRepository implements IGameRepository {
                     matchId: data.matchId,
                     userId: user.id,
                     round_eliminated: data.roundEliminated,
-                    status: data.status ?? ParticipantStatus.waiting,
+                    status: data.status,
                 },
             });
         }
