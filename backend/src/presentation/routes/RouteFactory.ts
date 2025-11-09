@@ -12,6 +12,7 @@ export class RouteFactory {
 
         const RATE_LIMIT_MESSAGE = "Too many requests from this IP, please try again later.";
 
+        // Defined before rate limiting to allow static files to be served without limits
         router.use("/public", Router().use(static_("public")));
 
         // General rate limiting
@@ -46,7 +47,7 @@ export class RouteFactory {
 
         // Game routes
         router.post("/start-game", limiter, (req, res) => gameController.startNewGame(req, res));
-        router.post("/join-game", limiter, (req, res) => gameController.joinMultiplayerMatch(req, res));
+        router.post("/join-game", limiter, authMiddleware.authenticate, (req, res) => gameController.joinMultiplayerMatch(req, res));
         router.post("/save-game-result", limiter, authMiddleware.authenticate, (req, res) => gameController.saveGameResult(req, res));
         
         // User routes
