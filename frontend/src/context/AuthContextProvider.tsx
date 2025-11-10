@@ -43,7 +43,9 @@ export default function AuthContextProvider({children}: {children: React.ReactNo
 	const updateUserProfile = async () => {
 		const serverData = await Backend.getUserProfile();
 		if (!serverData.ok) {
-			console.error("Failed to fetch user profile data");
+			toast.error(serverData.error || "Failed to fetch user profile");
+			toast.info("Please log in again");
+			logout();
 			return;
 		}
 		const data = serverData.data;

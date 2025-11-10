@@ -88,13 +88,28 @@ export class Backend {
 			};
 			options.body = JSON.stringify(queryParamsOrBody);
 		}
-
-		const res = await fetch(url, options);
-		const json = await res.json();
+		let res: Response;
+		try {
+			res = await fetch(url, options);
+		} catch (error) {
+			return {
+				ok: false,
+				error: `Network error: ${(error as Error).message}`,
+			};
+		}
+		let json: any;
+		try {
+			json = await res.json();
+		} catch (error) {
+			return {
+				ok: false,
+				error: res.statusText || "Failed to parse server response",
+			};
+		}
 		if (!res.ok) {
 			return {
 				ok: false,
-				error: json.error || json.errorMessage,
+				error: json.error || json.errorMessage || json.message || "An error occurred",
 			};
 		}
 		return {
@@ -182,8 +197,8 @@ export class Backend {
 		return res;
 	}
 
-	static async login(username: string, password: string): Promise<BackendResponse<{token: {token:string}}>> {
-		return Backend.POST<{token: {token:string}}>("/login", {username, password});
+	static async login(username: string, password: string): Promise<BackendResponse<{token: {token: string}}>> {
+		return Backend.POST<{token: {token: string}}>("/login", {username, password});
 	}
 
 	static async register(
