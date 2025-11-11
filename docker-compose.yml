@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    
+    container_name: infinite-simon-backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./db:/app/prisma/db
+    environment:
+      - DATABASE_URL=file:./db/dev.db
+      - JWT_SECRET=REPLACE_WITH_A_LONG_RANDOM_SECRET
+      - CORS_ORIGIN=*
+    restart: unless-stopped
