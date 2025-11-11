@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-ENV CORS_ORIGIN=*
 RUN npm run build
 
 FROM node:22-alpine AS production
