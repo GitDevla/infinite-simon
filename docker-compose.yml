@@ -14,3 +14,15 @@ services:
       - JWT_SECRET=REPLACE_WITH_A_LONG_RANDOM_SECRET
       - CORS_ORIGIN=*
     restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: infinite-simon-frontend
+    ports:
+      - 80:80
+    environment:
+      - REACT_APP_SERVER_URL=http://localhost:3001
+    restart: unless-stopped
+    depends_on:
+      - backend
