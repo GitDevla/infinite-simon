@@ -20,6 +20,8 @@ model User {
   joined_date DateTime @default(now())
   last_login DateTime @default(now())
 
+  email_verified Boolean @default(false)
+
   Participant Participant[]
 }
 

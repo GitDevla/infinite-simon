@@ -6,6 +6,7 @@ export interface User {
     avatar_uri?: string | null;
     joined_date: Date;
     last_login: Date;
+    email_verified: boolean;
 }
 
 export interface UserStats {
