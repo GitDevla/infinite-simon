@@ -59,18 +59,17 @@ export default function AuthScreen() {
 						{isLogin ? "Register" : "Login"}
 					</button>
 				</p>
-				{/* forgot password */}
 				<p className="text-center">
 					<button
 						type="button"
-						onClick={()=>setForgotPasswordOpen(true)}
+						onClick={() => setForgotPasswordOpen(true)}
 						className="text-simon-blue bg-transparent border-none cursor-pointer">
 						Forgot Password?
 					</button>
 				</p>
 			</div>
 			{forgotPasswordOpen && (
-				<ForgotPasswordModal modalClose={()=>setForgotPasswordOpen(false)} />
+				<ForgotPasswordModal modalClose={() => setForgotPasswordOpen(false)} />
 			)}
 		</Layout>
 	);

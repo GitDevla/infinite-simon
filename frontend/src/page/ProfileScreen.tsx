@@ -3,8 +3,8 @@ import Layout from "../component/Layout/Layout";
 import UserGlobalStats from "../component/UserGlobalStats";
 import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
-import { Link } from "react-router-dom";
 import { Backend } from "../util/Backend";
+import { toast } from "react-toastify";
 
 export default function ProfileScreen() {
 	const authContext = useContext(AuthContext);
@@ -16,9 +16,9 @@ export default function ProfileScreen() {
 	const requestEmailVerification = async () => {
 		const res = await Backend.resendVerificationEmail();
 		if (res.ok) {
-			alert("Verification email sent. Please check your inbox.");
+			toast.info("Verification email sent. Please check your inbox.");
 		} else {
-			alert(`Failed to send verification email: ${res.error}`);
+			toast.error(`Failed to send verification email: ${res.error}`);
 		}
 	}
 
@@ -37,7 +37,7 @@ export default function ProfileScreen() {
 					{
 						!verified && (
 							<p className="text-sm text-gray-400">Email not verified. 
-							<button type="button" className="text-simon-blue underline"  onClick={requestEmailVerification}>
+							<button type="button" className="text-simon-blue underline" onClick={requestEmailVerification}>
 								Start verification process.
 							</button>
 							</p>

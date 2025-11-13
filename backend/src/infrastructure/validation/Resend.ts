@@ -29,18 +29,18 @@ export class ResendEmailService implements IEmailService {
         });
     }
 
-    async sendRegistrationEmail(to: string, validifationCode:string): Promise<void> {
+    async sendRegistrationEmail(to: string, validationLink: string): Promise<void> {
         const subject = 'Welcome to Infinite-Simon! Confirm Your Email';
         const html = `
             <h1>Welcome to Infinite-Simon!</h1>
-            <p>Thank you for registering. Please use the following code to verify your email address:</p>
-            <h2>${validifationCode}</h2>
+            <p>Thank you for registering. Please use the following link to verify your email address:</p>
+            <h2>${validationLink}</h2>
             <p>If you did not sign up for this account, please ignore this email.</p>
         `;
         await this.sendEmail(to, subject, html);
     }
 
-    async sendPasswordResetEmail(to: string, resetLink:string): Promise<void> {
+    async sendPasswordResetEmail(to: string, resetLink: string): Promise<void> {
         const subject = 'Infinite-Simon Password Reset Request';
         const html = `
             <h1>Password Reset Request</h1>

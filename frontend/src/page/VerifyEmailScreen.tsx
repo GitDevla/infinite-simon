@@ -23,7 +23,7 @@ export default function VerifyEmailScreen() {
 
 
     return (
-        <Layout header="Settings">
+        <Layout header="Verify Email">
             <div className="max-w-[500px] mx-auto text-center">
                 {status === "pending" && <p>Verifying your email...</p>}
                 {status === "success" && <p className="text-simon-green">Your email has been successfully verified!</p>}

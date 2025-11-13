@@ -42,7 +42,7 @@ export class AuthService implements IAuthService {
 
     async initiateEmailVerification(userId: number): Promise<void> {
         const user = await this.userRepository.getUserById(userId);
-        if (!user) throw new InvalidParameterError("User not found");
+        if (!user) return;
 
         if (user.email_verified) 
             throw new InvalidParameterError("Email is already verified");
@@ -70,7 +70,7 @@ export class AuthService implements IAuthService {
 
     async initiatePasswordReset(email: string): Promise<void> {
         const user = await this.userRepository.getUserByEmail(email);
-        if (!user) throw new InvalidParameterError("Email not found");
+        if (!user) return;
 
         const resetToken = this.tokenGenerator.generate({ userId: user.id }, '15m');
         const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
