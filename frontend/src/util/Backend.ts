@@ -23,6 +23,7 @@ export interface UserProfile {
 	avatar_uri: string;
 	joined_date: string;
 	last_login: string;
+	email_verified: boolean;
 }
 
 export interface UserStats {
