@@ -3,12 +3,14 @@ import {useNavigate} from "react-router-dom";
 import FloatingInput from "../component/Atom/FloatingInput";
 import Layout from "../component/Layout/Layout";
 import {AuthContext} from "../context/AuthContext";
+import ForgotPasswordModal from "../component/ForgotPasswordModal";
 
 export default function AuthScreen() {
 	const [isLogin, setIsLogin] = useState(true);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [username, setUsername] = useState("");
+	const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
 	const authContext = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -57,15 +59,19 @@ export default function AuthScreen() {
 						{isLogin ? "Register" : "Login"}
 					</button>
 				</p>
+				{/* forgot password */}
 				<p className="text-center">
 					<button
 						type="button"
-						onClick={() => navigate("/")}
+						onClick={()=>setForgotPasswordOpen(true)}
 						className="text-simon-blue bg-transparent border-none cursor-pointer">
-						Go back to home
+						Forgot Password?
 					</button>
 				</p>
 			</div>
+			{forgotPasswordOpen && (
+				<ForgotPasswordModal modalClose={()=>setForgotPasswordOpen(false)} />
+			)}
 		</Layout>
 	);
 }

@@ -217,4 +217,8 @@ export class Backend {
 	static async verifyEmail(token: string): Promise<BackendResponse<{message: string}>> {
 		return Backend.POST<{message: string}>("/verify-email", {token});
 	}
+
+	static async requestPasswordReset(email: string): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/request-password-reset", {email});
+	}
 }
