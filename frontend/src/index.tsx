@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import "./style/index.css";
-import {HashRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import AuthContextProvider from "./context/AuthContextProvider";
 import {ThemeProvider} from "./context/ThemeContextProvider";
@@ -17,7 +17,7 @@ root.render(
 	<ThemeProvider>
 		<AuthContextProvider>
 			<div className="w-full min-h-screen overflow-x-hidden md:overflow-y-hidden">
-				<HashRouter>
+				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<App />} />
 						<Route path="/game" element={<GameScreen />} />
@@ -28,7 +28,7 @@ root.render(
 						<Route path="/reset-password" element={<NewPasswordScreen />} />
 						
 					</Routes>
-				</HashRouter>
+				</BrowserRouter>
 			</div>
 			<ToastContainer position="bottom-right" theme="dark" />
 		</AuthContextProvider>
