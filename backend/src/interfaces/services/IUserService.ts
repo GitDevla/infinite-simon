@@ -3,6 +3,10 @@ import { User, UserStats, UserScores, UserScoresQuery } from '../repositories/IU
 export interface IAuthService {
     login(username: string, password: string): Promise<{ token: string }>;
     register(username: string, email: string, password: string): Promise<void>;
+    initiatePasswordReset(email: string): Promise<void>;
+    finalizePasswordReset(token: string, newPassword: string): Promise<void>;
+    initiateEmailVerification(userId: number): Promise<void>;
+    finalizeEmailVerification(token: string): Promise<void>;
 }
 
 export interface UserStatsExtended extends UserStats {

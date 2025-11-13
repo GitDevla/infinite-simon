@@ -2,13 +2,15 @@ import { IAuthService } from "../../interfaces/services/IUserService";
 import { IUserRepository } from "../../interfaces/repositories/IUserRepository";
 import { IPasswordHasher, ITokenGenerator, IValidator } from "../../interfaces/services/IServices";
 import { InvalidParameterError, UnauthorizedError } from "../../presentation/errors/ClientError";
+import { IEmailService } from "../../interfaces/services/IEmailService";
 
 export class AuthService implements IAuthService {
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly passwordHasher: IPasswordHasher,
         private readonly tokenGenerator: ITokenGenerator,
-        private readonly validator: IValidator
+        private readonly validator: IValidator,
+        private readonly emailService: IEmailService
     ) {}
 
     async login(username: string, password: string): Promise<{ token: string }> {
@@ -34,6 +36,61 @@ export class AuthService implements IAuthService {
         if (existingEmail) throw new InvalidParameterError("Email is already in use");
 
         const passwordHash = await this.passwordHasher.hash(password);
-        await this.userRepository.create(username, email, passwordHash);
+        const user = await this.userRepository.create(username, email, passwordHash);
+        await this.initiateEmailVerification(user.id);
+    }
+
+    async initiateEmailVerification(userId: number): Promise<void> {
+        const user = await this.userRepository.getUserById(userId);
+        if (!user) throw new InvalidParameterError("User not found");
+
+        if (user.email_verified) 
+            throw new InvalidParameterError("Email is already verified");
+
+        const email = user.email;
+
+        const verificationToken = this.tokenGenerator.generate({ userId: user.id }, '1h');
+        const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+        const verificationLink = `${FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+        await this.emailService.sendRegistrationEmail(email, verificationLink);
+    }
+
+    async finalizeEmailVerification(token: string): Promise<void> {
+        const payload = this.tokenGenerator.verify(token);
+        if (!payload || !payload.userId) throw new InvalidParameterError("Invalid or expired token");
+
+        const user = await this.userRepository.getUserById(payload.userId);
+        if (!user) throw new InvalidParameterError("User not found");
+
+        await this.userRepository.update(user.id, {
+            email_verified: true
+        });
+    }
+
+    async initiatePasswordReset(email: string): Promise<void> {
+        const user = await this.userRepository.getUserByEmail(email);
+        if (!user) throw new InvalidParameterError("Email not found");
+
+        const resetToken = this.tokenGenerator.generate({ userId: user.id }, '15m');
+        const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+        const resetLink = `${FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+        await this.emailService.sendPasswordResetEmail(email, resetLink);
+    }
+
+    async finalizePasswordReset(token: string, newPassword: string): Promise<void> {
+        const payload = this.tokenGenerator.verify(token);
+        if (!payload || !payload.userId) throw new InvalidParameterError("Invalid or expired token");
+
+        this.validator.validatePassword(newPassword);
+
+        const user = await this.userRepository.getUserById(payload.userId);
+        if (!user) throw new InvalidParameterError("User not found");
+
+        const newHashedPassword = await this.passwordHasher.hash(newPassword);
+        await this.userRepository.update(user.id, {
+            password_hash: newHashedPassword
+        });
     }
 }
