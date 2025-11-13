@@ -221,4 +221,11 @@ export class Backend {
 	static async requestPasswordReset(email: string): Promise<BackendResponse<{message: string}>> {
 		return Backend.POST<{message: string}>("/request-password-reset", {email});
 	}
+
+	static async resetPassword(
+		token: string,
+		newPassword: string,
+	): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/finalize-password-reset", {token, newPassword});
+	}
 }
