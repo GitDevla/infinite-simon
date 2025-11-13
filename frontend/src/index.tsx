@@ -9,6 +9,7 @@ import AuthScreen from "./page/AuthScreen";
 import GameScreen from "./page/GameScreen";
 import ProfileScreen from "./page/ProfileScreen";
 import SettingsScreen from "./page/SettingsScreen";
+import VerifyEmailScreen from "./page/VerifyEmailScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -22,6 +23,8 @@ root.render(
 						<Route path="/auth" element={<AuthScreen />} />
 						<Route path="/profile" element={<ProfileScreen />} />
 						<Route path="/settings" element={<SettingsScreen />} />
+						<Route path="/verify-email" element={<VerifyEmailScreen />} />
+						
 					</Routes>
 				</HashRouter>
 			</div>

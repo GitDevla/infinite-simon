@@ -213,4 +213,8 @@ export class Backend {
 	static async resendVerificationEmail(): Promise<BackendResponse<{message: string}>> {
 		return Backend.POST<{message: string}>("/resend-verification-email", {});
 	}
+
+	static async verifyEmail(token: string): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/verify-email", {token});
+	}
 }
