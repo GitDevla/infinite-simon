@@ -209,4 +209,8 @@ export class Backend {
 	static async joinMatch(matchId: number): Promise<BackendResponse<GameStartResponse>> {
 		return Backend.POST<GameStartResponse>("/join-game", {matchId});
 	}
+
+	static async resendVerificationEmail(): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/resend-verification-email", {});
+	}
 }

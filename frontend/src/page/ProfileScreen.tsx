@@ -4,6 +4,7 @@ import UserGlobalStats from "../component/UserGlobalStats";
 import UserScoresList from "../component/UserScoresList";
 import {AuthContext} from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { Backend } from "../util/Backend";
 
 export default function ProfileScreen() {
 	const authContext = useContext(AuthContext);
@@ -11,6 +12,15 @@ export default function ProfileScreen() {
 	const username = authContext.user?.username;
 	const userAvatar = authContext.user?.avatar_uri;
 	const verified = authContext.user?.email_verified;
+
+	const requestEmailVerification = async () => {
+		const res = await Backend.resendVerificationEmail();
+		if (res.ok) {
+			alert("Verification email sent. Please check your inbox.");
+		} else {
+			alert(`Failed to send verification email: ${res.error}`);
+		}
+	}
 
 	return (
 		<Layout header="Profile" goBack={true}>
@@ -26,9 +36,11 @@ export default function ProfileScreen() {
 					</h3>
 					{
 						!verified && (
-							<p className="text-sm text-gray-400">Email not verified. <Link to="/verify" className="text-simon-blue underline">
-								Click here to resend verification email.
-							</Link></p>
+							<p className="text-sm text-gray-400">Email not verified. 
+							<button type="button" className="text-simon-blue underline"  onClick={requestEmailVerification}>
+								Start verification process.
+							</button>
+							</p>
 						)
 					}
 					<div className="mt-6 w-full">
