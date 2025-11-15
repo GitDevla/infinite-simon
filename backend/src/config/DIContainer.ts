@@ -20,6 +20,8 @@ import { IImageRepository } from "../interfaces/repositories/IImageRepository";
 import { IPasswordHasher, ITokenGenerator, IValidator } from "../interfaces/services/IServices";
 import { IAuthService, IUserService } from "../interfaces/services/IUserService";
 import { IGameService } from "../interfaces/services/IGameService";
+import { IEmailService } from "../interfaces/services/IEmailService";
+import { ResendEmailService } from "../infrastructure/validation/Resend";
 
 export class DIContainer {
     private readonly prisma: PrismaClient;
@@ -33,6 +35,7 @@ export class DIContainer {
     private readonly passwordHasher: IPasswordHasher;
     private readonly tokenGenerator: ITokenGenerator;
     private readonly validator: IValidator;
+    private readonly emailService: IEmailService;
     
     // Application services
     private readonly authService: IAuthService;
@@ -45,6 +48,7 @@ export class DIContainer {
         this.passwordHasher = new BcryptPasswordHasher();
         this.tokenGenerator = new JwtTokenGenerator();
         this.validator = new CredentialValidator();
+        this.emailService = new ResendEmailService(process.env.RESEND_API_KEY || "");
         
         // Repositories
         this.userRepository = new PrismaUserRepository(this.prisma);
@@ -56,7 +60,8 @@ export class DIContainer {
             this.userRepository,
             this.passwordHasher,
             this.tokenGenerator,
-            this.validator
+            this.validator,
+            this.emailService
         );
         
         this.userService = new UserService(

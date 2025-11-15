@@ -23,6 +23,7 @@ export interface UserProfile {
 	avatar_uri: string;
 	joined_date: string;
 	last_login: string;
+	email_verified: boolean;
 }
 
 export interface UserStats {
@@ -222,5 +223,24 @@ export class Backend {
 
 	static async joinMatch(matchId: number): Promise<BackendResponse<GameStartResponse>> {
 		return Backend.POST<GameStartResponse>("/join-game", {matchId});
+	}
+
+	static async resendVerificationEmail(): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/resend-verification-email", {});
+	}
+
+	static async verifyEmail(token: string): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/verify-email", {token});
+	}
+
+	static async requestPasswordReset(email: string): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/request-password-reset", {email});
+	}
+
+	static async resetPassword(
+		token: string,
+		newPassword: string,
+	): Promise<BackendResponse<{message: string}>> {
+		return Backend.POST<{message: string}>("/finalize-password-reset", {token, newPassword});
 	}
 }

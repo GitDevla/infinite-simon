@@ -31,4 +31,53 @@ export class AuthController {
             next(error);
         }
     }
+
+    async requestPasswordReset(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { email } = req.body;
+            if (!email) throw new MissingParameterError("email");
+
+            await this.authService.initiatePasswordReset(email);
+            res.json({ success: true });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async finalizePasswordReset(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { token, newPassword } = req.body;
+            if (!token) throw new MissingParameterError("token");
+            if (!newPassword) throw new MissingParameterError("newPassword");
+
+            await this.authService.finalizePasswordReset(token, newPassword);
+            res.json({ success: true });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async finalizeEmailVerification(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { token } = req.body;
+            if (!token) throw new MissingParameterError("token");
+
+            await this.authService.finalizeEmailVerification(token);
+            res.json({ success: true });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async resendVerificationEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const userId = (req as any).userId;
+            if (!userId) throw new MissingParameterError("userId");
+
+            await this.authService.initiateEmailVerification(userId);
+            res.json({ success: true });
+        } catch (error) {
+            next(error);
+        }
+    }
 }

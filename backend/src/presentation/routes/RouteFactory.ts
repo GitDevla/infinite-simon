@@ -44,6 +44,10 @@ export class RouteFactory {
         // Auth routes
         router.post("/login", authLimiter, (req, res, next) => authController.login(req, res, next));
         router.post("/register", authLimiter, (req, res, next) => authController.register(req, res, next));
+        router.post("/request-password-reset", authLimiter, (req, res, next) => authController.requestPasswordReset(req, res, next));
+        router.post("/finalize-password-reset", authLimiter, (req, res, next) => authController.finalizePasswordReset(req, res, next));
+        router.post("/verify-email", authLimiter, (req, res, next) => authController.finalizeEmailVerification(req, res, next));
+        router.post("/resend-verification-email", authLimiter, authMiddleware.authenticate, (req, res, next) => authController.resendVerificationEmail(req, res, next));
 
         // Game routes
         router.post("/start-game", limiter, (req, res, next) => gameController.startNewGame(req, res, next));
