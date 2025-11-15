@@ -8,12 +8,12 @@ RUN npm run build
 FROM node:22-alpine AS production
 WORKDIR /app
 COPY --from=build /app/package.json /app/package-lock.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 RUN npm install tsx
-COPY docker/entrypoint.sh /usr/src/app/entrypoint.sh
-RUN chmod +x /usr/src/app/entrypoint.sh
+COPY docker/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 EXPOSE 3001
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["npm", "run", "start"]

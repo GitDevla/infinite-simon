@@ -3,7 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV REACT_APP_SERVER_URL=http://localhost:3001
+ARG REACT_APP_SERVER_URL=http://localhost:3001
+ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
 RUN npm run build
  
 FROM nginx:stable-alpine AS production
