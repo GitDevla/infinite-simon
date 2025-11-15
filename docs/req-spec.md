@@ -34,6 +34,10 @@ A jövőbeni rendszer a következő új funkciókat és üzleti folyamatokat val
 - Részletes statisztikák és elemzések a játékos teljesítményéről, beleértve a legjobb köröket és átlagos pontszámokat.
 - Különböző játékmódok bevezetése, mint például az eredeti Simon says mód és egyéb kihívásokkal teli módok.
 - Felhasználói fiókok létrehozása.
+- Felhasználói fiók dekorálása profilképekkel és egyéni beállításokkal.
+- Regisztráció és bejelentkezés funkciók a felhasználói fiókok kezelésére.
+- Email alapú jelszó visszaállítási lehetőség.
+- Fiók aktiválás email-ben küldött link segítségével.
 - Hangjelzések és vizuális effektek a játékélmény fokozására.
 
 ## Rendszerre vonatkozó törvények, szabályok, ajánlások:
@@ -57,7 +61,9 @@ A weboldal megfelel az alábbi törvényeknek:
 | Backend | BE4 | Többjátékos támogatás | v0.4 | A rendszer lehetővé teszi a többjátékos játékot valós időben. |
 | Frontend | FR4 | Eredménytábla | v0.5 | A felhasználók megtekinthetik a legjobb pontszámokat és statisztikákat. |
 | Backend | BE3 | Pontszámok tárolása | v0.5 | A rendszer szerveren tárolja a játékosok pontszámait és statisztikáit. |
-| Backend | BE5 | Statisztikák és elemzések | v0.6 | A rendszer részletes statisztikákat és elemzéseket biztosít a játékosok teljesítményéről. |   
+| Backend | BE5 | Statisztikák és elemzések | v0.6 | A rendszer részletes statisztikákat és elemzéseket biztosít a játékosok teljesítményéről. |
+| Backend | BE7 | Többjátékos játékmenet szinkronizáció | v0.7 | A rendszer biztosítja a játékosok közötti játékmenet szinkronizációt többjátékos módban. |
+| Backend | BE8 | Felhasználó Verifikáció | v0.8 | A rendszer email alapú jelszó visszaállítást és fiók aktiválást biztosít. |
 
 
 ## Fogalomszótár

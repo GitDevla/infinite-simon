@@ -144,6 +144,7 @@ erDiagram
         string avatar_uri
         datetime joined_date
         datetime last_login
+        bool is_verified
     }
     MODE {
         int id PK
@@ -185,7 +186,7 @@ erDiagram
 + Az adatok lekérdezése és mentése aszinkron módon történik.
 ```mermaid
 classDiagram
-    class UserRepository {
+    class PrismaUserRepository {
         +getUserByUsername(username: string): Promise<User | null>;
         +getUserById(userId: number): Promise<User | null>;
         +create(username: string, email: string, passwordHash: string, avatarUri?: string): +Promise<User>;
@@ -200,23 +201,26 @@ classDiagram
         +getAverageScore(userId: number): Promise<number | null>;
         +getMultiPlayerStats(userId: number): Promise<number>;
         +getSinglePlayerStats(userId: number): Promise<number>;
+        +getUserByEmail(email: string): Promise<User | null>;
     }
 
-    class GameRepository {
+    class PrismaGameRepository {
         +createGame(modeId: number, difficultyId: number): Promise<Game>;
         +createMatch(data: GameSettings): Promise<Match>;
         +createGameResult(data: GameResult): Promise<any>;
+        +getMatchById(matchId: number): Promise<Match | null>;
+        +getGameById(gameId: number): Promise<Game | null>;
     }
 
-    class ImageRepository {
+    class ProfilePictureRepository {
         +save(base64: string, name: string): Promise<string>;
         +delete(uri: string): Promise<void>;
         +exists(uri: string): Promise<boolean>;
     }
 ```
-+ A UserRepository a felhasználói adatok tárolását és lekérdezését, eredmények lekérdezését végzi.
-+ A GameRepository a játékok, játékmenetek és eredmények mentését végzi.
-+ Az ImageRepository az avatar képek mentését és törlését végzi.
++ A **PrismaUserRepository** a felhasználói adatok tárolását és lekérdezését, eredmények lekérdezését végzi.
++ A **PrismaGameRepository** a játékok, játékmenetek és eredmények mentését végzi.
++ Az **ProfilePictureRepository** az avatar képek mentését és törlését végzi.
 
 ### Üzleti logika réteg
 + Az üzleti logika réteg a verseny koordinációt és seed generálást kezeli.
@@ -243,6 +247,10 @@ classDiagram
         +validateEmail(email: string): ValidationResult;
         +validatePassword(password: string): ValidationResult;
         +validateUsername(username: string): ValidationResult;
+        +initiateEmailVerification(userId: number) Promise<void>;
+        +finalizeEmailVerification(token: string): Promise<void>;
+        +initiatePasswordReset(email: string): Promise<void>;
+        +finalizePasswordReset(token: string, newPassword: string): Promise<void>;
     }
 
     class CredentialValidator {
@@ -261,6 +269,12 @@ classDiagram
         +hash(password: string): Promise<string>;
         +compare(password: string, hash: string): Promise<boolean>;
     }
+
+    class ResendEmailService {
+        +sendEmail(to: string, subject: string, html: string): Promise<void>;
+        +sendRegistrationEmail(to: string, validationLink: string): Promise<void>;
+        +sendPasswordResetEmail(to: string, resetLink: string): Promise<void>;
+    }
     
 
     GameService --> GameRepository
@@ -272,14 +286,16 @@ classDiagram
     AuthService --> CredentialValidator
     AuthService --> BcryptPasswordHasher
     AuthService --> JwtTokenGenerator
+    AuthService --> ResendEmailService
 ```
-+ A GameService kezeli a játék menetek létrehozását, seed generálását, csatlakozást és eredmények validálását.
++ A **GameService** kezeli a játék menetek létrehozását, seed generálását, csatlakozást és eredmények validálását.
 + A játék logika a kliens oldalon fut a szerver által generált seed alapján.
-+ A UserService a felhasználói regisztrációt, bejelentkezést és profilkezelést végzi.
-+ Az CredentialValidator a JWT tokenek kezeléséért felelős.
-+ A JwtTokenGenerator a JWT tokenek generálását és ellenőrzését végzi.
-+ A BcryptPasswordHasher a jelszavak biztonságos hash-elését és ellenőrzését végzi.
-+ Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.    
++ A **UserService** a felhasználói regisztrációt, bejelentkezést és profilkezelést végzi.
++ Az **CredentialValidator** a JWT tokenek kezeléséért felelős.
++ A **JwtTokenGenerator** a JWT tokenek generálását és ellenőrzését végzi.
++ A **BcryptPasswordHasher** a jelszavak biztonságos hash-elését és ellenőrzését végzi.
++ Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.  
++ A **ResendEmailService** kezeli az email küldést regisztráció és jelszó visszaállítás esetén.  
 
 
 ### Prezentációs réteg
@@ -290,6 +306,10 @@ classDiagram
     class AuthController {
         +register(req: Request, res: Response): Promise<void>;
         +login(req: Request, res: Response): Promise<void>;
+        +requestPasswordReset(req: Request, res: Response): Promise<void>;
+        +finalizePasswordReset(req: Request, res: Response): Promise<void>;
+        +finalizeEmailVerification(req: Request, res: Response): Promise<void>;
+        +resendVerificationEmail(req: Request, res: Response): Promise<void>;
     }
 
     class UserController {
@@ -310,11 +330,12 @@ classDiagram
     DIContainer --> UserController
     DIContainer --> GameController
 ```
-+ A AuthController kezeli a regisztrációt és bejelentkezést.
-+ A UserController kezeli a felhasználói profil lekérdezését és frissítését.
-+ A GameController kezeli a játék indítását és eredmények mentését.
-+ Minden kontroller a megfelelő szolgáltatásokat használja az üzleti logika végrehajtására.
-+ A DIContainer kezeli a függőség injektálást a kontrollerek és szolgáltatások között.
++ A **DIContainer** kezeli a függőség injektálást a kontrollerek és szolgáltatások között.
++ A **AuthController** kezeli a regisztrációt és bejelentkezést.
++ A **UserController** kezeli a felhasználói profil lekérdezését és frissítését.
++ A **GameController** kezeli a játék indítását és eredmények mentését.
++ Minden kontroller a megfelelő szolgáltatásokat használja az üzleti logika végrehajtásához.
+
 
 ## Tesztterv
 ### 1. Egységtesztek
@@ -336,7 +357,36 @@ classDiagram
 - Játékos sebesség teszt: a bemenet sorrendjének pontossága még akkor is ha a felhasználó gyorsan üti be őket.
 
 ## Telepítési terv
-#todo
+A rendszer telepítése a következő lépésekből áll:
+1. Szerver előkészítése:
+    - Operációs rendszer telepítése (pl. Ubuntu Server).
+    - Docker telepítése.
+2. Kód telepítése:
+    - A forráskód klónozása a verziókezelő rendszerből.
+    - Helyes környezeti beállítások konfigurálása.
+    - A Docker konténerek felépítése és indítása.
+        - A frontend és backend szolgáltatások külön konténerekben futnak.
+        - Adatbázis autómatikus inicializálása a konténer indításakor.
+3. Ellenőrzés:
+    - A rendszer elérhetőségének ellenőrzése böngészőből.
+    - Alapvető funkciók tesztelése (regisztráció, bejelentkezés, játék indítása).
+4. Monitorozás beállítása:
+    - Rendszer monitorozó eszközök telepítése a szerver állapotának figyelésére.
 
 ## Karbantartási terv
-#todo
+A rendszer karbantartása a következő tevékenységeket foglalja magában:
+1. Rendszerfrissítések:
+    - Rendszeres frissítések telepítése az operációs rendszerre és a Docker környezetre.
+    - Alkalmazás frissítések telepítése új verziók megjelenésekor.
+2. Adatbázis karbantartás:
+    - Rendszeres biztonsági mentések készítése az adatbázisról.
+    - Adatbázis optimalizálás és tisztítás szükség szerint.
+3. Hibakezelés:
+    - Hibák és problémák gyors azonosítása és javítása.
+    - Felhasználói visszajelzések figyelése és kezelése.
+4. Teljesítmény monitorozás:
+    - A rendszer teljesítményének folyamatos figyelése.
+    - Teljesítményproblémák azonosítása és optimalizálása.
+5. Biztonsági intézkedések:
+    - Rendszeres biztonsági auditok végrehajtása.
+    - Felhasználói adatok védelme és biztonsági rések javítása.
