@@ -6,13 +6,14 @@ import { processErrorMiddleware } from "./presentation/middleware/errorMiddlewar
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // Initialize dependency injection container
 const container = new DIContainer();
 
 // Middleware
 app.use(cors({
-	origin: "*",
+	origin: FRONTEND_URL,
 	credentials: true,
 }));
 app.use(express.json({ limit: "10mb" }));

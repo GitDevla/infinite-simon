@@ -14,7 +14,7 @@ services:
       - JWT_SECRET=REPLACE_WITH_A_LONG_RANDOM_SECRET
       - CORS_ORIGIN=*
       - RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxx
-      - FRONTEND_URL=http://localhost:80
+      - FRONTEND_URL=http://localhost
 
     restart: unless-stopped
   frontend:
