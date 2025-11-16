@@ -65,8 +65,8 @@ export function useGameLogic({
 		if (game.current === null) return;
 		game.current.startNewGame(gameStartResponse.match.seed, gameType);
 
-		if (matchId !== null && userContext.loggedIn) {
-			saveGameResult(matchId, 0, "playing").catch(err => {
+		if (gameStartResponse.match.id !== null && userContext.loggedIn) {
+			saveGameResult(gameStartResponse.match.id, 0, "playing").catch(err => {
 				console.error("Error setting status to playing:", err);
 			});
 		}
@@ -77,8 +77,8 @@ export function useGameLogic({
 			setScore(newScore);
 			setSequence(game.current.getSequence());
 			// save each round when logged in
-			if (matchId !== null && userContext.loggedIn) {
-				saveGameResult(matchId, newScore, "playing").catch(err => {
+			if (gameStartResponse.match.id !== null && userContext.loggedIn) {
+				saveGameResult(gameStartResponse.match.id, newScore, "playing").catch(err => {
 					console.error("Error saving game result:", err);
 				});
 			}
