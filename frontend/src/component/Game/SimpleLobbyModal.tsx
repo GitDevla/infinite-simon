@@ -23,7 +23,14 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 		const res = await Backend.startGame(GameMode.MultiPlayer, lvlId);
 		if (res.ok && res.data) {
 			setGame(res.data);
-			Backend.joinMatch(res.data.match.id);
+			let res2 = await Backend.joinMatch(res.data.match.id);
+			if (res2.ok) {
+				toast.success("You have created and joined the lobby!");
+			} else {
+				toast.error("Failed to join the created lobby.");
+			}
+		} else {
+			toast.error("Failed to create a multiplayer game. Please try again.");
 		}
 	};
 
@@ -38,6 +45,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 		const res = await Backend.joinMatch(id);
 		if (res.ok && res.data) {
 			setGame(res.data);
+			toast.success("Successfully joined the lobby!");
 			return res.data.match.id;
 		}
 		toast.error("Invalid lobby code. Please try again.");
