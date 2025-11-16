@@ -66,19 +66,19 @@ export interface Match {
 }
 
 export interface ParticipantListResponse {
-	success: boolean
-	participants: Participant[]
+	success: boolean;
+	participants: Participant[];
 }
 
 export interface Participant {
-	user: User
-	round_eliminated: number
-	status: string
+	user: User;
+	round_eliminated: number;
+	status: string;
 }
 
 export interface User {
-	username: string
-	avatar_uri: string
+	username: string;
+	avatar_uri: string;
 }
 
 
