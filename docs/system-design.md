@@ -218,7 +218,7 @@ classDiagram
 ```
 + A **PrismaUserRepository** a felhasználói adatok tárolását és lekérdezését, eredmények lekérdezését végzi.
 + A **PrismaGameRepository** a játékok, játékmenetek és eredmények mentését végzi.
-+ Az **ProfilePictureRepository** az avatar képek mentését és törlését végzi.
++ A **ProfilePictureRepository** az avatar képek mentését és törlését végzi.
 
 ### Üzleti logika réteg
 + Az üzleti logika réteg a verseny koordinációt és seed generálást kezeli.
