@@ -18,6 +18,13 @@ export interface GameResult {
     status: ParticipantStatus;
 }
 
+export interface MatchParticipant {
+    username: string;
+    avatar_uri: string | null;
+    status: ParticipantStatus;
+    round_eliminated: number | null;
+}
+
 export enum ParticipantStatus {
   waiting = "waiting",
   playing = "playing",

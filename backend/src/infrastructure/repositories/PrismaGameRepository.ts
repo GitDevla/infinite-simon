@@ -68,4 +68,11 @@ export class PrismaGameRepository implements IGameRepository {
             where: { id: gameId },
         });
     }
+
+    async getParticipantsByMatchId(matchId: number): Promise<any[]> {
+        return this.prisma.participant.findMany({
+            where: { matchId },
+            include: { user: { select: { username: true, avatar_uri: true } } }
+        });
+    }
 }

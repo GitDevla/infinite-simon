@@ -53,6 +53,7 @@ export class RouteFactory {
         router.post("/start-game", limiter, (req, res, next) => gameController.startNewGame(req, res, next));
         router.post("/join-game", limiter, authMiddleware.authenticate, (req, res, next) => gameController.joinMultiplayerMatch(req, res, next));
         router.post("/save-game-result", limiter, authMiddleware.authenticate, (req, res, next) => gameController.saveGameResult(req, res, next));
+        router.get("/api/match/:matchId/participants", limiter, authMiddleware.authenticate, (req, res, next) => gameController.getMatchParticipants(req, res, next));
 
         // User routes
         router.get("/api/me", limiter, authMiddleware.authenticate, (req, res, next) => userController.getMe(req, res, next));

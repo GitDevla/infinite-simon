@@ -61,4 +61,21 @@ export class GameController {
             next(error);
         }
     }
+
+    async getMatchParticipants(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const matchId = parseInt(req.params.matchId, 10);
+
+            if (isNaN(matchId)) throw new InvalidParameterError("matchId must be a valid number");
+
+            const participants = await this.gameService.getMatchParticipants(matchId);
+
+            res.json({ 
+                success: true, 
+                participants
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
