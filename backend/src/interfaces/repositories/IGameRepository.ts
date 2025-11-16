@@ -19,8 +19,10 @@ export interface GameResult {
 }
 
 export interface MatchParticipant {
-    username: string;
-    avatar_uri: string | null;
+    user: {
+        username: string;
+        avatar_uri: string | null;
+    };
     status: ParticipantStatus;
     round_eliminated: number | null;
 }
