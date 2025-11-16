@@ -66,8 +66,15 @@ export function useGameLogic({
 		game.current.startNewGame(gameStartResponse.match.seed, gameType);
 		game.current.onNewRound(() => {
 			if (game.current === null) return;
-			setScore(game.current.getCurrentRound() - 1);
+			const newScore = game.current.getCurrentRound() - 1;
+			setScore(newScore);
 			setSequence(game.current.getSequence());
+			// save each round when logged in
+			if (matchId !== null && userContext.loggedIn) {
+				saveGameResult(matchId, newScore, "playing").catch(err => {
+					console.error("Error saving game result:", err);
+				});
+			}
 		});
 		setSequence(game.current.getSequence());
 	};
@@ -82,8 +89,8 @@ export function useGameLogic({
 		}
 	}, []);
 
-	const saveGameResult = async (matchId: number, roundEliminated: number) => {
-		const res = await Backend.saveGameResult(matchId, roundEliminated);
+	const saveGameResult = async (matchId: number, roundEliminated: number, status: "playing" | "finished" = "finished") => {
+		const res = await Backend.saveGameResult(matchId, roundEliminated, status);
 		if (res.ok) {
 			toast.success("Game result saved successfully");
 		} else {
@@ -106,7 +113,7 @@ export function useGameLogic({
 			console.log("Game over! Saving result...");
 			if (matchId !== null) {
 				if (userContext.loggedIn) {
-					saveGameResult(matchId, score);
+					saveGameResult(matchId, score, "finished");
 				} else {
 					console.warn("Cannot save game result: user not logged in");
 				}

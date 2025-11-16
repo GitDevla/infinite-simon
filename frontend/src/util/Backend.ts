@@ -210,8 +210,8 @@ export class Backend {
 		return Backend.POST<{message: string}>("/register", {username, email, password});
 	}
 
-	static async saveGameResult(matchId: number, roundEliminated: number): Promise<BackendResponse> {
-		return Backend.POST("/save-game-result", {matchId, roundEliminated, status: "finished"}); //TODO: status when backend supports it
+	static async saveGameResult(matchId: number, roundEliminated: number, status: "playing" | "finished" = "finished"): Promise<BackendResponse> {
+		return Backend.POST("/save-game-result", {matchId, roundEliminated, status});
 	}
 
 	static async startGame(modeID: GameMode, difficultyID: GameType): Promise<BackendResponse<GameStartResponse>> {
