@@ -77,8 +77,19 @@ Mint játékos, szeretnék többjátékos módban játszani más játékosok ell
 **Background:**<br>
 Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
 
+##### SCENARIO: Lobby létrehozása többjátékos módhoz
+**When** A felhasználó létrehoz egy új többjátékos játék lobby-t<br>
+**Then** A lobby létrejön, a felhasználó kap egy egyedi kódot amellyel mások csatlakozhatnak
+
+##### SCENARIO: Csatlakozás egy meglévő többjátékos lobby-hoz
+**Given** A felhasználó rendelkezik egy érvényes lobby kóddal<br>
+**When** A felhasználó megadja a lobby kódot és csatlakozik<br>
+**Then** A felhasználó sikeresen csatlakozik a többjátékos játékhoz
+
+<!-- TODO update -->
 ##### SCENARIO: Játék indítása többjátékos módban
-#todo
+**When** A belépő játékos elindítja a többjátékos játékot<br>
+**Then** A játék elindul, és a felhasználó ugyanazt a minta sorozatot fogja látni, mint a többi játékos
 
 #### FEATURE: Különböző játékmód (alap, kibővített)
 Mint játékos, szeretnék különböző játékmódok közül választani (alap és kibővített), hogy változatosabb játékélményt kapjak.

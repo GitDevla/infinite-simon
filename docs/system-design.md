@@ -1,7 +1,5 @@
 # Rendszerterv
 ## Projekt terv
-#todo
-
 ### Csapatbeosztás
 - Tervező: Pataki Dávid (közös)
 - Designer: Pataki Dávid
