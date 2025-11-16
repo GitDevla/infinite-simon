@@ -1,5 +1,5 @@
 import { IGameService } from "../../interfaces/services/IGameService";
-import { IGameRepository, Game, Match } from "../../interfaces/repositories/IGameRepository";
+import { IGameRepository, Game, Match, MatchParticipant } from "../../interfaces/repositories/IGameRepository";
 import { MissingParameterError } from "../../presentation/errors/ClientError";
 import { ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
 
@@ -49,5 +49,13 @@ export class GameService implements IGameService {
             roundEliminated,
             status,
         });
+    }
+
+    async getMatchParticipants(matchId: number): Promise<MatchParticipant[]> {
+        return this.gameRepository.getParticipantsByMatchId(matchId);
+    }
+
+    async getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }> {
+        return this.gameRepository.getMatchStatus(matchId);
     }
 }

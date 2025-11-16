@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { IGameRepository, Game, Match, GameResult } from "../../interfaces/repositories/IGameRepository";
+import { IGameRepository, Game, Match, GameResult, MatchParticipant, ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
+import { NotFoundError } from "../../presentation/errors/ClientError";
 
 export class PrismaGameRepository implements IGameRepository {
     constructor(private readonly prisma: PrismaClient) {}
@@ -67,5 +68,44 @@ export class PrismaGameRepository implements IGameRepository {
         return this.prisma.game.findUnique({
             where: { id: gameId },
         });
+    }
+
+    async getParticipantsByMatchId(matchId: number): Promise<MatchParticipant[]> {
+        const participants = await this.prisma.participant.findMany({
+            where: { matchId },
+            include: { user: { select: { username: true, avatar_uri: true } } }
+        });
+
+        return participants.map(p => ({
+            user: {
+                username: p.user.username,
+                avatar_uri: p.user.avatar_uri,
+            },
+            round_eliminated: p.round_eliminated,
+            status: p.status as ParticipantStatus,
+        }));
+    }
+
+    async getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }> {
+        const match = await this.prisma.match.findUnique({ where: { id: matchId } });
+        if (!match) {
+            throw new NotFoundError("Match");
+        }
+
+        const participants = await this.prisma.participant.findMany({
+            where: { matchId },
+        });
+
+        if (participants.length === 0) {
+            return { status: ParticipantStatus.waiting };
+        }
+
+        if (participants.every(p => p.status === ParticipantStatus.finished)) {
+            return { status: ParticipantStatus.finished };
+        } else if (participants.some(p => p.status === ParticipantStatus.playing)) {
+            return { status: ParticipantStatus.playing };
+        } else {
+            return { status: ParticipantStatus.waiting };
+        }
     }
 }

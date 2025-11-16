@@ -1,4 +1,4 @@
-import type {GameMode, GameType} from "../service/Game";
+import type { GameMode, GameType } from "../service/Game";
 
 const backendUrl = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
 
@@ -64,6 +64,34 @@ export interface Match {
 	id: number;
 	seed: number;
 }
+
+export interface ParticipantListResponse {
+	success: boolean;
+	participants: Participant[];
+}
+
+export interface Participant {
+	user: User;
+	round_eliminated: number;
+	status: "waiting" | "playing" | "finished";
+}
+
+export interface User {
+	username: string;
+	avatar_uri: string;
+}
+
+
+export interface MatchStatusResponse {
+	success: boolean;
+	status: Status;
+}
+
+export interface Status {
+	status: "waiting" | "playing" | "finished";
+}
+
+
 
 export class Backend {
 	private static async request<T = any>(
@@ -198,20 +226,20 @@ export class Backend {
 		return res;
 	}
 
-	static async login(username: string, password: string): Promise<BackendResponse<{token: {token: string}}>> {
-		return Backend.POST<{token: {token: string}}>("/login", {username, password});
+	static async login(username: string, password: string): Promise<BackendResponse<{ token: { token: string } }>> {
+		return Backend.POST<{ token: { token: string } }>("/login", { username, password });
 	}
 
 	static async register(
 		username: string,
 		email: string,
 		password: string,
-	): Promise<BackendResponse<{message: string}>> {
-		return Backend.POST<{message: string}>("/register", {username, email, password});
+	): Promise<BackendResponse<{ message: string }>> {
+		return Backend.POST<{ message: string }>("/register", { username, email, password });
 	}
 
-	static async saveGameResult(matchId: number, roundEliminated: number): Promise<BackendResponse> {
-		return Backend.POST("/save-game-result", {matchId, roundEliminated, status: "finished"}); //TODO: status when backend supports it
+	static async saveGameResult(matchId: number, roundEliminated: number, status: "playing" | "finished" = "finished"): Promise<BackendResponse> {
+		return Backend.POST("/save-game-result", { matchId, roundEliminated, status });
 	}
 
 	static async startGame(modeID: GameMode, difficultyID: GameType): Promise<BackendResponse<GameStartResponse>> {
@@ -222,25 +250,47 @@ export class Backend {
 	}
 
 	static async joinMatch(matchId: number): Promise<BackendResponse<GameStartResponse>> {
-		return Backend.POST<GameStartResponse>("/join-game", {matchId});
+		return Backend.POST<GameStartResponse>("/join-game", { matchId });
 	}
 
-	static async resendVerificationEmail(): Promise<BackendResponse<{message: string}>> {
-		return Backend.POST<{message: string}>("/resend-verification-email", {});
+	static async resendVerificationEmail(): Promise<BackendResponse<{ message: string }>> {
+		return Backend.POST<{ message: string }>("/resend-verification-email", {});
 	}
 
-	static async verifyEmail(token: string): Promise<BackendResponse<{message: string}>> {
-		return Backend.POST<{message: string}>("/verify-email", {token});
+	static async verifyEmail(token: string): Promise<BackendResponse<{ message: string }>> {
+		return Backend.POST<{ message: string }>("/verify-email", { token });
 	}
 
-	static async requestPasswordReset(email: string): Promise<BackendResponse<{message: string}>> {
-		return Backend.POST<{message: string}>("/request-password-reset", {email});
+	static async requestPasswordReset(email: string): Promise<BackendResponse<{ message: string }>> {
+		return Backend.POST<{ message: string }>("/request-password-reset", { email });
 	}
 
 	static async resetPassword(
 		token: string,
 		newPassword: string,
-	): Promise<BackendResponse<{message: string}>> {
-		return Backend.POST<{message: string}>("/finalize-password-reset", {token, newPassword});
+	): Promise<BackendResponse<{ message: string }>> {
+		return Backend.POST<{ message: string }>("/finalize-password-reset", { token, newPassword });
+	}
+
+	static async getParticipantList(matchId: number): Promise<BackendResponse<ParticipantListResponse>> {
+		const res = await Backend.GET<ParticipantListResponse>(
+			"/api/match/:matchId/participants".replace(":matchId", matchId.toString()),
+		);
+
+		if (!res.ok) {
+			return res;
+		}
+
+		for (const participant of res.data.participants) {
+			participant.user.avatar_uri = participant.user.avatar_uri ? `${backendUrl}/${participant.user.avatar_uri}` : DEFAULT_PROFILE_PIC_URL;
+		}
+
+		return res;
+	}
+
+	static async getMatchStatus(matchId: number): Promise<BackendResponse<MatchStatusResponse>> {
+		return Backend.GET<MatchStatusResponse>(
+			"/api/match/:matchId/status".replace(":matchId", matchId.toString()),
+		);
 	}
 }

@@ -1,19 +1,20 @@
-import {createRef} from "react";
+import { createRef } from "react";
 import AnimatedCursor from "../component/Game/AnimatedCursor";
-import ButtonQuarterRing, {type ButtonQuarterRingHandle} from "../component/Game/ButtonQuarterRing";
+import ButtonQuarterRing, { type ButtonQuarterRingHandle } from "../component/Game/ButtonQuarterRing";
 import GameEndModal from "../component/Game/GameEndModal";
 import Knob from "../component/Game/GameKnob";
 import Slider from "../component/Game/GameSlider";
 import Switch from "../component/Game/GameSwitch";
 import "../style/GameScreen.css";
-import {useSearchParams} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import GameStatusBar from "../component/Game/GameStatusBar";
 import InputShelf from "../component/Game/InputShelf";
+import ParticipantList from "../component/Game/ParticipantList";
 import ScoreButton from "../component/Game/ScoreButton";
-import {useGameInputs} from "../hook/useGameInputs";
-import {useGameLogic} from "../hook/useGameLogic";
-import {useSequenceAnimation} from "../hook/useSequenceAnimation";
-import {GameMode, GameType} from "../service/Game";
+import { useGameInputs } from "../hook/useGameInputs";
+import { useGameLogic } from "../hook/useGameLogic";
+import { useSequenceAnimation } from "../hook/useSequenceAnimation";
+import { GameMode, GameType } from "../service/Game";
 
 export type GameInput = {
 	type: string;
@@ -32,16 +33,16 @@ export default function GameScreen() {
 	const mode = Number(searchParams.get("mode")) || GameMode.SinglePlayer;
 	const matchID = searchParams.get("matchID") === null ? undefined : Number(searchParams.get("matchID"));
 
-	const {score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs} = useGameLogic({
+	const { score, gameOngoing, setGameOngoing, sequence, handleUserInput, moveSpeedInMs } = useGameLogic({
 		gameType: difficulty as GameType,
 		gameMode: mode as GameMode,
 		initialMatchId: matchID,
 	});
 
-	const {forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs} =
+	const { forceUpdate, resetInputs, updateInput, enabledButtons, enabledSliders, enabledSwitches, enabledKnobs } =
 		useGameInputs(sequence);
 
-	const {pointerPosition, replaying, buttonRefs} = useSequenceAnimation(
+	const { pointerPosition, replaying, buttonRefs } = useSequenceAnimation(
 		sequence,
 		moveSpeedInMs,
 		updateInput,
@@ -64,7 +65,7 @@ export default function GameScreen() {
 							buttonRefs.current[input.id] = ref;
 						}
 						return (
-							<div key={input.id} style={{transform: `rotate(${rotations[index]}deg)`}}>
+							<div key={input.id} style={{ transform: `rotate(${rotations[index]}deg)` }}>
 								<ButtonQuarterRing
 									color={input.id.split("-")[1]}
 									onPress={() => handleUserInput(input.id, true)}
@@ -120,6 +121,11 @@ export default function GameScreen() {
 			</InputShelf>
 			{!gameOngoing && <GameEndModal score={score} />}
 			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />
+			{matchID &&
+				<div className="absolute top-2 left-2 bg-bg-secondary rounded p-2 shadow-md w-48">
+					<ParticipantList matchID={matchID} />
+				</div>
+			}
 		</div>
 	);
 }

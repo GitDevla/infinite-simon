@@ -18,6 +18,15 @@ export interface GameResult {
     status: ParticipantStatus;
 }
 
+export interface MatchParticipant {
+    user: {
+        username: string;
+        avatar_uri: string | null;
+    };
+    status: ParticipantStatus;
+    round_eliminated: number | null;
+}
+
 export enum ParticipantStatus {
   waiting = "waiting",
   playing = "playing",
@@ -30,4 +39,6 @@ export interface IGameRepository {
     upsertGameResult(data: GameResult): Promise<GameResult>;
     getMatchById(matchId: number): Promise<Match | null>;
     getGameById(gameId: number): Promise<Game | null>;
+    getParticipantsByMatchId(matchId: number): Promise<MatchParticipant[]>;
+    getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }>;
 }
