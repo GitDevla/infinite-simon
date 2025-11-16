@@ -92,7 +92,9 @@ export function useGameLogic({
 	const saveGameResult = async (matchId: number, roundEliminated: number, status: "playing" | "finished" = "finished") => {
 		const res = await Backend.saveGameResult(matchId, roundEliminated, status);
 		if (res.ok) {
-			toast.success("Game result saved successfully");
+			if (status === "finished") {
+				toast.success("Game result saved successfully");
+			}
 		} else {
 			console.error("Error saving game result:", res.error);
 		}
