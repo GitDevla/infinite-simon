@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {toast} from "react-toastify";
-import {GameMode, type GameType} from "../../service/Game";
-import {Backend, type GameStartResponse} from "../../util/Backend";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { GameMode, type GameType } from "../../service/Game";
+import { Backend, type GameStartResponse } from "../../util/Backend";
 import FloatingInput from "../Atom/FloatingInput";
 
 enum Windows {
@@ -11,7 +11,7 @@ enum Windows {
 	JOIN = "JOIN",
 }
 
-export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; modalClose: () => void}) {
+export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameType; modalClose: () => void }) {
 	const [currentWindow, setCurrentWindow] = useState<Windows>(Windows.SELECT);
 	const navigate = useNavigate();
 
@@ -51,10 +51,10 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 		<div>
 			{/** biome-ignore lint/a11y/noStaticElementInteractions: something has to be responsible */}
 			<div
-				className="absolute w-full h-full top-0 left-0 bg-black bg-opacity-50 z-40"
+				className="fixed top-0 left-0 size-full bg-black  bg-opacity-50 z-40"
 				onClick={modalClose}
 				onKeyDown={modalClose}></div>
-			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-primary p-6 rounded-lg z-50 w-80 bg-bg-secondary">
+			<div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-primary p-6 rounded-lg z-50 w-80 bg-bg-secondary">
 				<h2 className="text-xl font-bold mb-4 text-center">Multiplayer</h2>
 				{currentWindow === Windows.SELECT && (
 					<div className="flex flex-col space-y-4">
