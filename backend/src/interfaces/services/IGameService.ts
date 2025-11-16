@@ -5,4 +5,5 @@ export interface IGameService {
     joinMultiplayerMatch(userId: number, matchId: number): Promise<{ game: Game; match: Match }>;
     saveGameResult(userId: number, matchId: number, roundEliminated: number, status: ParticipantStatus): Promise<void>;
     getMatchParticipants(matchId: number): Promise<MatchParticipant[]>;
+    getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }>;
 }

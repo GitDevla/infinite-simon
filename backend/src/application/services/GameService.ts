@@ -54,4 +54,8 @@ export class GameService implements IGameService {
     async getMatchParticipants(matchId: number): Promise<MatchParticipant[]> {
         return this.gameRepository.getParticipantsByMatchId(matchId);
     }
+
+    async getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }> {
+        return this.gameRepository.getMatchStatus(matchId);
+    }
 }

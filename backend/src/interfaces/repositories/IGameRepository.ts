@@ -40,4 +40,5 @@ export interface IGameRepository {
     getMatchById(matchId: number): Promise<Match | null>;
     getGameById(gameId: number): Promise<Game | null>;
     getParticipantsByMatchId(matchId: number): Promise<MatchParticipant[]>;
+    getMatchStatus(matchId: number): Promise<{ status: ParticipantStatus }>;
 }

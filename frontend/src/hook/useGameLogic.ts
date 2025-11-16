@@ -64,6 +64,13 @@ export function useGameLogic({
 	const setupGameFromResponse = (gameStartResponse: GameStartResponse) => {
 		if (game.current === null) return;
 		game.current.startNewGame(gameStartResponse.match.seed, gameType);
+
+		if (matchId !== null && userContext.loggedIn) {
+			saveGameResult(matchId, 0, "playing").catch(err => {
+				console.error("Error setting status to playing:", err);
+			});
+		}
+
 		game.current.onNewRound(() => {
 			if (game.current === null) return;
 			const newScore = game.current.getCurrentRound() - 1;
