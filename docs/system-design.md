@@ -289,7 +289,7 @@ classDiagram
 + A **GameService** kezeli a játék menetek létrehozását, seed generálását, csatlakozást és eredmények validálását.
 + A játék logika a kliens oldalon fut a szerver által generált seed alapján.
 + A **UserService** a felhasználói regisztrációt, bejelentkezést és profilkezelést végzi.
-+ Az **CredentialValidator** a JWT tokenek kezeléséért felelős.
++ Az **CredentialValidator** a felhasználói hitelesítő adatok (felhasználónév, jelszó, email) validálásáért felelős.
 + A **JwtTokenGenerator** a JWT tokenek generálását és ellenőrzését végzi.
 + A **BcryptPasswordHasher** a jelszavak biztonságos hash-elését és ellenőrzését végzi.
 + Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.  
