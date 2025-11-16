@@ -123,7 +123,7 @@ export default function GameScreen() {
 			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />
 			{matchID &&
 				<div className="absolute top-2 left-2 bg-bg-secondary rounded p-2 shadow-md w-48">
-					<ParticipantList matchID={matchID} updateCounter={score} />
+					<ParticipantList matchID={matchID} />
 				</div>
 			}
 		</div>

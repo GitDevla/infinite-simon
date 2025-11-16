@@ -5,35 +5,38 @@ import { AuthContext } from "../../context/AuthContext";
 
 export default function ParticipantList({
     matchID,
-    updateCounter,
     showStatus = true,
 }: {
     matchID: number;
-    updateCounter?: number;
     showStatus?: boolean;
 }) {
     const me = useContext(AuthContext).user?.username;
 
     const [participants, setParticipants] = useState<Participant[]>([]);
 
-    useEffect(() => {
-        async function fetchParticipants() {
-            try {
-                const response = await Backend.getParticipantList(matchID);
-                if (response.ok) {
-                    const participantsData = response.data.participants;
-                    participantsData.sort((a, b) => b.round_eliminated - a.round_eliminated);
-                    setParticipants(participantsData);
-                } else {
-                    console.error("Failed to fetch participants");
-                }
-            } catch (error) {
-                console.error("Error fetching participants:", error);
+    async function fetchParticipants() {
+        try {
+            const response = await Backend.getParticipantList(matchID);
+            if (response.ok) {
+                const participantsData = response.data.participants;
+                participantsData.sort((a, b) => b.round_eliminated - a.round_eliminated);
+                setParticipants(participantsData);
+            } else {
+                console.error("Failed to fetch participants");
             }
+        } catch (error) {
+            console.error("Error fetching participants:", error);
         }
+    }
 
+    useEffect(() => {
+        let interval = setInterval(() => {
+            fetchParticipants();
+        }, 3000);
         fetchParticipants();
-    }, [matchID, updateCounter]);
+        return () => clearInterval(interval);
+    }, [matchID]);
+
     return (
         <div>
             <h3 className="font-bold mb-2">Participants</h3>

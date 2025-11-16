@@ -18,7 +18,6 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 	const navigate = useNavigate();
 
 	const [game, setGame] = useState<GameStartResponse | null>(null);
-	const [updateCounter, setUpdateCounter] = useState<number>(0);
 
 	const createGame = async () => {
 		const res = await Backend.startGame(GameMode.MultiPlayer, lvlId);
@@ -62,17 +61,6 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 		}
 	}, [currentWindow]);
 
-
-	useEffect(() => {
-		if (game && (currentWindow === Windows.LOBBY || currentWindow === Windows.CREATE)) {
-			let counter = setInterval(() => {
-				setUpdateCounter(prev => prev + 1);
-			}, 5000);
-			return () => clearInterval(counter);
-		}
-	}, [game, currentWindow]);
-
-
 	const [inputtedCode, setInputtedCode] = useState<string>("");
 
 	return (
@@ -111,7 +99,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 							<p>Loading...</p>
 						)}
 						<div className="mb-4">
-							<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} updateCounter={updateCounter} />
+							<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} />
 						</div>
 						<div className="flex justify-between">
 							<button
@@ -165,7 +153,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 				{currentWindow === Windows.LOBBY && (
 					<div>
 						<p>Waiting for the game to start...</p>
-						<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} updateCounter={updateCounter} />
+						<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} />
 						<div className="flex justify-between mt-4">
 							<button
 								type="button"
