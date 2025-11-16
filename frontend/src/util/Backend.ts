@@ -73,7 +73,7 @@ export interface ParticipantListResponse {
 export interface Participant {
 	user: User;
 	round_eliminated: number;
-	status: string;
+	status: "waiting" | "playing" | "finished";
 }
 
 export interface User {
@@ -88,7 +88,7 @@ export interface MatchStatusResponse {
 }
 
 export interface Status {
-	status: string;
+	status: "waiting" | "playing" | "finished";
 }
 
 

@@ -30,6 +30,7 @@ export default function ParticipantList({
     }
 
     useEffect(() => {
+        if (!matchID) return;
         let interval = setInterval(() => {
             fetchParticipants();
         }, 3000);

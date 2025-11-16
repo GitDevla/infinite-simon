@@ -61,7 +61,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 		if (currentWindow === Windows.LOBBY && game) {
 			let interval = setInterval(async () => {
 				const res = await Backend.getMatchStatus(game.match.id);
-				if (res.ok && res.data.status.status == "playing") {
+				if (res.ok && res.data.status.status === "playing") {
 					goToGameScreen(game.match.id);
 				}
 			}, 3000);
@@ -107,7 +107,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 							<p>Loading...</p>
 						)}
 						<div className="mb-4">
-							<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} />
+							{game && <ParticipantList matchID={game.match.id} showStatus={false} />}
 						</div>
 						<div className="flex justify-between">
 							<button
@@ -161,7 +161,7 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 				{currentWindow === Windows.LOBBY && (
 					<div>
 						<p>Waiting for the game to start...</p>
-						<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} />
+						{game && <ParticipantList matchID={game.match.id} showStatus={false} />}
 						<div className="flex justify-between mt-4">
 							<button
 								type="button"
