@@ -82,6 +82,17 @@ export interface User {
 }
 
 
+export interface MatchStatusResponse {
+	success: boolean
+	status: Status
+}
+
+export interface Status {
+	status: string
+}
+
+
+
 export class Backend {
 	private static async request<T = any>(
 		method: "GET" | "POST" | "PUT",
@@ -275,5 +286,11 @@ export class Backend {
 		}
 
 		return res;
+	}
+
+	static async getMatchStatus(matchId: number): Promise<BackendResponse<MatchStatusResponse>> {
+		return Backend.GET<MatchStatusResponse>(
+			"/api/match/:matchId/status".replace(":matchId", matchId.toString()),
+		);
 	}
 }

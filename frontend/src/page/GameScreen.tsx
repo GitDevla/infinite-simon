@@ -121,7 +121,11 @@ export default function GameScreen() {
 			</InputShelf>
 			{!gameOngoing && <GameEndModal score={score} />}
 			<AnimatedCursor pos={pointerPosition} speed={moveSpeedInMs} />
-			{matchID && <ParticipantList matchID={matchID} updateCounter={score} />}
+			{matchID &&
+				<div className="absolute top-2 left-2 bg-bg-secondary rounded p-2 shadow-md w-48">
+					<ParticipantList matchID={matchID} updateCounter={score} />
+				</div>
+			}
 		</div>
 	);
 }

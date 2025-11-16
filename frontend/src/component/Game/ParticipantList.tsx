@@ -1,6 +1,7 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Backend, type Participant } from "../../util/Backend";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function ParticipantList({
     matchID,
@@ -11,6 +12,8 @@ export default function ParticipantList({
     updateCounter?: number;
     showStatus?: boolean;
 }) {
+    const me = useContext(AuthContext).user?.username;
+
     const [participants, setParticipants] = useState<Participant[]>([]);
 
     useEffect(() => {
@@ -32,9 +35,10 @@ export default function ParticipantList({
         fetchParticipants();
     }, [matchID, updateCounter]);
     return (
-        <div className="absolute top-2 left-2 bg-bg-secondary rounded p-2 shadow-md w-48">
+        <div>
             <h3 className="font-bold mb-2">Participants</h3>
             <ul>
+                {participants.length === 0 && <li>No participants yet.</li>}
                 {participants.map((participant, idx) => (
                     <li key={participant.user.username} className="flex items-center mb-1 gap-2">
                         {showStatus && (
@@ -50,6 +54,7 @@ export default function ParticipantList({
                             className="w-6 h-6 rounded-full mr-2"
                         />
                         <span>{participant.user.username}</span>
+                        {participant.user.username === me && <span className="ml-1 text-gray-300">(You)</span>}
                         {showStatus && (
                             <span
                                 className={clsx(

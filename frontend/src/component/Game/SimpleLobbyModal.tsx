@@ -1,26 +1,30 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {toast} from "react-toastify";
-import {GameMode, type GameType} from "../../service/Game";
-import {Backend, type GameStartResponse} from "../../util/Backend";
+import { use, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { GameMode, type GameType } from "../../service/Game";
+import { Backend, type GameStartResponse } from "../../util/Backend";
 import FloatingInput from "../Atom/FloatingInput";
+import ParticipantList from "./ParticipantList";
 
 enum Windows {
 	SELECT = "SELECT",
 	CREATE = "CREATE",
 	JOIN = "JOIN",
+	LOBBY = "LOBBY",
 }
 
-export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; modalClose: () => void}) {
+export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameType; modalClose: () => void }) {
 	const [currentWindow, setCurrentWindow] = useState<Windows>(Windows.SELECT);
 	const navigate = useNavigate();
 
 	const [game, setGame] = useState<GameStartResponse | null>(null);
+	const [updateCounter, setUpdateCounter] = useState<number>(0);
 
 	const createGame = async () => {
 		const res = await Backend.startGame(GameMode.MultiPlayer, lvlId);
 		if (res.ok && res.data) {
 			setGame(res.data);
+			Backend.joinMatch(res.data.match.id);
 		}
 	};
 
@@ -44,6 +48,41 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 	const goToGameScreen = (id: number) => {
 		navigate(`/game?difficulty=${lvlId}&mode=${GameMode.MultiPlayer}&matchID=${id}`);
 	};
+
+
+	useEffect(() => {
+		let interval: NodeJS.Timer | undefined = undefined;
+		if (currentWindow === Windows.LOBBY && game) {
+			interval = setInterval(async () => {
+				const res = await Backend.getMatchStatus(game.match.id);
+				if (res.ok && res.data.status.status == "playing") {
+					goToGameScreen(game.match.id);
+				}
+			}, 3000);
+		}
+		if (currentWindow !== Windows.LOBBY && interval) {
+			clearInterval(interval);
+		}
+		return () => {
+			if (interval) clearInterval(interval);
+		};
+
+	}, [currentWindow]);
+
+
+	useEffect(() => {
+		let counter: NodeJS.Timer | undefined = undefined;
+		if (game && (currentWindow === Windows.LOBBY || currentWindow === Windows.CREATE)) {
+			counter = setInterval(() => {
+				setUpdateCounter(prev => prev + 1);
+			}, 5000);
+		}
+		else {
+			if (counter) clearInterval(counter);
+		}
+		return () => clearInterval(counter);
+	}, [game, currentWindow]);
+
 
 	const [inputtedCode, setInputtedCode] = useState<string>("");
 
@@ -82,6 +121,9 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 						) : (
 							<p>Loading...</p>
 						)}
+						<div className="mb-4">
+							<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} updateCounter={updateCounter} />
+						</div>
 						<div className="flex justify-between">
 							<button
 								type="button"
@@ -122,11 +164,25 @@ export default function SimpleLobbyModal({lvlId, modalClose}: {lvlId: GameType; 
 								type="button"
 								onClick={() => {
 									validateCode(Number(inputtedCode)).then(id => {
-										if (id) goToGameScreen(id);
+										if (id) setCurrentWindow(Windows.LOBBY);
 									});
 								}}
 								className="ml-4 bg-simon-green text-white px-4 py-2 rounded hover:bg-opacity-80">
 								Join Lobby
+							</button>
+						</div>
+					</div>
+				)}
+				{currentWindow === Windows.LOBBY && (
+					<div>
+						<p>Waiting for the game to start...</p>
+						<ParticipantList matchID={game ? game.match.id : 0} showStatus={false} updateCounter={updateCounter} />
+						<div className="flex justify-between mt-4">
+							<button
+								type="button"
+								onClick={() => setCurrentWindow(Windows.SELECT)}
+								className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-opacity-80">
+								Leave Lobby
 							</button>
 						</div>
 					</div>
