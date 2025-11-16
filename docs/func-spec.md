@@ -133,7 +133,7 @@ Mint felhasználó, szeretném testreszabni a játékbeállításokat, hogy a sa
 | MainScreen | A kezdőképernyő, ahol a játékos navigálhat a különböző funkciók között. |
 | LobbyModal | A többjátékos játékokhoz való csatlakozást és várakozást kezeli. |
 | SettingsScreen | A játék és alkalmazás beállításainak módosítását teszi lehetővé. |
-| UserProfileScreen | A felhasználói profil megtekintését és szerkesztését teszi lehetővé valamit a felhasználói statisztikák megjelenítését. |
+| UserProfileScreen | A felhasználói profil megtekintését és szerkesztését teszi lehetővé, valamint a felhasználói statisztikák megjelenítését. |
 | GameScreen | A játék fő képernyője, ahol a játékos játszik |
 | GameOverModal | A játék vége képernyő, ahol a játékos megtekintheti az eredményét és a pontszáma elmentésre kerül. |
 | ResetPasswordModal | A jelszó visszaállítási folyamatot kezeli. |
