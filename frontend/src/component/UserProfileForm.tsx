@@ -1,7 +1,7 @@
-import {useContext, useEffect, useState} from "react";
-import {toast} from "react-toastify";
-import {AuthContext} from "../context/AuthContext";
-import {Backend} from "../util/Backend";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext";
+import { Backend } from "../util/Backend";
 import FloatingInput from "./Atom/FloatingInput";
 
 export default function UserProfileForm() {
@@ -49,6 +49,11 @@ export default function UserProfileForm() {
 			updates.password = form.newPassword;
 		}
 
+		if (Object.keys(updates).length === 0) {
+			toast.info("No changes to update");
+			return;
+		}
+
 		const res = await Backend.updateUserProfile(updates);
 		if (res.ok) {
 			toast.success("Profile updated successfully");
@@ -81,7 +86,7 @@ export default function UserProfileForm() {
 								const f = ev.target.files?.[0];
 								if (!f) return;
 								const reader = new FileReader();
-								reader.onload = () => setForm(s => ({...s, profilePic: String(reader.result)}));
+								reader.onload = () => setForm(s => ({ ...s, profilePic: String(reader.result) }));
 								reader.readAsDataURL(f);
 							}}
 						/>
@@ -94,7 +99,7 @@ export default function UserProfileForm() {
 							label="Username"
 							state={form.username}
 							setState={v => {
-								setForm(s => ({...s, username: v}));
+								setForm(s => ({ ...s, username: v }));
 							}}
 							type="text"
 						/>
@@ -104,7 +109,7 @@ export default function UserProfileForm() {
 							label="Email"
 							state={form.email}
 							setState={v => {
-								setForm(s => ({...s, email: v}));
+								setForm(s => ({ ...s, email: v }));
 							}}
 							type="email"
 						/>
@@ -119,7 +124,7 @@ export default function UserProfileForm() {
 						label="Current password"
 						state={form.currentPassword}
 						setState={v => {
-							setForm(s => ({...s, currentPassword: v}));
+							setForm(s => ({ ...s, currentPassword: v }));
 						}}
 						type="password"
 					/>
@@ -127,7 +132,7 @@ export default function UserProfileForm() {
 						label="New password"
 						state={form.newPassword}
 						setState={v => {
-							setForm(s => ({...s, newPassword: v}));
+							setForm(s => ({ ...s, newPassword: v }));
 						}}
 						type="password"
 					/>
@@ -136,7 +141,7 @@ export default function UserProfileForm() {
 							label="Confirm new password"
 							state={form.confirmPassword}
 							setState={v => {
-								setForm(s => ({...s, confirmPassword: v}));
+								setForm(s => ({ ...s, confirmPassword: v }));
 							}}
 							type="password"
 						/>
