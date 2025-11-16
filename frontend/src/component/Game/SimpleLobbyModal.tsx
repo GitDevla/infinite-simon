@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GameMode, type GameType } from "../../service/Game";
@@ -51,36 +51,25 @@ export default function SimpleLobbyModal({ lvlId, modalClose }: { lvlId: GameTyp
 
 
 	useEffect(() => {
-		let interval: NodeJS.Timer | undefined = undefined;
 		if (currentWindow === Windows.LOBBY && game) {
-			interval = setInterval(async () => {
+			let interval = setInterval(async () => {
 				const res = await Backend.getMatchStatus(game.match.id);
 				if (res.ok && res.data.status.status == "playing") {
 					goToGameScreen(game.match.id);
 				}
 			}, 3000);
+			return () => clearInterval(interval);
 		}
-		if (currentWindow !== Windows.LOBBY && interval) {
-			clearInterval(interval);
-		}
-		return () => {
-			if (interval) clearInterval(interval);
-		};
-
 	}, [currentWindow]);
 
 
 	useEffect(() => {
-		let counter: NodeJS.Timer | undefined = undefined;
 		if (game && (currentWindow === Windows.LOBBY || currentWindow === Windows.CREATE)) {
-			counter = setInterval(() => {
+			let counter = setInterval(() => {
 				setUpdateCounter(prev => prev + 1);
 			}, 5000);
+			return () => clearInterval(counter);
 		}
-		else {
-			if (counter) clearInterval(counter);
-		}
-		return () => clearInterval(counter);
 	}, [game, currentWindow]);
 
 

@@ -83,12 +83,12 @@ export interface User {
 
 
 export interface MatchStatusResponse {
-	success: boolean
-	status: Status
+	success: boolean;
+	status: Status;
 }
 
 export interface Status {
-	status: string
+	status: string;
 }
 
 
