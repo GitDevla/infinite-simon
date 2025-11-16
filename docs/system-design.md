@@ -245,7 +245,7 @@ classDiagram
         +validateEmail(email: string): ValidationResult;
         +validatePassword(password: string): ValidationResult;
         +validateUsername(username: string): ValidationResult;
-        +initiateEmailVerification(userId: number) Promise<void>;
+        +initiateEmailVerification(userId: number): Promise<void>;
         +finalizeEmailVerification(token: string): Promise<void>;
         +initiatePasswordReset(email: string): Promise<void>;
         +finalizePasswordReset(token: string, newPassword: string): Promise<void>;
