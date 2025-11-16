@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IGameRepository, Game, Match, GameResult } from "../../interfaces/repositories/IGameRepository";
+import { IGameRepository, Game, Match, GameResult, MatchParticipant, ParticipantStatus } from "../../interfaces/repositories/IGameRepository";
 
 export class PrismaGameRepository implements IGameRepository {
     constructor(private readonly prisma: PrismaClient) {}
@@ -69,10 +69,19 @@ export class PrismaGameRepository implements IGameRepository {
         });
     }
 
-    async getParticipantsByMatchId(matchId: number): Promise<any[]> {
-        return this.prisma.participant.findMany({
+    async getParticipantsByMatchId(matchId: number): Promise<MatchParticipant[]> {
+        const participants = await this.prisma.participant.findMany({
             where: { matchId },
             include: { user: { select: { username: true, avatar_uri: true } } }
         });
+
+        return participants.map(p => ({
+            user: {
+                username: p.user.username,
+                avatar_uri: p.user.avatar_uri,
+            },
+            round_eliminated: p.round_eliminated,
+            status: p.status as ParticipantStatus,
+        }));
     }
 }

@@ -39,4 +39,5 @@ export interface IGameRepository {
     upsertGameResult(data: GameResult): Promise<GameResult>;
     getMatchById(matchId: number): Promise<Match | null>;
     getGameById(gameId: number): Promise<Game | null>;
+    getParticipantsByMatchId(matchId: number): Promise<MatchParticipant[]>;
 }

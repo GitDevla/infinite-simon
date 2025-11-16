@@ -51,13 +51,7 @@ export class GameService implements IGameService {
         });
     }
 
-    async getMatchParticipants(matchId: number): Promise<any[]> {
-        const participants = await (this.gameRepository as any).getParticipantsByMatchId(matchId);
-        return participants.map((p: MatchParticipant) => ({
-            username: p.user.username,
-            avatar_uri: p.user.avatar_uri,
-            status: p.status,
-            round_eliminated: p.round_eliminated
-        }));
+    async getMatchParticipants(matchId: number): Promise<MatchParticipant[]> {
+        return this.gameRepository.getParticipantsByMatchId(matchId);
     }
 }
