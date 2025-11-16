@@ -75,7 +75,7 @@ Mint regisztrált felhasználó, szeretném megtekinteni a profilomat és a ját
 Mint játékos, szeretnék többjátékos módban játszani más játékosok ellen, hogy versenyezhessek és javíthassam a készségeimet.
 
 **Background:**<br>
-Given A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
+**Given** A felhasználó be van jelentkezve az Infinite-Simon webalkalmazásba
 
 ##### SCENARIO: Lobby létrehozása többjátékos módhoz
 **When** A felhasználó létrehoz egy új többjátékos játék lobby-t<br>
