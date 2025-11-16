@@ -11,7 +11,7 @@
 - A létező Infinity-Simon[^7] játék továbbfejlesztése új többjátékos funkciókkal.
 - A játékosok közötti versengés lehetősége.
 - Pontszámok szerveren való tárolása.
-- Többjátékos mód, ahol a játékosok valós időben versenyezhetnek egymás ellen.
+- Többjátékos mód, ahol a játékosok látszólag valós időben versenyezhetnek egymás ellen.
 - Részletes statisztikák és elemzések a játékos teljesítményéről.
 - Különböző játékmódok bevezetése (pl. eredeti Simon says, Kibővített mód, etc.).
 
@@ -30,10 +30,14 @@ A jövőbeni rendszer a következő új funkciókat és üzleti folyamatokat val
 - Többjátékos mód bevezetése, ahol a játékosok versenyezhetnek egymás ellen seed-alapú sorozatok használatával.
 - Seed generálás a szerveren, amely biztosítja hogy minden játékos ugyanazt a sorozatot kapja egy adott versenyben.
 - Játék logika futtatása a kliens oldalon a szerver által generált seed alapján.
-- Pontszámok szerveren való tárolása és validálása, hogy a játékosok bármilyen eszközről elérhessék a pontszámaikat.
-- Részletes statisztikák és elemzések a játékos teljesítményéről, beleértve a legjobb köröket, átlagos pontszámokat, és fejlődési trendeket.
+- Pontszámok szerveren való tárolása, hogy a játékosok bármilyen eszközről elérhessék a pontszámaikat.
+- Részletes statisztikák és elemzések a játékos teljesítményéről, beleértve a legjobb köröket és átlagos pontszámokat.
 - Különböző játékmódok bevezetése, mint például az eredeti Simon says mód és egyéb kihívásokkal teli módok.
 - Felhasználói fiókok létrehozása.
+- Felhasználói fiók dekorálása profilképekkel és egyéni beállításokkal.
+- Regisztráció és bejelentkezés funkciók a felhasználói fiókok kezelésére.
+- Email alapú jelszó visszaállítási lehetőség.
+- Fiók aktiválás email-ben küldött link segítségével.
 - Hangjelzések és vizuális effektek a játékélmény fokozására.
 
 ## Rendszerre vonatkozó törvények, szabályok, ajánlások:
@@ -57,7 +61,9 @@ A weboldal megfelel az alábbi törvényeknek:
 | Backend | BE4 | Többjátékos támogatás | v0.4 | A rendszer lehetővé teszi a többjátékos játékot valós időben. |
 | Frontend | FR4 | Eredménytábla | v0.5 | A felhasználók megtekinthetik a legjobb pontszámokat és statisztikákat. |
 | Backend | BE3 | Pontszámok tárolása | v0.5 | A rendszer szerveren tárolja a játékosok pontszámait és statisztikáit. |
-| Backend | BE5 | Statisztikák és elemzések | v0.6 | A rendszer részletes statisztikákat és elemzéseket biztosít a játékosok teljesítményéről. |   
+| Backend | BE5 | Statisztikák és elemzések | v0.6 | A rendszer részletes statisztikákat és elemzéseket biztosít a játékosok teljesítményéről. |
+| Backend | BE7 | Többjátékos játékmenet szinkronizáció | v0.7 | A rendszer biztosítja a játékosok közötti játékmenet szinkronizációt többjátékos módban. |
+| Backend | BE8 | Felhasználó Verifikáció | v0.8 | A rendszer email alapú jelszó visszaállítást és fiók aktiválást biztosít. |
 
 
 ## Fogalomszótár
