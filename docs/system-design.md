@@ -358,11 +358,13 @@ classDiagram
 A rendszer telepítése a következő lépésekből áll:
 1. Szerver előkészítése:
     - Operációs rendszer telepítése (pl. Ubuntu Server).
-    - Docker telepítése.
+    - Docker telepítése. (https://docs.docker.com/engine/install/ubuntu/)
 2. Kód telepítése:
     - A forráskód klónozása a verziókezelő rendszerből.
-    - Helyes környezeti beállítások konfigurálása.
+        `git clone https://github.com/pti-szfm-2025/infinite-simon`
+    - Helyes környezeti beállítások konfigurálása a `docker.compose.yml` fájlban.
     - A Docker konténerek felépítése és indítása.
+        `docker-compose up --build -d`
         - A frontend és backend szolgáltatások külön konténerekben futnak.
         - Adatbázis autómatikus inicializálása a konténer indításakor.
 3. Ellenőrzés:
