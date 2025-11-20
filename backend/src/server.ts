@@ -3,10 +3,13 @@ import express from "express";
 import { DIContainer } from "./config/DIContainer";
 import { RouteFactory } from "./presentation/routes/RouteFactory";
 import { processErrorMiddleware } from "./presentation/middleware/errorMiddleware";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const openapiDocument = YAML.load("./src/docs/openapi.yaml");
 
 // Initialize dependency injection container
 const container = new DIContainer();
@@ -17,6 +20,7 @@ app.use(cors({
 	credentials: true,
 }));
 app.use(express.json({ limit: "10mb" }));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDocument));
 
 // Routes
 app.use(RouteFactory.createRoutes(container));
