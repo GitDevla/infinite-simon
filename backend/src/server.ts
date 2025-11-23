@@ -5,11 +5,12 @@ import { RouteFactory } from "./presentation/routes/RouteFactory";
 import { processErrorMiddleware } from "./presentation/middleware/errorMiddleware";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
+import path from "path";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-const openapiDocument = YAML.load("./src/docs/openapi.yaml");
+const openapiDocument = YAML.load(path.join(__dirname, "../docs/openapi.yaml"));
 
 // Initialize dependency injection container
 const container = new DIContainer();
