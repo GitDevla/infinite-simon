@@ -1,0 +1,659 @@
+openapi: 3.0.1
+info:
+  title: Infinity Simon Backend API
+  description: API documentation for the Infinity Simon backend server.
+  version: 2.0.0
+
+servers:
+  - url: http://localhost:3001
+    description: Local development server
+  - url: https://simon.devla.dev/api
+    description: Production server
+
+paths:
+  /login:
+    post:
+      summary: User login
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized, invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse" 
+  /register:
+    post:
+      summary: User registration
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        409:
+          description: Username or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /request-password-reset:
+    post:
+      summary: Request password reset
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      responses:
+        200:
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+  /finalize-password-reset:
+    post:
+      summary: Finalize password reset
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - newPassword
+              properties:
+                token:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        200:
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /verify-email:
+    post:
+      summary: Verify user email
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+      responses:
+        200:
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /resend-verification-email:
+    post:
+      summary: Resend email verification
+      tags: [Auth]
+      security:
+        - bearerAuth: []
+
+      responses:
+        200:
+          description: Verification email resent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+  /start-game:
+    post:
+      summary: Start a new game
+      tags: [Game]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - difficultyId
+                - modeId
+              properties:
+                difficultyId:
+                  type: integer
+                modeId:
+                  type: integer
+      responses:
+        200:
+          description: Game started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  gameState:
+                    $ref: "#/components/schemas/GameState"
+                  match:
+                    $ref: "#/components/schemas/MatchSummary"
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /join-game:
+    post:
+      summary: Join an existing game
+      tags: [Game]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - matchId
+              properties:
+                matchId:
+                  type: integer
+      responses:
+        200:
+          description: Joined game successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  gameState:
+                    $ref: "#/components/schemas/GameState"
+                  match:
+                    $ref: "#/components/schemas/MatchSummary"
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /save-game-result:
+    post:
+      summary: Save game result (final or intermediate)
+      tags: [Game]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - matchId
+                - roundEliminated
+                - status
+              properties:
+                matchId:
+                  type: integer
+                roundEliminated:
+                  type: integer
+                status:
+                  $ref: "#/components/schemas/ParticipantStatus"
+      responses:
+        200:
+          description: Game result saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/match/{matchId}/participants:
+    get:
+      summary: Get match participants
+      tags: [Game]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of match participants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  participants:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MatchParticipant"
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/match/{matchId}/status:
+    get:
+      summary: Get match status
+      tags: [Game]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Match status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  status:
+                    $ref: "#/components/schemas/ParticipantStatus"
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/me:
+    get:
+      summary: Get current user info
+      tags: [User]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Current user information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserData"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Update current user info
+      tags: [User]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                profilePicture:
+                  type: string
+                password:
+                  type: string
+                currentPassword:
+                  type: string
+      responses:
+        200:
+          description: User information updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/UserData"
+        400:
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingParametersError"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/stats:
+    get:
+      summary: Get user statistics
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: mode
+          description: Game mode filter
+          schema:
+            type: integer
+        - in: query
+          name: diff
+          description: Difficulty level filter
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          description: Limit number of results
+          schema:
+            type: integer
+        - in: query
+          name: page
+          description: Page number for pagination
+          schema:
+            type: integer
+        - in: query
+          name: orderBy
+          description: Field to order by
+          schema:
+            type: string
+      responses:
+        200:
+          description: User statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStats"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    
+  
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    GameState:
+      type: object
+      properties:
+        id:
+          type: integer
+        modeId:
+          type: integer
+        difficultyId:
+          type: integer
+
+    MatchSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        seed:
+          type: integer
+
+    MatchParticipant:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/ParticipantUser"
+        roundEliminated:
+          type: integer
+        status:
+          $ref: "#/components/schemas/ParticipantStatus"
+
+    ParticipantUser:
+      type: object
+      properties:
+        username:
+          type: string
+        avatar_uri:
+          type: string
+
+    UserData:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        avatar_uri:
+          type: string
+        joined_date:
+          type: string
+          format: date-time
+        last_login:
+          type: string
+          format: date-time
+        email_verified:
+          type: boolean
+
+    ParticipantStatus:
+      type: string
+      enum: [waiting, playing, finished]
+
+    UserScores:
+      type: object
+      properties:
+        difficulty:
+          type: integer
+        mode:
+          type: integer
+        score:
+          type: integer
+        date:
+          type: string
+          format: date-time
+        placement:
+          type: integer
+      
+    UserStats:
+      type: object
+      properties:
+        totalGames:
+          type: integer
+        bestScore:
+          type: integer
+        averageScore:
+          type: integer
+        multiplayerGames:
+          type: integer
+        singleplayerGames:
+          type: integer
+
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        error:
+          type: string
+
+    MissingParametersError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+        - type: object
+          properties:
+            error:
+              type: string
+              example: "Missing required parameters."
