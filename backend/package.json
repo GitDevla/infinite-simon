@@ -7,7 +7,7 @@
 	"main": "src/server.js",
 	"scripts": {
 		"dev": "tsx watch src/server.ts",
-		"build": "tsc",
+		"build": "tsc && mkdir dist/docs && cp src/docs/openapi.yaml dist/docs/openapi.yaml",
 		"start": "node dist/server.js",
 		"db:setup": "npx prisma db push && npm run seed",
 		"prisma:generate": "prisma generate",

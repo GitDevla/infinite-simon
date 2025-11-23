@@ -21,6 +21,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - username
+                - password
               properties:
                 username:
                   type: string
@@ -58,6 +61,10 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - username
+                - email
+                - password
               properties:
                 username:
                   type: string
@@ -97,6 +104,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - email
               properties:
                 email:
                   type: string
@@ -126,6 +135,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - token
+                - newPassword
               properties:
                 token:
                   type: string
@@ -163,6 +175,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - token
               properties:
                 token:
                   type: string
@@ -223,6 +237,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - difficultyId
+                - modeId
               properties:
                 difficultyId:
                   type: integer
@@ -266,6 +283,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - matchId
               properties:
                 matchId:
                   type: integer
@@ -307,6 +326,10 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - matchId
+                - roundEliminated
+                - status
               properties:
                 matchId:
                   type: integer
