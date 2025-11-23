@@ -8,8 +8,8 @@ A régi játék élő demója elérhető itt: [https://pti-szfm-2025.github.io/i
 ## Leírás
 Az Infinity Simon egy kibővített változata a klasszikus Simon játénak, ahol a játékosnak egyre hosszabb és bonyolultabb input-kombinációt kell megjegyeznie és visszaadnia. A játék célja, hogy minél tovább jussunk anélkül, hogy hibáznánk.
 
-[Követelményspecifikáció](./docs/req-spec.md)
-[Funkcionálisspecifikáció](./docs/func-spec.md)
+[Követelmény Specifikáció](./docs/req-spec.md)
+[Funkcionális Specifikáció](./docs/func-spec.md)
 [Rendszerterv](./docs/system-design.md)
 
 ## Tech Stack

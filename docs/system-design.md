@@ -386,11 +386,11 @@ classDiagram
     - **GET /api/match/{matchId}/status**: Játék állapot lekérdezése.
     - **GET /api/me**: Saját felhasználói adatok lekérdezése.
     - **PUT /api/me**: Saját felhasználói profil frissítése.
-    - **GET /api/me/stats**: Saját felhasználói statistikák lekérdezése.
+    - **GET /api/me/stats**: Saját felhasználói statisztikák lekérdezése.
 
 - Az API végpontok JSON formátumban fogadják és küldik az adatokat.
 - API dokumentáció OpenAPI (Swagger) formátumban kerül elkészítésre a projekt során.
-- Swagger documentáció elérhető lesz a `/docs` útvonalon.
+- Swagger dokumentáció elérhető lesz a `/docs` útvonalon.
 
 ### Frontend terv
 - A frontend React (v19.1.1) és TypeScript alapú.
@@ -444,7 +444,7 @@ tsconfig.json         # TypeScript konfiguráció
 - Globális stílusok és témák definiálása a `style/` mappában.
 
 #### Oldalak
-- **index.tsx**: Alkalmazás belépési pontja, ahol a React alkalmazás inicializálódik, globalis Context-ek beállítása történik és a routing kerül definiálásra.
+- **index.tsx**: Alkalmazás belépési pontja, ahol a React alkalmazás inicializálódik, globális Context-ek beállítása történik és a routing kerül definiálásra.
 - **App.tsx**: Főképernyő komponens, amely a különböző oldalak közötti navigációt kezeli.
 - **AuthScreen.tsx**: Bejelentkezési és regisztrációs képernyő.
 - **GameScreen.tsx**: Játék képernyő, ahol a játék folyik.
