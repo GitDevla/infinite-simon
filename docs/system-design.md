@@ -178,9 +178,41 @@ erDiagram
     MATCH ||--o{ PARTICIPANT : "eredmény"
 ```
 ## Implementációs terv
-### Perszistencia réteg
-+ A perszisztencia réteg SQLite adatbázisra épül.
-+ Az adatbázis kapcsolódást Prisma biztosítja.
+### Backend réteg
+A backend Node.js és TypeScript alapú, Express keretrendszerrel. A kód rétegekre van bontva a tiszta architektúra elvei szerint: prezentációs réteg, üzleti logika réteg és perszisztencia réteg.
+
+A backend betartja a SOLID elveket és a függőség injektálást a könnyű tesztelhetőség és karbantarthatóság érdekében.
+#### Mappa struktúra
+```
+dist/                   # Fordított kód
+docker/                # Docker konfigurációk
+prisma/                # Prisma adatbázis sémák és migrációk
+src/                   # Forráskód
+    application/      # Üzleti logika réteg
+        services/      # Szolgáltatások
+    config/           # Konfigurációs fájlok
+    infrastructure/   # Perszisztencia réteg
+        repositories/  # Repository osztályok
+        security/      # Biztonsági szolgáltatások (pl. jelszó hashelés, token generálás)
+        validation/    # Validációs szolgáltatások
+    interfaces/     # Prezentációs réteg
+        repositories/  # Repository interfészek
+        services/      # Szolgáltatás interfészek
+    presentation/  # Kontroller osztályok
+        controllers/   # API kontrollerek
+        errors/        # Hiba kezelők
+        middleware/    # Köztes réteg (pl. hitelesítés, naplózás)
+        routes/        # API útvonalak
+    server.ts        # Alkalmazás belépési pontja
+test/                 # Teszt fájlok
+.env                  # Környezeti változók
+Dockerfile            # Docker kép konfiguráció
+package.json          # Projekt függőségek és parancsok
+tsconfig.json         # TypeScript konfiguráció
+```
+#### Perszistencia réteg
++ A perszisztencia réteg SQLite (melynek verzióját a Prisma fogja meghatározni) adatbázisra épül.
++ Az adatbázis kapcsolódást Prisma (v^6.17.1) biztosítja.
 + Az adatok lekérdezése és mentése aszinkron módon történik.
 ```mermaid
 classDiagram
@@ -220,7 +252,7 @@ classDiagram
 + A **PrismaGameRepository** a játékok, játékmenetek és eredmények mentését végzi.
 + A **ProfilePictureRepository** az avatar képek mentését és törlését végzi.
 
-### Üzleti logika réteg
+#### Üzleti logika réteg
 + Az üzleti logika réteg a verseny koordinációt és seed generálást kezeli.
 + A játék menetek létrehozása, seed generálása és eredmények validálása itt történik.
 + A játék logika maga a kliens oldalon fut, a backend csak seed-et generál és eredményeket validál.
@@ -295,8 +327,12 @@ classDiagram
 + Minden szolgáltatás a megfelelő repository-kat használja az adatok kezelésére.  
 + A **ResendEmailService** kezeli az email küldést regisztráció és jelszó visszaállítás esetén.  
 
+##### Biztonsági szolgáltatások
+- A jelszavak biztonságos tárolásához a **BcryptPasswordHasher** szolgáltatás használja a bcrypt algoritmust.
+- A felhasználói hitelesítés JWT tokenekkel történik, amelyeket a **JwtTokenGenerator** szolgáltatás kezel.
+- A jelszó visszaállítás és email megerősítés token alapú folyamatokon keresztül történik.
 
-### Prezentációs réteg
+#### Prezentációs réteg
 + A prezentációs réteg a felhasználói interakciókat kezeli.
 + A REST API végpontok itt kerülnek definiálásra.
 ```mermaid
@@ -334,6 +370,94 @@ classDiagram
 + A **GameController** kezeli a játék indítását és eredmények mentését.
 + Minden kontroller a megfelelő szolgáltatásokat használja az üzleti logika végrehajtásához.
 
+##### API terv
+- A rendszer REST API-t használ a frontend és backend közötti kommunikációhoz.
+- Az API végpontok a következők:
+    - **POST /login**: Felhasználó bejelentkezés.
+    - **POST /register**: Felhasználó regisztráció.
+    - **POST /request-password-reset**: Jelszó visszaállítás kezdeményezése.
+    - **POST /finalize-password-reset**: Jelszó visszaállítás befejezése.
+    - **POST /verify-email**: Email cím megerősítése.
+    - **POST /resend-verification-email**: Ellenőrző email újraküldése.    
+    - **POST /start-game**: Új játék indítása.
+    - **POST /join-game**: Csatlakozás egy meglévő játékhoz.
+    - **POST /save-game-result**: Játék eredmény mentése.
+    - **GET /api/match/{matchId}/participants**: Játék résztvevők lekérdezése.
+    - **GET /api/match/{matchId}/status**: Játék állapot lekérdezése.
+    - **GET /api/me**: Saját felhasználói adatok lekérdezése.
+    - **PUT /api/me**: Saját felhasználói profil frissítése.
+    - **GET /api/me/stats**: Saját felhasználói statistikák lekérdezése.
+
+- Az API végpontok JSON formátumban fogadják és küldik az adatokat.
+- API dokumentáció OpenAPI (Swagger) formátumban kerül elkészítésre a projekt során.
+- Swagger documentáció elérhető lesz a `/docs` útvonalon.
+
+### Frontend terv
+- A frontend React (v19.1.1) és TypeScript alapú.
+- A felhasználói felület komponens alapú, minden funkció külön komponensként van megvalósítva.
+- A komponensek állapotkezelése React state és props segítségével történik.
+- A backend API hívások Fetch könyvtárral történnek.
+
+#### Mappa struktúra
+```
+build/                  # Fordított kód
+docker/                # Docker konfigurációk
+public/                # Nyilvános fájlok (index.html, favicon, stb.)
+src/                   # Forráskód
+    asset/          # Stílusok, képek, egyéb assetek
+    components/     # Újrafelhasználható React komponensek
+        Atom/       # Atomi komponensek (gombok, input mezők, stb.)
+        Game/       # Játék specifikus komponensek
+        Layout/     # Oldal elrendezés komponensek (fejléc, lábléc, stb.)
+    context/       # React Context-ek állapotkezeléshez
+    hook/         # Egyedi React hook-ok
+    page/         # Oldalak (Regisztráció, Bejelentkezés,
+                    # Játék, Statisztikák, stb.)
+    service/      # Játék logika szolgáltatások
+    style/        # Globális stílusok és témák
+    test/         # Teszt fájlok
+    util/         # Segédfüggvények és típusok
+    index.tsx     # Alkalmazás belépési pontja
+.env                  # Környezeti változók
+Dockerfile            # Docker kép konfiguráció
+package.json          # Projekt függőségek és parancsok
+tsconfig.json         # TypeScript konfiguráció
+```
+#### Komponens struktúra
+- **Atom komponensek**: Alapvető UI elemek, mint gombok, input mezők, címkék.
+- **Játék komponensek**: Játék specifikus elemek, mint a sorozat megjelenítő, pontszám tábla.
+- **Elrendezés komponensek**: Oldal elrendezéshez szükséges elemek, mint fejléc, lábléc, navigációs sáv.
+
+#### Állapotkezelés
+- A React Context-ek használata a globális állapot kezelésére, mint felhasználói adatok, játék állapot.
+- Egyedi hook-ok a komponensek közötti állapot megosztására és logika újrafelhasználására.
+- **Context**-ek:
+    - `AuthContext`: Felhasználói hitelesítési állapot kezelése.
+    - `ThemeContext`: Alkalmazás téma és stílus kezelése.
+- **Hook**-ok:
+    - `useGameInputs`: Játék bemenetek kezelése és validálása.
+    - `useGameLogic`: Játék logika kezelése, sorozat generálás, pontszám számítás.
+    - `useSequenceAnimation`: Sorozat megjelenítés animáció kezelése.
+
+#### Stílusok
+- A `tailwindcss` használata a gyors és hatékony stílusok létrehozásához.
+- Globális stílusok és témák definiálása a `style/` mappában.
+
+#### Oldalak
+- **index.tsx**: Alkalmazás belépési pontja, ahol a React alkalmazás inicializálódik, globalis Context-ek beállítása történik és a routing kerül definiálásra.
+- **App.tsx**: Főképernyő komponens, amely a különböző oldalak közötti navigációt kezeli.
+- **AuthScreen.tsx**: Bejelentkezési és regisztrációs képernyő.
+- **GameScreen.tsx**: Játék képernyő, ahol a játék folyik.
+- **NewPasswordScreen.tsx**: Jelszó visszaállítás képernyő.
+- **ProfileScreen.tsx**: Felhasználói profil kezelő képernyő.
+- **SettingsScreen.tsx**: Játék és Felhasználói beállítások képernyő.
+- **VerifyEmailScreen.tsx**: Email cím megerősítő képernyő.
+
+#### Játék logika
+- A játék logika a frontend szolgáltatásokban van megvalósítva.
+- A `GameService` kezeli a sorozat generálását, bemenetek validálását és pontszám számítást.
+- A játék menetek a szerver által generált seed alapján futnak a kliens oldalon.
+- A seed alapján egy pseudo-random sorozat generálódik, amely biztosítja hogy minden játékos ugyanazt a sorozatot kapja egy adott versenyben.
 
 ## Tesztterv
 ### 1. Egységtesztek
