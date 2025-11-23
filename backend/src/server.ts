@@ -10,7 +10,7 @@ import path from "path";
 const app = express();
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-const openapiDocument = YAML.load(path.join(__dirname, "../docs/openapi.yaml"));
+const openapiDocument = YAML.load(path.join(__dirname, "./docs/openapi.yaml"));
 
 // Initialize dependency injection container
 const container = new DIContainer();
