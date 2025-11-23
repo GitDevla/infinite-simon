@@ -390,7 +390,7 @@ classDiagram
 
 - Az API végpontok JSON formátumban fogadják és küldik az adatokat.
 - API dokumentáció OpenAPI (Swagger) formátumban kerül elkészítésre a projekt során.
-- Swagger dokumentáció elérhető lesz a `/docs` útvonalon.
+- Swagger dokumentáció elérhető [OpenAPI YAML](../backend/src/docs/openapi.yaml) fájlban vagy a [Swagger UI](https://simon.devla.dev/docs) bemutató oldalon. (Lokális futtatás esetén: `http://localhost:3001/docs`)
 
 ### Frontend terv
 - A frontend React (v19.1.1) és TypeScript alapú.
